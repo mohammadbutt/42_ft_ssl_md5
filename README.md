@@ -5,6 +5,7 @@
 #### Project file: [ft_ssl_md5](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/docs_and_media/ft_ssl_md5.en.pdf)
 
 Allowed C System Calls: open(2), close(2), read(2), write(2)
+
 Allowed C functions: malloc(3), free(3)
 
 
