@@ -8,4 +8,7 @@ Allowed C System Calls: open(2), close(2), read(2), write(2)
 
 Allowed C functions: malloc(3), free(3)
 
+Additional functions: strerror(3), exit(3).
+
+
 
