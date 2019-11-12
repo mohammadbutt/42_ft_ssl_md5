@@ -6,7 +6,7 @@
 #    By: mbutt <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/11 14:35:05 by mbutt             #+#    #+#              #
-#    Updated: 2019/11/11 15:47:10 by mbutt            ###   ########.fr        #
+#    Updated: 2019/11/11 16:12:50 by mbutt            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,21 +33,21 @@ all: $(NAME)
 
 $(NAME):
 	@make -C $(FT_PRINTF_DIR) # runs Makefile for ft_printf
-	@echo "${CYAN}Compiling Makefile for ft_ssl...${NC}"
+	@echo "${CYAN}Compiling Makefile for ft_ssl...⌛${NC}"
 	@$(CC) $(CFLAGS) $(WFLAGS) $(SRC) # Creates object files
 	@$(CC) $(OBJ) $(FT_PRINTF_STATIC) $(DEBUG) -o $(NAME)
-	@echo "${GREEN}Generated ft_ssl successfully.${NC}"
+	@echo "${GREEN}Generated ft_ssl successfully ✓.${NC}"
 
 clean:
 	make clean -C srcs/ft_printf/
 	/bin/rm -rf $(OBJ)
-	@echo "${ORANGE}Removed object files for ft_ssl.${NC}"
+	@echo "${ORANGE}Removed object files for ft_ssl ♻ .${NC}"
 
 fclean:
 	make fclean -C srcs/ft_printf/
 	/bin/rm -rf $(NAME) $(OBJ)
-	@echo "${ORANGE}Removed object files for ft_ssl.${NC}"
-	@echo "${YELLOW}Removed ft_ssl.${NC}"
+	@echo "${ORANGE}Removed object files for ft_ssl ♻ .${NC}"
+	@echo "${YELLOW}Removed ft_ssl ♻ .${NC}"
 
 re: fclean all
 .PHONY: all clean fclean re
