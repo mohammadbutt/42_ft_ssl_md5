@@ -11,4 +11,5 @@ Allowed C functions: malloc(3), free(3)
 Additional functions: strerror(3), exit(3).
 
 
-
+# Resources and References:
+1. [Reading from stdin](https://stackoverflow.com/questions/15883568/reading-from-stdin)
