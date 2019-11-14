@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 18:02:34 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/12 21:01:38 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/13 19:01:53 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 void error_invalid_file_permission(int fd, char **argv)
 {
-	ft_printf("ft_ssl1: %s: %s\n", argv[1], strerror(errno));
+	ft_printf("ft_ssl: %s: %s\n", argv[1], strerror(errno));
 	close(fd);
 	exit(EXIT_SUCCESS);
 }
@@ -61,122 +61,7 @@ void error_messages(int fd, char **argv)
 		error_message_dir(fd, argv);
 	close(fd);
 }
-/*
-** Function mini_gnl reads a file and stores the content/text of that file to be
-** used for hasing later.
-*/
 
-/*
-char *mini_gnl(int fd, char **argv)
-{
-	char placeholder[2];
-	char *temp;
-	char *s;
-	int i;
-	char *temp_pointer;
-	int len;
-
-	temp = NULL;
-	i = 2;
-	fd = open(argv[1], O_RDONLY);
-//	s = malloc(sizeof(char) * (2));
-//	if(s == NULL)
-//		return("Malloc Error");
-	while(read(fd, placeholder, 1) > 0)
-	{
-		placeholder[1] = '\0';
-		ft_printf("%s", placeholder);
-		s = malloc(sizeof(char) * (i + 1));
-		temp = malloc(sizeof(char) * (i + 1));
-		if(s == NULL || temp == NULL)
-			return("Malloc Error inside while loop");
-		ft_strcat(temp, placeholder);
-		i++;
-		s[i] = '\0';
-		temp_pointer = s;
-		if(s)
-			free(s);
-		if (temp)
-			free(temp);
-//		i++;
-	}
-	len = 0;
-	len = ft_strlen(temp_pointer + 1);
-	s = malloc(sizeof(char) * (len + 1));
-	ft_strcpy(s, temp);
-//	len = ft_strlen(temp_str2);
-//	temp_str2[i] = '\0';
-//	full_string = malloc(sizeof(char) * (i + 1));
-//	ft_strcpy(full_string, temp_str2);
-//	ft_printf("%s", temp_str2);
-//	ft_printf("%s", full_string);
-//	ft_printf("%s", temp);
-//	ft_printf("%s", s);
-	return(s);
-
-}
-*/
-
-/*
-char *mini_gnl(int fd, char **argv)
-{
-	int i;
-	char buffer;
-	char *str;
-	char *pointer;
-
-	i = 1;
-	pointer = NULL;
-	fd = open(argv[1], O_RDONLY);
-	while(read(fd, &buffer, 1) > 0)
-	{
-//		ft_printf("%c", buffer);
-		str = malloc(sizeof(char) * (i + 1));
-//		ft_printf("|%s|", pointer);
-		if(i > 1)
-			ft_strcpy(str, pointer);
-		else
-			ft_strcpy(str, &buffer);
-		str[i - 1] = buffer;
-		str[i] = '\0';
-//		ft_strcat(str, &buffer);
-//		ft_strcpy(str, pointer);
-		pointer = str;
-		ft_printf("|%s|\n", pointer);
-		i++;
-		free(str);
-//		ft_printf("%c", buffer);
-	}
-	ft_printf("%s", pointer);
-	close(fd);
-	str = malloc(sizeof(char) * (i + 1));
-	ft_strcpy(str, pointer);
-	return(str);
-}
-*/
-
-/*
-** Traverses through a file and counts the number of characters in the file.
-** For example: will go through a file called alpha.txt, that has the following
-** content:
-** a
-** bc
-** def
-** calculate_buffer_length will return 6.
-*/
-
-int calculate_buffer_length(int fd, char **argv)
-{
-	char buffer;
-	int buffer_len;
-
-	buffer_len = 0;
-	fd = open(argv[1], O_RDONLY);
-	while(read(fd, &buffer, 1) > 0)
-		buffer_len++;
-	close(fd);
-	return(buffer_len);
-}
 
 /*
 char *mini_gnl(int fd, char **argv)
@@ -200,7 +85,36 @@ char *mini_gnl(int fd, char **argv)
 }
 */
 
-char *mini_gnl(int fd, char **argv)
+/*
+** Traverses through a file and counts the number of characters in the file.
+** For example: will go through a file called alpha.txt, that has the following
+** content:
+** a
+** bc
+** def
+** calculate_buffer_length will return 6.
+*/
+
+int calculate_buffer_length(int fd, char *argv)
+{
+	char buffer;
+	int buffer_len;
+
+	buffer_len = 0;
+	fd = open(argv, O_RDONLY);
+	while(read(fd, &buffer, 1) > 0)
+		buffer_len++;
+	close(fd);
+	return(buffer_len);
+}
+
+/*
+** Function mini_gnl reads a file and stores the content/text of that file to be
+** used for hashing later.
+*/
+
+
+char *mini_gnl(int fd, char *argv)
 {
 	int buffer_len;
 	char *big_buffer;
@@ -209,31 +123,161 @@ char *mini_gnl(int fd, char **argv)
 	big_buffer = malloc(sizeof(char) * (buffer_len + 1));
 	if(big_buffer == NULL)
 		return("mini_gnl memory allocation failed\n");
-	fd = open(argv[1], O_RDONLY);
+	fd = open(argv, O_RDONLY);
 	read(fd, big_buffer, buffer_len);
 	big_buffer[buffer_len] = '\0';
 	close(fd);
 	return(big_buffer);	
 }
 
+
+/*
+char *mini_gnl(int fd, char *argv)
+{
+	char buffer[2];
+	char *temp;
+	char *new_string;
+
+	new_string = malloc(sizeof(char) * (2));
+	if(new_string == NULL)
+		return("memory allocation failed in mini_gnl\n");
+	new_string[0] = 0;
+	fd = open(argv, O_RDONLY);
+	while(read(fd, buffer, 1) > 0)
+	{
+		temp = new_string;
+		new_string = ft_strjoin(temp, buffer);
+		free(temp);
+	}
+	close(fd);
+	return(new_string);
+}
+*/
+char *mini_gnl_stdin(void)
+{
+	char buffer[2];
+	char *temp;
+	char *new_string;
+
+	new_string = malloc(sizeof(char) * (2));
+	if(new_string == NULL)
+		return("memory allocation failed in mini_gnl_stdin.\n");
+	new_string[0] = 0;
+	while((read(0, buffer, 1)) > 0)
+	{
+//		printf("%d\n", return_of_read);
+		temp = new_string;
+		new_string = ft_strjoin(temp, buffer);
+		free(temp);
+	}
+//	close(fd);
+	return(new_string);
+}
+
+
 void ft_ssl_parsing(int fd, char **argv)
 {
 	char *full_str;
 
 	error_messages(fd, argv);
-	full_str = mini_gnl(fd, argv);
+	full_str = mini_gnl(fd, argv[1]);
 	printf("%s", full_str);
 	free(full_str);
 }
 
-void handle_stdin(char **argv)
+void ft_print_usage(char *buffer)
 {
-	char *str;
+	ft_printf("ft_ssl: '%s' is an invalid command.\n\n", buffer);
+	ft_printf("Message Digest Commands:\n");
+	ft_printf("md5\nsha224\nsha256\nsha384\nsha512\n");
+}
+
+
+void handle_stdin(void);
+/*
+char *is_md_command_valid(void)
+{
+	char buffer[8];
+	int return_of_read;
+
+	return_of_read = read(0, buffer, 8);
+	if(return_of_read == 0)
+		handle_stdin();
+	buffer[return_of_read - 1] = '\0';
+	if(ft_strcmp(buffer, "md5") == 0 || ft_strcmp(buffer, "sha224") == 0)
+		return(buffer);
+	else if(ft_strcmp(buffer, "sha256") == 0 || ft_strcmp(buffer, "sha384") == 0)
+		return(buffer);
+	else if(ft_strcmp(buffer, "sha512") == 0)
+		return(buffer);
+	else
+	{
+		ft_print_usage(buffer);
+		handle_stdin();
+	}
+
+}
+*/
+
+void read_stdin_loop(char *buffer)
+{
+	int return_of_read;
+
+	return_of_read = 0;
 	while(1)
 	{
-		str = argv[1];
+		ft_printf("ft_SSL> ");
+		buffer[0] = 0;
+		return_of_read = read(0, buffer, 8);
+		if(return_of_read > 1)
+		{
+			buffer[return_of_read - 1] = '\0';
+			if (ft_strcmp(buffer, "md5") == 0)
+				break;
+			else if (ft_strcmp(buffer, "sha224") == 0)
+				break;
+			else if (ft_strcmp(buffer, "sha256") == 0)
+				break;
+			else if (ft_strcmp(buffer, "sha384") == 0)
+				break;
+			else if (ft_strcmp(buffer, "sha512") == 0)
+				break;
+			else
+				ft_print_usage(buffer);
+		}
 	}
-	printf("%s", str);
+}
+
+void handle_stdin(void)
+{
+//	char *string;          ////////////////////////////
+	char buffer[8];
+
+	read_stdin_loop(buffer);
+//	char *md_command;
+	ft_printf("%s", buffer);
+//	ft_printf("ft_SSL> ");
+//	md_command = is_md_command_valid();
+//	check_if // -1 -> strcmp != 0 and usage, 0i, 1
+//	string = mini_gnl_stdin();
+
+//	system(string);
+//	if(ft_strcmp(string, "md5") == 0)
+//		printf("%s", string); ///////////////////
+//	free(string);       ///////////////
+//	char buffer;
+
+//	while(read(0, &buffer, 1) > 0)
+//		ft_printf("%c", buffer);
+
+//	str = mini_gnl(0, argv[1]);
+	
+//	printf("%s", str);
+//	while(1)
+//	{
+//		str = argv[1];
+//	}
+//	printf("%s", str);
 }
 
 int main(int argc, char *argv[])
@@ -242,10 +286,11 @@ int main(int argc, char *argv[])
 
 	fd = open(argv[1], O_RDONLY);
 
-//	if(argc == 1)
-//		handle_stdin(argv);
+	if(argc == 1)
+		handle_stdin();
 	if(argc > 1)
 		ft_ssl_parsing(fd, argv);
+//	system("leaks ft_ssl");
 //	while(1);
 
 /*
