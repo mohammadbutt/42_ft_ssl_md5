@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 18:02:34 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/13 19:07:01 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/13 23:07:36 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@
 ** 2. A file has permission denied access. "Permission denied"
 */
 
-void error_invalid_file_permission(int fd, char **argv)
+void error_invalid_file_permission(int fd, char *argv)
 {
-	ft_printf("ft_ssl: %s: %s\n", argv[1], strerror(errno));
+	ft_printf("ft_ssl: %s: %s\n", argv, strerror(errno));
+//	fd = fd * 1;
 	close(fd);
-	exit(EXIT_SUCCESS);
+//	exit(EXIT_SUCCESS);
 }
 
 /*
@@ -35,11 +36,12 @@ void error_invalid_file_permission(int fd, char **argv)
 ** message. "Is a directory"
 */
 
-void error_message_dir(int fd, char **argv)
+void error_message_dir(int fd, char *argv)
 {
-	ft_printf("ft_ssl: %s: %s\n", argv[1], strerror(errno));
+	ft_printf("ft_ssl: %s: %s\n", argv, strerror(errno));
+//	fd = fd * 1;
 	close(fd);
-	exit(EXIT_SUCCESS);
+//	exit(EXIT_SUCCESS);
 }
 
 /*
@@ -48,18 +50,25 @@ void error_message_dir(int fd, char **argv)
 ** At the end closes the file descriptor
 */
 
-void error_messages(int fd, char **argv)
+bool error_messages(int fd, char *argv)
 {
 	char temp_buff[2];
 	ssize_t return_of_read;
 
 	return_of_read = 0;
 	if(fd == -1)
+	{
 		error_invalid_file_permission(fd, argv);
+		return(true);
+	}
 	return_of_read = read(fd, temp_buff, 1);
 	if(return_of_read == -1)
+	{
 		error_message_dir(fd, argv);
+		return(true);
+	}
 	close(fd);
+	return(false);
 }
 
 
@@ -131,28 +140,6 @@ char *mini_gnl(int fd, char *argv)
 }
 
 
-/*
-char *mini_gnl(int fd, char *argv)
-{
-	char buffer[2];
-	char *temp;
-	char *new_string;
-
-	new_string = malloc(sizeof(char) * (2));
-	if(new_string == NULL)
-		return("memory allocation failed in mini_gnl\n");
-	new_string[0] = 0;
-	fd = open(argv, O_RDONLY);
-	while(read(fd, buffer, 1) > 0)
-	{
-		temp = new_string;
-		new_string = ft_strjoin(temp, buffer);
-		free(temp);
-	}
-	close(fd);
-	return(new_string);
-}
-*/
 char *mini_gnl_stdin(void)
 {
 	char buffer[2];
@@ -165,24 +152,91 @@ char *mini_gnl_stdin(void)
 	new_string[0] = 0;
 	while((read(0, buffer, 1)) > 0)
 	{
-//		printf("%d\n", return_of_read);
 		temp = new_string;
 		new_string = ft_strjoin(temp, buffer);
 		free(temp);
 	}
-//	close(fd);
 	return(new_string);
 }
 
-
-void ft_ssl_parsing(int fd, char **argv)
+bool is_ssl_flag_valid(char c)
 {
-	char *full_str;
+	int i;
 
-	error_messages(fd, argv);
-	full_str = mini_gnl(fd, argv[1]);
-	printf("%s", full_str);
-	free(full_str);
+	i = 0;
+	while(SSL_VALID_FLAG[i])
+	{
+		if(SSL_VALID_FLAG[i] == c)
+			return(true);
+		i++;
+	}
+	return(false);
+}
+
+void collect_ssl_flag(t_ssl *ssl, char c)
+{
+	if(c == 'p')
+		ssl->flag.p = true;
+	else if(c == 'q')
+		ssl->flag.q = true;
+	else if(c == 'r')
+		ssl->flag.r = true;
+	else if(c == 's')
+		ssl->flag.s = true;
+}
+
+void ssl_exit_illegal_option(char c)
+{
+	ft_printf("ft_ssl: illegal option -- %c\n", c);
+	ft_printf("usage: ft_ssl [-pqrs] [-s string] [files ...]\n");
+	exit(EXIT_SUCCESS);
+}
+
+void ft_ssl_collect_flags(char *argv, t_ssl *ssl)
+{
+	int i;
+
+	i = 1;
+	while(argv[i])
+	{
+		if(is_ssl_flag_valid(argv[i]) == true)
+			collect_ssl_flag(ssl, argv[i]);
+		else if(is_ssl_flag_valid(argv[i]) == false)
+			ssl_exit_illegal_option(argv[i]);
+		i++;
+	}
+
+}
+
+void ft_ssl_parsing(int argc, char **argv)
+{
+	t_ssl ssl;
+	char *full_str;
+	int i;
+	int fd;
+
+	i = 1;
+	ft_bzero(&ssl.flag, sizeof(ssl.flag));
+	while(i < argc)
+	{
+		fd = open(argv[i], O_RDONLY);
+		if(argv[i][0] == '-' && argv[i][1] != '\0')
+		{
+			ft_ssl_collect_flags(argv[i], &ssl);
+			ft_printf("ssl.flag.p|%d|\n", ssl.flag.p);
+			ft_printf("ssl.flag.q|%d|\n", ssl.flag.q);
+			ft_printf("ssl.flag.r|%d|\n", ssl.flag.r);
+			ft_printf("ssl.flag.s|%d|\n", ssl.flag.s);
+		}
+		else if(error_messages(fd, argv[i]) == false)
+		{
+			full_str = mini_gnl(fd, argv[i]);
+			printf("ft_ssl (%s) = ",argv[i]);
+			free(full_str);
+		}	
+		(fd) && (close(fd));
+		i++;
+	}
 }
 
 void ft_print_usage(char *buffer)
@@ -192,6 +246,16 @@ void ft_print_usage(char *buffer)
 	ft_printf("md5\nsha224\nsha256\nsha384\nsha512\n\n");
 }
 
+bool is_message_digest_valid(char *str)
+{
+	if (ft_strcmp(str, "md5") == 0 || ft_strcmp(str, "sha224") == 0)
+		return(true);
+	else if (ft_strcmp(str, "sha256") == 0 || ft_strcmp(str, "sha384") == 0)
+		return(true);
+	else if (ft_strcmp(str, "sha512") == 0)
+		return(true);
+	return(false);
+}
 
 void read_stdin_loop(char *buffer)
 {
@@ -206,15 +270,7 @@ void read_stdin_loop(char *buffer)
 		if(return_of_read > 1)
 		{
 			buffer[return_of_read - 1] = '\0';
-			if (ft_strcmp(buffer, "md5") == 0)
-				break;
-			else if (ft_strcmp(buffer, "sha224") == 0)
-				break;
-			else if (ft_strcmp(buffer, "sha256") == 0)
-				break;
-			else if (ft_strcmp(buffer, "sha384") == 0)
-				break;
-			else if (ft_strcmp(buffer, "sha512") == 0)
+			if(is_message_digest_valid(buffer) == true)
 				break;
 			else
 				ft_print_usage(buffer);
@@ -224,12 +280,14 @@ void read_stdin_loop(char *buffer)
 
 void handle_stdin(void)
 {
-//	char *string;          ////////////////////////////
-	char buffer[8];
+	char message_digest_buffer[8];
+	char *message;
 
-	read_stdin_loop(buffer);
+	read_stdin_loop(message_digest_buffer);
+	message = mini_gnl_stdin();
+	printf("%s", message);
 //	char *md_command;
-	ft_printf("%s", buffer);
+//	ft_printf("%s", message_digest_buffer);
 //	ft_printf("ft_SSL> ");
 //	md_command = is_md_command_valid();
 //	check_if // -1 -> strcmp != 0 and usage, 0i, 1
@@ -256,14 +314,14 @@ void handle_stdin(void)
 
 int main(int argc, char *argv[])
 {
-	int fd;
+//	int fd;
 
-	fd = open(argv[1], O_RDONLY);
+//	fd = open(argv[1], O_RDONLY);
 
 	if(argc == 1)
 		handle_stdin();
-	if(argc > 1)
-		ft_ssl_parsing(fd, argv);
+	else if(argc > 1)
+		ft_ssl_parsing(argc, argv);
 //	system("leaks ft_ssl");
 //	while(1);
 

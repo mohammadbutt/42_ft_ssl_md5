@@ -6,7 +6,7 @@
 #    By: mbutt <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/11 14:35:05 by mbutt             #+#    #+#              #
-#    Updated: 2019/11/13 17:07:23 by mbutt            ###   ########.fr        #
+#    Updated: 2019/11/13 22:11:52 by mbutt            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ NAME = ft_ssl
 CC = gcc
 CFLAGS = -I. -c -g
 WFLAGS = -Wall -Wextra -Werror
-DEBUG = #-fsanitize=address -g #-ggdb
+DEBUG = -fsanitize=address -g #-ggdb
 #DEBUG = -fsanitize=undefined
 
 SRC = *.c
