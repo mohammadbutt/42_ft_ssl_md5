@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 18:02:34 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/13 19:01:53 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/13 19:07:01 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,37 +187,11 @@ void ft_ssl_parsing(int fd, char **argv)
 
 void ft_print_usage(char *buffer)
 {
-	ft_printf("ft_ssl: '%s' is an invalid command.\n\n", buffer);
+	ft_printf("ft_ssl:Error: '%s' is an invalid command.\n\n", buffer);
 	ft_printf("Message Digest Commands:\n");
-	ft_printf("md5\nsha224\nsha256\nsha384\nsha512\n");
+	ft_printf("md5\nsha224\nsha256\nsha384\nsha512\n\n");
 }
 
-
-void handle_stdin(void);
-/*
-char *is_md_command_valid(void)
-{
-	char buffer[8];
-	int return_of_read;
-
-	return_of_read = read(0, buffer, 8);
-	if(return_of_read == 0)
-		handle_stdin();
-	buffer[return_of_read - 1] = '\0';
-	if(ft_strcmp(buffer, "md5") == 0 || ft_strcmp(buffer, "sha224") == 0)
-		return(buffer);
-	else if(ft_strcmp(buffer, "sha256") == 0 || ft_strcmp(buffer, "sha384") == 0)
-		return(buffer);
-	else if(ft_strcmp(buffer, "sha512") == 0)
-		return(buffer);
-	else
-	{
-		ft_print_usage(buffer);
-		handle_stdin();
-	}
-
-}
-*/
 
 void read_stdin_loop(char *buffer)
 {
