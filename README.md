@@ -14,3 +14,4 @@ Additional functions: strerror(3), exit(3).
 # Resources and References:
 1. [Reading from stdin - stackoverflow](https://stackoverflow.com/questions/15883568/reading-from-stdin)
 2. [Design Principles and Design Patterns by Robert C Martin](https://fi.ort.edu.uy/innovaportal/file/2032/1/design_principles.pdf)
+3. Testing vogsphere git
