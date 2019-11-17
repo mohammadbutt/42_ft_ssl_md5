@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 18:02:34 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/13 23:07:36 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/16 17:01:19 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,10 +223,10 @@ void ft_ssl_parsing(int argc, char **argv)
 		if(argv[i][0] == '-' && argv[i][1] != '\0')
 		{
 			ft_ssl_collect_flags(argv[i], &ssl);
-			ft_printf("ssl.flag.p|%d|\n", ssl.flag.p);
-			ft_printf("ssl.flag.q|%d|\n", ssl.flag.q);
-			ft_printf("ssl.flag.r|%d|\n", ssl.flag.r);
-			ft_printf("ssl.flag.s|%d|\n", ssl.flag.s);
+//			ft_printf("ssl.flag.p|%d|\n", ssl.flag.p);
+//			ft_printf("ssl.flag.q|%d|\n", ssl.flag.q);
+//			ft_printf("ssl.flag.r|%d|\n", ssl.flag.r);
+//			ft_printf("ssl.flag.s|%d|\n", ssl.flag.s);
 		}
 		else if(error_messages(fd, argv[i]) == false)
 		{
