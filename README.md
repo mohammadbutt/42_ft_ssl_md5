@@ -18,9 +18,12 @@ Additional functions: strerror(3), exit(3).
 2. `-s` flag needs another string. There are one of two ways to have a string. One, there have to be characters in the same argument after -s. Two, there has to be a string argument after `-s` as shown below:
    1. `-sabc`
    2. `-s` abc
-3. Not having character right after `-s` in the same argument or the argument after will result in "option requires an argument -- s" message.
-   `./ft_ssl md5 -s` will result in the following message:
-      testing error message
+3. `./ft_ssl md5 -s` will result in the following message:
+   1. 
+     ```
+   md5: option requires an argument -- s
+   usage: md5 [-pqrtx] [-s string] [files ...]
+      ```
 
 
 
