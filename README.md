@@ -18,12 +18,22 @@ Additional functions: strerror(3), exit(3).
 2. `-s` flag needs another string. There are one of two ways to have a string. One, there have to be characters in the same argument after -s. Two, there has to be a string argument after `-s` as shown below:
    1. `-sabc`
    2. `-s` abc
-3. `./ft_ssl md5 -s` will result in the following message:
+3. `./ft_ssl md5 -s` will result in the following error message:
    ``` 
    md5: option requires an argument -- s
    usage: md5 [-pqrtx] [-s string] [files ...]
    ```
 
+### Rules for `-p`
+1. `./ft_ssl md5 -p` allows for standard input stream.
+2. `./ft_ssl md5 -pppp` allows for standard input stream for the first 'p', but second, third, and fourth p is hashed as an empty string. So there will be four hashes.
+3. `./ft_ssl md5 -pqrqr` allows for standard input stream for the first 'p', but remaining 'qrqr' flags are only hashed once as an empty string. So there will be two hashes.
+4. `./ft_ssl md5 -ps` allows for standard input stream for the first 'p', but for 's', following error message is printed:
+   ```
+   0bee89b07a248e27c83fc3d5951213c1
+   md5: option requires an argument -- s
+   usage: md5 [-pqrtx] [-s string] [files ...]
+   ```
 
 
 # Resources and References:
