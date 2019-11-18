@@ -41,6 +41,13 @@ Additional functions: strerror(3), exit(3).
    0bee89b07a248e27c83fc3d5951213c1
    MD5 ("ss") = 3691308f2a4c2f6983f2880d32e29c84
    ```
+6. `./ft_ssl md5 -psss -sss` will have the following hash:
+   ```
+   abc
+   0bee89b07a248e27c83fc3d5951213c1
+   MD5 ("ss") = 3691308f2a4c2f6983f2880d32e29c84
+   MD5 ("ss") = 3691308f2a4c2f6983f2880d32e29c84
+   ```
 
 
 # Resources and References:
