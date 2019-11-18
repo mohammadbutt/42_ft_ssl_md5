@@ -35,7 +35,7 @@ Additional functions: strerror(3), exit(3).
    md5: option requires an argument -- s
    usage: md5 [-pqrtx] [-s string] [files ...]
    ```
-5. `./ft_ssl md5 -psss` allows for standard input stream for the first 'p' "abc" is entererd, for 's', it hashes the string second third 's', as shown below:
+5. `./ft_ssl md5 -psss` allows for standard input stream for the first 'p' "abc" is entererd, for 's', it stores second and third s as a string as "ss", as shown below:
    ```
    abc
    0bee89b07a248e27c83fc3d5951213c1
