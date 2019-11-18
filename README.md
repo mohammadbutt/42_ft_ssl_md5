@@ -10,6 +10,14 @@ Allowed C functions: malloc(3), free(3)
 
 Additional functions: strerror(3), exit(3).
 
+### Rules for `-s`
+
+1. Anything after `-s` is a string. Even `p`, `q`, `r`. Example 1, `./ft_ssl md5 -spqr` will hash the string "pqr". Eample 2, `./ft_ssl md5 -ss` will hash the string "s".
+2. `-s` flag needs another string. There are one of two ways to have a string. One, there have to be characters in the same argument after -s. Two, there has to be a string argument after `-s` as shown below:
+   a. `-sabc`
+   b. `-s` abc
+
+
 
 # Resources and References:
 1. [Reading from stdin - stackoverflow](https://stackoverflow.com/questions/15883568/reading-from-stdin)
