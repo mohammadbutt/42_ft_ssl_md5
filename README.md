@@ -19,11 +19,10 @@ Additional functions: strerror(3), exit(3).
    1. `-sabc`
    2. `-s` abc
 3. `./ft_ssl md5 -s` will result in the following message:
-   1. 
-     ```
-   md5: option requires an argument -- s
-   usage: md5 [-pqrtx] [-s string] [files ...]
-      ```
+```
+md5: option requires an argument -- s
+usage: md5 [-pqrtx] [-s string] [files ...]
+```
 
 
 
