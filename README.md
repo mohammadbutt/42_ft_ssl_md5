@@ -48,7 +48,12 @@ Additional functions: strerror(3), exit(3).
    MD5 ("ss") = 3691308f2a4c2f6983f2880d32e29c84
    MD5 ("ss") = 3691308f2a4c2f6983f2880d32e29c84
    ```
-
+### Rules for `-r` and `-q`
+1. If there are only three arguments as shown below, then the `q` and `r` behave in a similar manner to `-p` flag in reading the input from the stream, but it is only true if `-q` and `-r` are the only flags:
+   ```
+   ./ft_ssl md5 -q
+   ./ft_ssl md5 -r
+   ```
 
 # Resources and References:
 1. [Reading from stdin - stackoverflow](https://stackoverflow.com/questions/15883568/reading-from-stdin)
