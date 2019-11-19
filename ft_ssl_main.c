@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ssl_main.c                                         :+:      :+:    :+:   */
+/*   ft_ssl_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/12 18:02:34 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/16 17:18:17 by mbutt            ###   ########.fr       */
+/*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
+/*   Updated: 2019/11/18 16:36:49 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,20 @@ bool is_message_digest_valid(char *str)
 	return(false);
 }
 
+/*
+** Since the program should be able to exit out any time Ctrl + D is pressed,
+** this function is created to check if the return of read is equal to 0.
+** If enter is pressed, return_of_read is equal to 1.
+** But if Ctrl+D is pressed, return_of_read is equal to 0. which will exit the
+** program, just like how the original openssl does.
+*/
+
+void if_control_d(int return_of_read)
+{
+	if(return_of_read == 0)
+		exit(EXIT_SUCCESS);
+}
+
 void read_stdin_loop(char *buffer)
 {
 	int return_of_read;
@@ -264,7 +278,16 @@ void read_stdin_loop(char *buffer)
 	return_of_read = 0;
 	while(1)
 	{
-		ft_printf("ft_SSL> ");
+// Adding the below
+//		if(signal(SIGINT, false) == SIG_ERR)
+//		{
+//			ft_printf("%s\n", NL_HASH);
+//			exit(EXIT_SUCCESS);
+//		}
+// Adding the above
+	
+		ft_printf("ft_SS> ");
+		ft_printf("%d", return_of_read);
 		buffer[0] = 0;
 		return_of_read = read(0, buffer, 8);
 		if(return_of_read > 1)
@@ -275,6 +298,9 @@ void read_stdin_loop(char *buffer)
 			else
 				ft_print_usage(buffer);
 		}
+		if_control_d(return_of_read);
+//		if(return_of_read == 0)
+//			exit(EXIT_SUCCESS);
 	}
 }
 

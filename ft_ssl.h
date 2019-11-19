@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/13 23:09:07 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/18 16:07:33 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,19 @@
 */
 
 /*
+*** These Macros will be deleted later. Just for testing
+*/
+
+# define NL_HASH "d41d8cd98f00b204e9800998ecf8427e"
+# define AB_NL_HASH "daa8075d6ac5ff8d0c6d4650adb4ef29"
+# define AB_HASH "187ef4436122d1cc2f40dc2b92f0eba0"
+
+/*
 ** Macros-----------------------------------------------------------------------
 */
 
 # define SSL_VALID_FLAG "pqrs"
+
 
 
 /*
