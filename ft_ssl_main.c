@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/18 22:34:32 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/18 22:43:15 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,8 +245,10 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 	if(ssl->flag.s == true && argv[i + 1] != '\0')
 		store_message_to_digest_for_s(argv + i + 1, ssl);
 	else if(ssl->flag.s == true && j + 1 == argc)
+	{
 		ft_option_requires_argument(ssl->message_digest_algo);
-	exit(EXIT_SUCCESS); // Need to takes it off later 
+		exit(EXIT_SUCCESS); // Need to takes it off later 
+	}
 
 }
 bool is_md_algorithm_valid(char *str)
