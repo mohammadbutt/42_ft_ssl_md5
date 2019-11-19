@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/18 20:10:12 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/18 22:34:32 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,26 +202,51 @@ void ssl_exit_illegal_option(char c)
 ** And the program in this case exits.
 */
 
-void ft_option_requies_argument(char *digest_method)
+void ft_option_requires_argument(char *digest_method)
 {
 	ft_printf("%s: option requires an argument -- s\n", digest_method);
 	ft_printf("usage: %s [-pqr] [-s string] [files ...]\n", digest_method);
+//		free(digest_method);
 	exit(EXIT_SUCCESS);
 }
 
-void ft_ssl_collect_flags(char *argv, t_ssl *ssl)
+void store_message_to_digest_for_s(char *argv, t_ssl *ssl)
+{
+	char *message_to_digest;
+	int len_of_message;
+
+	len_of_message = ft_strlen(argv);
+	message_to_digest = malloc(sizeof(char) * (len_of_message + 1));
+	ft_strcpy(message_to_digest, argv);
+	ft_printf("%s", message_to_digest);
+	free(message_to_digest);
+	ssl->flag.s = ssl->flag.s; // Just a filler for -Wall -Wextra -Werror
+}
+
+
+void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 {
 	int i;
+//	char *message_to_digest;
 
 	i = 1;
 	while(argv[i])
 	{
 		if(is_ssl_flag_valid(argv[i]) == true)
+		{
 			collect_ssl_flag(ssl, argv[i]);
+			if(ssl->flag.s == true)
+				break;
+		}
 		else if(is_ssl_flag_valid(argv[i]) == false)
 			ssl_exit_illegal_option(argv[i]);
 		i++;
 	}
+	if(ssl->flag.s == true && argv[i + 1] != '\0')
+		store_message_to_digest_for_s(argv + i + 1, ssl);
+	else if(ssl->flag.s == true && j + 1 == argc)
+		ft_option_requires_argument(ssl->message_digest_algo);
+	exit(EXIT_SUCCESS); // Need to takes it off later 
 
 }
 bool is_md_algorithm_valid(char *str)
@@ -264,11 +289,12 @@ void ft_ssl_parse_qr(int argc, char **argv)
 
 	i = 2;
 	ft_initialize_ssl_flag(&ssl);
+	ssl.message_digest_algo = argv[1];
 	while(i < argc)
 	{
 		if(argv[i][0] == '-' && argv[i][1] != '\0')
 		{
-			ft_ssl_collect_flags(argv[i], &ssl);
+			ft_ssl_collect_flags(argv[i], &ssl, i, argc);
 			if(ssl.flag.p == true || ssl.flag.s == true)
 				return;
 		}
@@ -277,33 +303,42 @@ void ft_ssl_parse_qr(int argc, char **argv)
 		i++;
 	}
 	message_to_digest = mini_gnl_stdin();
-	ft_printf("%s", message_to_digest);
+	ft_printf("message digest algo: %s\n", ssl.message_digest_algo);
+	ft_printf("message to digest: %s", message_to_digest);
+	free(message_to_digest);
 	exit(EXIT_SUCCESS);
 }
 
 void ft_ssl_parse_pqrs(int argc, char **argv)
 {
 	t_ssl ssl;
-	char *full_str;
+	char *message_to_digest;
 	int i;
 	int fd;
 
 	i = 2;
 	ft_initialize_ssl_flag(&ssl);
-	ft_printf("|%d|\n", argc);
+	ssl.message_digest_algo = argv[1];
+//	ft_printf("|%d|\n", argc);
 //	ft_ssl_parsing_for_qr(argc, argv);
 	while(i < argc)
 	{
-		fd = open(argv[i], O_RDONLY);
+//		ft_printf("i|%d|\n", i);
+//		fd = open(argv[i], O_RDONLY);
 		if(argv[i][0] == '-' && argv[i][1] != '\0')
 		{
-			ft_ssl_collect_flags(argv[i], &ssl);
+			ft_ssl_collect_flags(argv[i], &ssl, i, argc);
 		}
-		else if(error_messages(fd, argv[i]) == false)
-		{
-			full_str = mini_gnl(fd, argv[i]);
-			printf("ft_ssl (%s) = ",argv[i]);
-			free(full_str);
+		else
+		{	
+			fd = open(argv[i], O_RDONLY);
+			if(error_messages(fd, argv[i]) == false)
+			{
+				message_to_digest = mini_gnl(fd, argv[i]);
+				ft_printf("ft_ssl message to digest (%s) = \n",argv[i]);
+				ft_printf("message digest algo: %s\n", ssl.message_digest_algo);
+				free(message_to_digest);
+			}
 		}	
 		(fd) && (close(fd));
 		i++;
@@ -321,7 +356,8 @@ void ft_ssl_parsing(int argc, char **argv)
 	else if(is_md_algorithm_valid(argv[1]) == true && argc == 2)
 	{
 		message_to_digest = mini_gnl_stdin();
-		ft_printf("%s", message_to_digest);
+		ft_printf("message digest algo: %s\n", argv[1]);
+		ft_printf("message to digest: %s", message_to_digest);
 	}
 	else
 	{
@@ -416,13 +452,15 @@ char *read_stdin_loop(char *message_digest_algorithm)
 
 void handle_stdin(void)
 {
-	char message_digest_algorithm[8];
-	char *message;
+	char message_digest_algo[8];
+	char *message_to_digest;
 
-	read_stdin_loop(message_digest_algorithm);
-	ft_printf("|%s|\n", message_digest_algorithm);
-	message = mini_gnl_stdin();
-	printf("%s", message);
+	read_stdin_loop(message_digest_algo);
+	message_to_digest = mini_gnl_stdin();
+
+	ft_printf("message digest algo: %s\n", message_digest_algo);
+	ft_printf("message to digest: %s\n", message_to_digest);
+
 //	char *md_command;
 //	ft_printf("%s", message_digest_buffer);
 //	ft_printf("ft_SSL> ");

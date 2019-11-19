@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/18 19:31:08 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/18 22:27:13 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 ** Notes about headers that are included:
 ** #include <fcntl.h> 	to access open(2).
 ** #include <string.h>	to access strerror(3).
-## #include <errno.h>	to access errno(3)
+** #include <errno.h>	to access errno(3)
 */
 
 /*
@@ -58,6 +58,8 @@ typedef struct	s_ssl_flag
 typedef struct	s_ssl
 {
 	t_ssl_flag	flag;
+	char		*message_digest_algo;
+	char		*message_to_digest;
 }				t_ssl;
 
 
