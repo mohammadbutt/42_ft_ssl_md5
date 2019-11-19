@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/18 19:39:04 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/18 20:10:12 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,29 +259,26 @@ void ft_initialize_ssl_flag(t_ssl *ssl)
 void ft_ssl_parse_qr(int argc, char **argv)
 {
 	t_ssl ssl;
-	char *full_str;
+	char *message_to_digest;
 	int i;
-	int fd;
 
 	i = 2;
 	ft_initialize_ssl_flag(&ssl);
 	while(i < argc)
 	{
-		fd = open(argv[i], O_RDONLY);
 		if(argv[i][0] == '-' && argv[i][1] != '\0')
 		{
 			ft_ssl_collect_flags(argv[i], &ssl);
+			if(ssl.flag.p == true || ssl.flag.s == true)
+				return;
 		}
-		else if(error_messages(fd, argv[i]) == false)
-		{
-			full_str = mini_gnl(fd, argv[i]);
-			printf("ft_ssl (%s) = ",argv[i]);
-			free(full_str);
-		}	
-		(fd) && (close(fd));
+		else
+			return;
 		i++;
 	}
-
+	message_to_digest = mini_gnl_stdin();
+	ft_printf("%s", message_to_digest);
+	exit(EXIT_SUCCESS);
 }
 
 void ft_ssl_parse_pqrs(int argc, char **argv)
@@ -328,7 +325,6 @@ void ft_ssl_parsing(int argc, char **argv)
 	}
 	else
 	{
-//		ft_printf("%s\n", argv[1]);
 		ft_ssl_parse_qr(argc, argv);
 		ft_ssl_parse_pqrs(argc, argv);
 	}
