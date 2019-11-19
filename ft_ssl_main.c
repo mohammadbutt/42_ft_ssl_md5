@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/18 16:36:49 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/18 19:18:58 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,10 +185,27 @@ void collect_ssl_flag(t_ssl *ssl, char c)
 		ssl->flag.s = true;
 }
 
+/*
+** ssl_exit_illegal_option is used when the flag is not one of the valid flag
+** options -p, -q, -r, or -s.
+*/
+
 void ssl_exit_illegal_option(char c)
 {
 	ft_printf("ft_ssl: illegal option -- %c\n", c);
 	ft_printf("usage: ft_ssl [-pqrs] [-s string] [files ...]\n");
+	exit(EXIT_SUCCESS);
+}
+/*
+** ft_option_requires_argument is used when an argument is not entered
+** with -s flag.
+** And the program in this case exits.
+*/
+
+void ft_option_requies_argument(char *digest_method)
+{
+	ft_printf("%s: option requires an argument -- s\n", digest_method);
+	ft_printf("usage: %s [-pqr] [-s string] [files ...]\n", digest_method);
 	exit(EXIT_SUCCESS);
 }
 
@@ -207,8 +224,39 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl)
 	}
 
 }
+bool is_message_digest_valid(char *str)
+{
+	if (ft_strcmp(str, "md5") == 0 || ft_strcmp(str, "sha224") == 0)
+		return(true);
+	else if (ft_strcmp(str, "sha256") == 0 || ft_strcmp(str, "sha384") == 0)
+		return(true);
+	else if (ft_strcmp(str, "sha512") == 0)
+		return(true);
+	return(false);
+}
 
-void ft_ssl_parsing(int argc, char **argv)
+/*
+** flag.p and flag.s are set equal to -1 because if -s or -p never appear in
+** any of the arguments, but -q or -r are present then the program should be
+** able to enter the standard input/stdin mode to read from stream.
+*/
+void ft_print_usage(char *buffer)
+{
+	ft_printf("ft_ssl:Error: '%s' is an invalid command.\n\n", buffer);
+	ft_printf("Message Digest Commands:\n");
+	ft_printf("md5\nsha224\nsha256\nsha384\nsha512\n\n");
+}
+
+void ft_initialize_ssl_flag(t_ssl *ssl)
+{	
+//	ft_bzero(&ssl.flag, sizeof(ssl.flag));
+	ssl->flag.p = -1;
+	ssl->flag.s = -1;
+	ssl->flag.q = false;
+	ssl->flag.r = false;
+}
+
+void ft_ssl_parse_qr(int argc, char **argv)
 {
 	t_ssl ssl;
 	char *full_str;
@@ -216,17 +264,43 @@ void ft_ssl_parsing(int argc, char **argv)
 	int fd;
 
 	i = 1;
-	ft_bzero(&ssl.flag, sizeof(ssl.flag));
+	ft_initialize_ssl_flag(&ssl);
 	while(i < argc)
 	{
 		fd = open(argv[i], O_RDONLY);
 		if(argv[i][0] == '-' && argv[i][1] != '\0')
 		{
 			ft_ssl_collect_flags(argv[i], &ssl);
-//			ft_printf("ssl.flag.p|%d|\n", ssl.flag.p);
-//			ft_printf("ssl.flag.q|%d|\n", ssl.flag.q);
-//			ft_printf("ssl.flag.r|%d|\n", ssl.flag.r);
-//			ft_printf("ssl.flag.s|%d|\n", ssl.flag.s);
+		}
+		else if(error_messages(fd, argv[i]) == false)
+		{
+			full_str = mini_gnl(fd, argv[i]);
+			printf("ft_ssl (%s) = ",argv[i]);
+			free(full_str);
+		}	
+		(fd) && (close(fd));
+		i++;
+	}
+
+}
+
+void ft_ssl_parse_pqrs(int argc, char **argv)
+{
+	t_ssl ssl;
+	char *full_str;
+	int i;
+	int fd;
+
+	i = 1;
+	ft_initialize_ssl_flag(&ssl);
+	ft_printf("|%d|\n", argc);
+//	ft_ssl_parsing_for_qr(argc, argv);
+	while(i < argc)
+	{
+		fd = open(argv[i], O_RDONLY);
+		if(argv[i][0] == '-' && argv[i][1] != '\0')
+		{
+			ft_ssl_collect_flags(argv[i], &ssl);
 		}
 		else if(error_messages(fd, argv[i]) == false)
 		{
@@ -239,23 +313,51 @@ void ft_ssl_parsing(int argc, char **argv)
 	}
 }
 
-void ft_print_usage(char *buffer)
+
+void ft_ssl_parsing(int argc, char **argv)
 {
-	ft_printf("ft_ssl:Error: '%s' is an invalid command.\n\n", buffer);
-	ft_printf("Message Digest Commands:\n");
-	ft_printf("md5\nsha224\nsha256\nsha384\nsha512\n\n");
+	if(is_message_digest_valid(argv[1]) == false)
+	{
+		ft_print_usage(argv[1]);
+		exit(EXIT_SUCCESS);
+	}
+
+//	ft_printf("%s\n", argv[1]);
+	ft_ssl_parse_qr(argc, argv);
+	ft_ssl_parse_pqrs(argc, argv);
+/*
+	t_ssl ssl;
+	char *full_str;
+	int i;
+	int fd;
+
+	i = 1;
+	ft_initialize_ssl_flag(&ssl);
+	ft_printf("|%d|\n", argc);
+//	ft_ssl_parsing_for_qr(argc, argv);
+	while(i < argc)
+	{
+		fd = open(argv[i], O_RDONLY);
+		if(argv[i][0] == '-' && argv[i][1] != '\0')
+		{
+			ft_ssl_collect_flags(argv[i], &ssl);
+		}
+		else if(error_messages(fd, argv[i]) == false)
+		{
+			full_str = mini_gnl(fd, argv[i]);
+			printf("ft_ssl (%s) = ",argv[i]);
+			free(full_str);
+		}	
+		(fd) && (close(fd));
+		i++;
+	}
+*/
 }
 
-bool is_message_digest_valid(char *str)
-{
-	if (ft_strcmp(str, "md5") == 0 || ft_strcmp(str, "sha224") == 0)
-		return(true);
-	else if (ft_strcmp(str, "sha256") == 0 || ft_strcmp(str, "sha384") == 0)
-		return(true);
-	else if (ft_strcmp(str, "sha512") == 0)
-		return(true);
-	return(false);
-}
+
+
+
+
 
 /*
 ** Since the program should be able to exit out any time Ctrl + D is pressed,
@@ -271,32 +373,41 @@ void if_control_d(int return_of_read)
 		exit(EXIT_SUCCESS);
 }
 
-void read_stdin_loop(char *buffer)
+/*
+** read_stdin_loop reads the input from user if the only argument is ./ft_ssl.
+**
+** Program keeps on running under following conditions:
+** 1. If enter is pressed.
+** 2. If the digest message string is anything other than "md5", "sha224",
+** "sha256", "sha384", "sha512"
+**
+** Program stops under following conditions:
+** 1. If Control + D is pressed. And program exits
+** 2. If digest message string is one of "md5", "sha224", "sha256", "sha384", or
+** "sha512". And program continues to do the rest of the work.
+*/
+
+char *read_stdin_loop(char *message_digest_algorithm)
 {
 	int return_of_read;
 
 	return_of_read = 0;
 	while(1)
-	{
-// Adding the below
-//		if(signal(SIGINT, false) == SIG_ERR)
-//		{
-//			ft_printf("%s\n", NL_HASH);
-//			exit(EXIT_SUCCESS);
-//		}
-// Adding the above
-	
+	{	
 		ft_printf("ft_SS> ");
-		ft_printf("%d", return_of_read);
-		buffer[0] = 0;
-		return_of_read = read(0, buffer, 8);
+//		ft_printf("%d", return_of_read);
+		message_digest_algorithm[0] = 0;
+		return_of_read = read(0, message_digest_algorithm, 8);
 		if(return_of_read > 1)
 		{
-			buffer[return_of_read - 1] = '\0';
-			if(is_message_digest_valid(buffer) == true)
-				break;
+			message_digest_algorithm[return_of_read - 1] = '\0';
+			if(is_message_digest_valid(message_digest_algorithm) == true)
+			{
+				return(message_digest_algorithm);
+//				break;
+			}
 			else
-				ft_print_usage(buffer);
+				ft_print_usage(message_digest_algorithm);
 		}
 		if_control_d(return_of_read);
 //		if(return_of_read == 0)
@@ -306,10 +417,11 @@ void read_stdin_loop(char *buffer)
 
 void handle_stdin(void)
 {
-	char message_digest_buffer[8];
+	char message_digest_algorithm[8];
 	char *message;
 
-	read_stdin_loop(message_digest_buffer);
+	read_stdin_loop(message_digest_algorithm);
+	ft_printf("|%s|\n", message_digest_algorithm);
 	message = mini_gnl_stdin();
 	printf("%s", message);
 //	char *md_command;
