@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/18 19:18:58 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/18 19:39:04 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,7 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl)
 	}
 
 }
-bool is_message_digest_valid(char *str)
+bool is_md_algorithm_valid(char *str)
 {
 	if (ft_strcmp(str, "md5") == 0 || ft_strcmp(str, "sha224") == 0)
 		return(true);
@@ -249,11 +249,11 @@ void ft_print_usage(char *buffer)
 
 void ft_initialize_ssl_flag(t_ssl *ssl)
 {	
-//	ft_bzero(&ssl.flag, sizeof(ssl.flag));
-	ssl->flag.p = -1;
-	ssl->flag.s = -1;
-	ssl->flag.q = false;
-	ssl->flag.r = false;
+	ft_bzero(&ssl->flag, sizeof(ssl->flag));
+//	ssl->flag.p = -1;
+//	ssl->flag.s = -1;
+//	ssl->flag.q = false;
+//	ssl->flag.r = false;
 }
 
 void ft_ssl_parse_qr(int argc, char **argv)
@@ -263,7 +263,7 @@ void ft_ssl_parse_qr(int argc, char **argv)
 	int i;
 	int fd;
 
-	i = 1;
+	i = 2;
 	ft_initialize_ssl_flag(&ssl);
 	while(i < argc)
 	{
@@ -291,7 +291,7 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 	int i;
 	int fd;
 
-	i = 1;
+	i = 2;
 	ft_initialize_ssl_flag(&ssl);
 	ft_printf("|%d|\n", argc);
 //	ft_ssl_parsing_for_qr(argc, argv);
@@ -313,18 +313,25 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 	}
 }
 
-
 void ft_ssl_parsing(int argc, char **argv)
 {
-	if(is_message_digest_valid(argv[1]) == false)
+	char *message_to_digest;
+	if(is_md_algorithm_valid(argv[1]) == false)
 	{
 		ft_print_usage(argv[1]);
 		exit(EXIT_SUCCESS);
 	}
-
-//	ft_printf("%s\n", argv[1]);
-	ft_ssl_parse_qr(argc, argv);
-	ft_ssl_parse_pqrs(argc, argv);
+	else if(is_md_algorithm_valid(argv[1]) == true && argc == 2)
+	{
+		message_to_digest = mini_gnl_stdin();
+		ft_printf("%s", message_to_digest);
+	}
+	else
+	{
+//		ft_printf("%s\n", argv[1]);
+		ft_ssl_parse_qr(argc, argv);
+		ft_ssl_parse_pqrs(argc, argv);
+	}
 /*
 	t_ssl ssl;
 	char *full_str;
@@ -353,10 +360,6 @@ void ft_ssl_parsing(int argc, char **argv)
 	}
 */
 }
-
-
-
-
 
 
 /*
@@ -401,7 +404,7 @@ char *read_stdin_loop(char *message_digest_algorithm)
 		if(return_of_read > 1)
 		{
 			message_digest_algorithm[return_of_read - 1] = '\0';
-			if(is_message_digest_valid(message_digest_algorithm) == true)
+			if(is_md_algorithm_valid(message_digest_algorithm) == true)
 			{
 				return(message_digest_algorithm);
 //				break;
