@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/19 19:18:22 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/19 19:57:06 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,6 +311,7 @@ void ft_print_usage(char *buffer)
 void ft_initialize_ssl_flag(t_ssl *ssl)
 {	
 	ft_bzero(&ssl->flag, sizeof(ssl->flag));
+	ssl->skip_if = false;
 //	ssl->flag.p = -1;
 //	ssl->flag.s = -1;
 //	ssl->flag.q = false;
@@ -367,36 +368,29 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 	i = 2;
 	ft_initialize_ssl_flag(&ssl);
 	ssl.message_digest_algo = argv[1];
-//	ft_printf("Comes into ft_ssl_parse_pqrs\n");
-//	ft_printf("|%d|\n", argc);
-//	ft_ssl_parsing_for_qr(argc, argv);
 	while(i < argc)
 	{
-//		ft_printf("i|%d|\n", i);
-//		fd = open(argv[i], O_RDONLY);
-		if(argv[i][0] == '-' && argv[i][1] != '\0')
-		{
+		if(argv[i][0] == '-' && argv[i][1] != '\0' && ssl.skip_if == false)
 			ft_ssl_collect_flags(argv[i], &ssl, i, argc);
-		}
 		else
-		{	
-			fd = open(argv[i], O_RDONLY);
-			if(error_messages(fd, argv[i]) == false)
+		{
+			if(ssl.flag.s == true)
+				hash_message(ssl.message_digest_algo, argv[i]);
+			else if(ssl.flag.s == false)
 			{
-//				ft_printf("Comes here\n");
-				message_to_digest = mini_gnl(fd, argv[i]);
-//				ft_printf("|%s|\n", message_to_digest);
-				if(ssl.flag.s == true)
-					hash_message(ssl.message_digest_algo, argv[i]);
-				else if(ssl.flag.s == false)
+				fd = open(argv[i], O_RDONLY);
+				if(error_messages(fd, argv[i]) == false)
+				{
+					message_to_digest = mini_gnl(fd, argv[i]);
 					hash_message(ssl.message_digest_algo, message_to_digest);
-//				ft_printf("ft_ssl message to digest (%s) = \n",argv[i]);
-//				ft_printf("message digest algo: %s\n", ssl.message_digest_algo);
-				free(message_to_digest);
-				ssl.flag.s = false;
-				ssl.flag.p = false;
+					free(message_to_digest);
+				}
 			}
-		}	
+			if(ssl.flag.s == false && ssl.flag.p == false)
+				ssl.skip_if = true;
+			ssl.flag.s = false;
+			ssl.flag.p = false;
+		}
 		(fd) && (close(fd));
 		i++;
 	}

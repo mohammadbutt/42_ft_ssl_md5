@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/19 16:45:42 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/19 19:48:56 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct	s_ssl_flag
 typedef struct	s_ssl
 {
 	t_ssl_flag	flag;
+	bool		skip_if;
 	char		*message_digest_algo;
 	char		*message_to_digest;
 }				t_ssl;
