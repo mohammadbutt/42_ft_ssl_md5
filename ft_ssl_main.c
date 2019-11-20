@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/19 20:15:40 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/19 21:15:44 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,16 +249,9 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 		i++;
 	}
 	if(ssl->flag.s == true && argv[i + 1] != '\0')
-	{
 		hash_message(ssl->message_digest_algo, argv + i + 1);
-	//	store_message_to_digest_for_s(argv + i + 1, ssl);
-	}
 	else if(ssl->flag.s == true && j + 1 == argc)
-	{
 		ft_option_requires_argument(ssl->message_digest_algo);
-//		exit(EXIT_SUCCESS); // Need to takes it off later 
-	}
-
 }
 
 /*
@@ -269,8 +262,8 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 ** is helpful to have is_there_p_or_s, so if 'p' or 's' are true then the pogram
 ** leaves ft_ssl_parse_qr to go to ft_ssl_parse_pqrs.
 **
-** Return Value: returns true if there is 'p' or 's', returns false if there is
-** no 'p' or 's'
+** Return Value: returns true if there is 'p' or 's'.
+** Returns false if there is no 'p' or 's'
 */
 bool is_there_p_or_s(char *argv)
 {
@@ -312,6 +305,7 @@ void ft_initialize_ssl_flag(t_ssl *ssl)
 {	
 	ft_bzero(&ssl->flag, sizeof(ssl->flag));
 	ssl->skip_if = false;
+//	ssl->skip_p = false;
 //	ssl->flag.p = -1;
 //	ssl->flag.s = -1;
 //	ssl->flag.q = false;
@@ -363,7 +357,7 @@ void ft_ssl_parse_pqrs_without_dash(char **argv, t_ssl *ssl, int i)
 	char *message_to_digest;
 	int fd;
 
-	ssl->message_digest_algo = argv[1];
+//	ssl->message_digest_algo = argv[1];
 	if(ssl->flag.s == true)
 		hash_message(ssl->message_digest_algo, argv[i]);
 	else if(ssl->flag.s == false)
