@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/19 19:57:06 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/19 20:15:40 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,12 +358,37 @@ void ft_ssl_parse_qr(int argc, char **argv)
 	exit(EXIT_SUCCESS);
 }
 
+void ft_ssl_parse_pqrs_without_dash(char **argv, t_ssl *ssl, int i)
+{
+	char *message_to_digest;
+	int fd;
+
+	ssl->message_digest_algo = argv[1];
+	if(ssl->flag.s == true)
+		hash_message(ssl->message_digest_algo, argv[i]);
+	else if(ssl->flag.s == false)
+	{
+		fd = open(argv[i], O_RDONLY);
+		if(error_messages(fd, argv[i]) == false)
+		{
+			message_to_digest = mini_gnl(fd, argv[i]);
+			hash_message(ssl->message_digest_algo, message_to_digest);
+			free(message_to_digest);
+		}
+		(fd) && (close(fd));
+	}
+	if(ssl->flag.s == false && ssl->flag.p == false)
+		ssl->skip_if = true;
+	ssl->flag.s = false;
+	ssl->flag.p = false;
+}
+
 void ft_ssl_parse_pqrs(int argc, char **argv)
 {
 	t_ssl ssl;
-	char *message_to_digest;
+//	char *message_to_digest;
 	int i;
-	int fd;
+//	int fd;
 
 	i = 2;
 	ft_initialize_ssl_flag(&ssl);
@@ -374,6 +399,8 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 			ft_ssl_collect_flags(argv[i], &ssl, i, argc);
 		else
 		{
+			ft_ssl_parse_pqrs_without_dash(argv, &ssl, i);
+/*
 			if(ssl.flag.s == true)
 				hash_message(ssl.message_digest_algo, argv[i]);
 			else if(ssl.flag.s == false)
@@ -385,13 +412,14 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 					hash_message(ssl.message_digest_algo, message_to_digest);
 					free(message_to_digest);
 				}
+				(fd) && (close(fd));
 			}
 			if(ssl.flag.s == false && ssl.flag.p == false)
 				ssl.skip_if = true;
 			ssl.flag.s = false;
 			ssl.flag.p = false;
+*/
 		}
-		(fd) && (close(fd));
 		i++;
 	}
 }
