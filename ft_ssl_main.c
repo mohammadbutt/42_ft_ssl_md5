@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/19 21:15:44 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/19 21:46:01 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,33 +321,18 @@ void ft_ssl_parse_qr(int argc, char **argv)
 	i = 2;
 	ft_initialize_ssl_flag(&ssl);
 	ssl.message_digest_algo = argv[1];
-//	ft_printf("Comes into qr\n");
 	while(i < argc)
 	{
+		if(is_there_p_or_s(argv[i]) == true)
+			return;
 		if(argv[i][0] == '-' && argv[i][1] != '\0')
-		{
-//			ft_printf("|p:%d|", ssl.flag.p);
-//			ft_printf("|q:%d|", ssl.flag.q);
-//			ft_printf("|r:%d|", ssl.flag.r);
-//			ft_printf("|s:%d|\n", ssl.flag.s);
-			if(is_there_p_or_s(argv[i]) == true)
-				return;
 			ft_ssl_collect_flags(argv[i], &ssl, i, argc);
-//			if(ssl.flag.p == true || ssl.flag.s == true)
-//				return;
-		}
 		else
 			return;
 		i++;
 	}
-//	printf("Does it come her\n");
 	message_to_digest = mini_gnl_stdin();
-//	ft_printf("Does it come here ft_ssl_parse_qr1\n");
 	hash_message(ssl.message_digest_algo, message_to_digest);
-//	ft_printf("Does it come here ft_ssl_parse_qr2\n");
-//	ft_printf("message digest algo: %s\n", ssl.message_digest_algo);
-//	ft_printf("message to digest: %s", message_to_digest);
-//	ft_printf("Exits ft_ssl_parse_qr\n");
 	free(message_to_digest);
 	exit(EXIT_SUCCESS);
 }
