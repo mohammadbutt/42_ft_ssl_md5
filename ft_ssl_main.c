@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/18 22:43:15 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/19 19:18:22 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ void error_invalid_file_permission(int fd, char *argv)
 //	fd = fd * 1;
 	close(fd);
 //	exit(EXIT_SUCCESS);
+}
+
+void hash_message(char *message_digest_algo, char *message_to_digest)
+{
+	ft_printf("message digest algo: |%s|\n", message_digest_algo);
+	ft_printf("message to digest: |%s|\n", message_to_digest);
 }
 
 /*
@@ -243,13 +249,41 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 		i++;
 	}
 	if(ssl->flag.s == true && argv[i + 1] != '\0')
-		store_message_to_digest_for_s(argv + i + 1, ssl);
+	{
+		hash_message(ssl->message_digest_algo, argv + i + 1);
+	//	store_message_to_digest_for_s(argv + i + 1, ssl);
+	}
 	else if(ssl->flag.s == true && j + 1 == argc)
 	{
 		ft_option_requires_argument(ssl->message_digest_algo);
-		exit(EXIT_SUCCESS); // Need to takes it off later 
+//		exit(EXIT_SUCCESS); // Need to takes it off later 
 	}
 
+}
+
+/*
+** Function is_there_p_or_s is used in function ft_ssl_parse_qr.
+** Because ft_ssl_parse_qr is supposed to only pint and hash a string if
+** q or r are true, and both p and s are false. Since functions ft_ssl_parse_qr
+** and ft_ssl_parse_pqrs both rely on ft_ssl_collect_flags to collect flags, it
+** is helpful to have is_there_p_or_s, so if 'p' or 's' are true then the pogram
+** leaves ft_ssl_parse_qr to go to ft_ssl_parse_pqrs.
+**
+** Return Value: returns true if there is 'p' or 's', returns false if there is
+** no 'p' or 's'
+*/
+bool is_there_p_or_s(char *argv)
+{
+	int i;
+
+	i = 1;
+	while(argv[i])
+	{
+		if(argv[i] == 'p' || argv[i] == 's')
+			return(true);
+		i++;
+	}
+	return(false);
 }
 bool is_md_algorithm_valid(char *str)
 {
@@ -292,21 +326,33 @@ void ft_ssl_parse_qr(int argc, char **argv)
 	i = 2;
 	ft_initialize_ssl_flag(&ssl);
 	ssl.message_digest_algo = argv[1];
+//	ft_printf("Comes into qr\n");
 	while(i < argc)
 	{
 		if(argv[i][0] == '-' && argv[i][1] != '\0')
 		{
-			ft_ssl_collect_flags(argv[i], &ssl, i, argc);
-			if(ssl.flag.p == true || ssl.flag.s == true)
+//			ft_printf("|p:%d|", ssl.flag.p);
+//			ft_printf("|q:%d|", ssl.flag.q);
+//			ft_printf("|r:%d|", ssl.flag.r);
+//			ft_printf("|s:%d|\n", ssl.flag.s);
+			if(is_there_p_or_s(argv[i]) == true)
 				return;
+			ft_ssl_collect_flags(argv[i], &ssl, i, argc);
+//			if(ssl.flag.p == true || ssl.flag.s == true)
+//				return;
 		}
 		else
 			return;
 		i++;
 	}
+//	printf("Does it come her\n");
 	message_to_digest = mini_gnl_stdin();
-	ft_printf("message digest algo: %s\n", ssl.message_digest_algo);
-	ft_printf("message to digest: %s", message_to_digest);
+//	ft_printf("Does it come here ft_ssl_parse_qr1\n");
+	hash_message(ssl.message_digest_algo, message_to_digest);
+//	ft_printf("Does it come here ft_ssl_parse_qr2\n");
+//	ft_printf("message digest algo: %s\n", ssl.message_digest_algo);
+//	ft_printf("message to digest: %s", message_to_digest);
+//	ft_printf("Exits ft_ssl_parse_qr\n");
 	free(message_to_digest);
 	exit(EXIT_SUCCESS);
 }
@@ -321,6 +367,7 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 	i = 2;
 	ft_initialize_ssl_flag(&ssl);
 	ssl.message_digest_algo = argv[1];
+//	ft_printf("Comes into ft_ssl_parse_pqrs\n");
 //	ft_printf("|%d|\n", argc);
 //	ft_ssl_parsing_for_qr(argc, argv);
 	while(i < argc)
@@ -336,10 +383,18 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 			fd = open(argv[i], O_RDONLY);
 			if(error_messages(fd, argv[i]) == false)
 			{
+//				ft_printf("Comes here\n");
 				message_to_digest = mini_gnl(fd, argv[i]);
-				ft_printf("ft_ssl message to digest (%s) = \n",argv[i]);
-				ft_printf("message digest algo: %s\n", ssl.message_digest_algo);
+//				ft_printf("|%s|\n", message_to_digest);
+				if(ssl.flag.s == true)
+					hash_message(ssl.message_digest_algo, argv[i]);
+				else if(ssl.flag.s == false)
+					hash_message(ssl.message_digest_algo, message_to_digest);
+//				ft_printf("ft_ssl message to digest (%s) = \n",argv[i]);
+//				ft_printf("message digest algo: %s\n", ssl.message_digest_algo);
 				free(message_to_digest);
+				ssl.flag.s = false;
+				ssl.flag.p = false;
 			}
 		}	
 		(fd) && (close(fd));
@@ -358,13 +413,17 @@ void ft_ssl_parsing(int argc, char **argv)
 	else if(is_md_algorithm_valid(argv[1]) == true && argc == 2)
 	{
 		message_to_digest = mini_gnl_stdin();
-		ft_printf("message digest algo: %s\n", argv[1]);
-		ft_printf("message to digest: %s", message_to_digest);
+		hash_message(argv[1], message_to_digest);
+//		ft_printf("message digest algo: %s\n", argv[1]);
+//		ft_printf("message to digest: %s", message_to_digest);
 	}
 	else
 	{
+//		ft_printf("Does it come here in ft_ssl_parsing 1\n");
 		ft_ssl_parse_qr(argc, argv);
+//		ft_printf("Does it come here in ft_ssl_parsing 2\n");
 		ft_ssl_parse_pqrs(argc, argv);
+//		ft_printf("Does it come here in ft_ssl_parsing 3\n");
 	}
 /*
 	t_ssl ssl;
@@ -431,7 +490,7 @@ char *read_stdin_loop(char *message_digest_algorithm)
 	return_of_read = 0;
 	while(1)
 	{	
-		ft_printf("ft_SS> ");
+		ft_printf("ft_SSL> ");
 //		ft_printf("%d", return_of_read);
 		message_digest_algorithm[0] = 0;
 		return_of_read = read(0, message_digest_algorithm, 8);
@@ -460,8 +519,9 @@ void handle_stdin(void)
 	read_stdin_loop(message_digest_algo);
 	message_to_digest = mini_gnl_stdin();
 
-	ft_printf("message digest algo: %s\n", message_digest_algo);
-	ft_printf("message to digest: %s\n", message_to_digest);
+	hash_message(message_digest_algo, message_to_digest);
+//	ft_printf("message digest algo: %s\n", message_digest_algo);
+//	ft_printf("message to digest: %s\n", message_to_digest);
 
 //	char *md_command;
 //	ft_printf("%s", message_digest_buffer);
