@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/21 15:14:09 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/21 15:39:03 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ typedef struct	s_ssl
 {
 	t_ssl_flag	flag;
 	bool		skip_if_to_collect_flags;
-	bool		skip_p_stdin;
+//	bool		skip_p_stdin;
+	bool		skip_mini_gnl_stdin_for_flag_p;
 	int			count_of_flag_p;
 	char		*message_digest_algo;
 	char		*message_to_digest;

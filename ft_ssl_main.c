@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/21 15:30:17 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/21 15:39:52 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,30 +259,24 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 	}
 	if(ssl->flag.p == true)
 	{
-		if(ssl->skip_p_stdin == false)
+//		if(ssl->skip_p_stdin == false)
+//		if(ssl->skip_stdin_for_p == false)
+		if(ssl->skip_mini_gnl_stdin_for_flag_p == false)
 		{
 			stdin_message_to_digest = mini_gnl_stdin();
-//			ft_printf("|%s|\n", stdin_message_to_digest);
 			hash_message(ssl->message_digest_algo, stdin_message_to_digest);
 			free(stdin_message_to_digest);
 			ssl->flag.count_of_p--;
-//			ssl->flag.p_count--;
-//			ssl->count_of_flag_p--;
+			ssl->skip_mini_gnl_stdin_for_flag_p = true;
+//			ssl->skip_std_in_for_p = true;
 		}
-//		ft_printf(BGREEN"2ssl->flag.p_count|%d|"NC, ssl->flag.p_count);
-//		ft_printf("\n");
-		ft_printf(BBLUE"2ssl->flag.count_of_p|%d|"NC, ssl->flag.count_of_p);
-		ft_printf("\n");
-
-//		while(ssl->flag.p_count && ssl->count_of_flag_p)
 		while(ssl->flag.count_of_p)
 		{
 			hash_message(ssl->message_digest_algo, "");
 			ssl->flag.count_of_p--;
-//			ssl->flag.p_count--;
-//			ssl->count_of_flag_p--;
 		}
-		ssl->skip_p_stdin = true;
+//		ssl->skip_stdin_for_p = true;
+//		ssl->skip_p_stdin = true;
 	}
 	if(ssl->flag.s == true && argv[i + 1] != '\0')
 	{
@@ -345,7 +339,8 @@ void ft_initialize_ssl_flag(t_ssl *ssl)
 	ft_bzero(&ssl->flag, sizeof(ssl->flag));
 //	ssl->skip_if = false;
 	ssl->skip_if_to_collect_flags = false;
-	ssl->skip_p_stdin = false;
+//	ssl->skip_p_stdin = false;
+	ssl->skip_mini_gnl_stdin_for_flag_p = false;
 	ssl->flag.count_of_p = 0;
 //	ssl->flag.p_count = 0;
 //	ssl->count_of_flag_p = 0;
