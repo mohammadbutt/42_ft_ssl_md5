@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/19 21:46:01 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/21 15:30:17 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,13 +151,16 @@ char *mini_gnl_stdin(void)
 	char buffer[2];
 	char *temp;
 	char *new_string;
-
+	int i;
+	
+	i = 1;
 	new_string = malloc(sizeof(char) * (2));
 	if(new_string == NULL)
 		return("memory allocation failed in mini_gnl_stdin.\n");
 	new_string[0] = 0;
 	while((read(0, buffer, 1)) > 0)
 	{
+		buffer[i] = '\0';
 		temp = new_string;
 		new_string = ft_strjoin(temp, buffer);
 		free(temp);
@@ -180,15 +183,22 @@ bool is_ssl_flag_valid(char c)
 }
 
 void collect_ssl_flag(t_ssl *ssl, char c)
+//t_ssl	*collect_ssl_flag(t_ssl *ssl, char c)
 {
 	if(c == 'p')
+	{
 		ssl->flag.p = true;
+		ssl->flag.count_of_p++;
+//		ssl->flag.p_count++;
+//		ssl->count_of_flag_p++;
+	}
 	else if(c == 'q')
 		ssl->flag.q = true;
 	else if(c == 'r')
 		ssl->flag.r = true;
 	else if(c == 's')
 		ssl->flag.s = true;
+//	return(ssl);
 }
 
 /*
@@ -229,11 +239,10 @@ void store_message_to_digest_for_s(char *argv, t_ssl *ssl)
 	ssl->flag.s = ssl->flag.s; // Just a filler for -Wall -Wextra -Werror
 }
 
-
 void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 {
 	int i;
-//	char *message_to_digest;
+	char *stdin_message_to_digest;
 
 	i = 1;
 	while(argv[i])
@@ -248,8 +257,38 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 			ssl_exit_illegal_option(argv[i]);
 		i++;
 	}
+	if(ssl->flag.p == true)
+	{
+		if(ssl->skip_p_stdin == false)
+		{
+			stdin_message_to_digest = mini_gnl_stdin();
+//			ft_printf("|%s|\n", stdin_message_to_digest);
+			hash_message(ssl->message_digest_algo, stdin_message_to_digest);
+			free(stdin_message_to_digest);
+			ssl->flag.count_of_p--;
+//			ssl->flag.p_count--;
+//			ssl->count_of_flag_p--;
+		}
+//		ft_printf(BGREEN"2ssl->flag.p_count|%d|"NC, ssl->flag.p_count);
+//		ft_printf("\n");
+		ft_printf(BBLUE"2ssl->flag.count_of_p|%d|"NC, ssl->flag.count_of_p);
+		ft_printf("\n");
+
+//		while(ssl->flag.p_count && ssl->count_of_flag_p)
+		while(ssl->flag.count_of_p)
+		{
+			hash_message(ssl->message_digest_algo, "");
+			ssl->flag.count_of_p--;
+//			ssl->flag.p_count--;
+//			ssl->count_of_flag_p--;
+		}
+		ssl->skip_p_stdin = true;
+	}
 	if(ssl->flag.s == true && argv[i + 1] != '\0')
+	{
 		hash_message(ssl->message_digest_algo, argv + i + 1);
+		ssl->flag.s = false;
+	}
 	else if(ssl->flag.s == true && j + 1 == argc)
 		ft_option_requires_argument(ssl->message_digest_algo);
 }
@@ -304,7 +343,12 @@ void ft_print_usage(char *buffer)
 void ft_initialize_ssl_flag(t_ssl *ssl)
 {	
 	ft_bzero(&ssl->flag, sizeof(ssl->flag));
-	ssl->skip_if = false;
+//	ssl->skip_if = false;
+	ssl->skip_if_to_collect_flags = false;
+	ssl->skip_p_stdin = false;
+	ssl->flag.count_of_p = 0;
+//	ssl->flag.p_count = 0;
+//	ssl->count_of_flag_p = 0;
 //	ssl->skip_p = false;
 //	ssl->flag.p = -1;
 //	ssl->flag.s = -1;
@@ -357,11 +401,19 @@ void ft_ssl_parse_pqrs_without_dash(char **argv, t_ssl *ssl, int i)
 		(fd) && (close(fd));
 	}
 	if(ssl->flag.s == false && ssl->flag.p == false)
-		ssl->skip_if = true;
+		ssl->skip_if_to_collect_flags = true;
+//		ssl->skip_if = true;
 	ssl->flag.s = false;
 	ssl->flag.p = false;
+	ssl->flag.count_of_p = 0;
+//	ssl->count_of_flag_p = 0;
 }
 
+/*
+** ssl.skip_if is false as long as 's' or 'p' flag appear.
+** If in an argument 's' or 'p' flag dont appear than ssl.skip_if is enabled and
+** set to true, so flags are no more collected.
+*/
 void ft_ssl_parse_pqrs(int argc, char **argv)
 {
 	t_ssl ssl;
@@ -374,31 +426,13 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 	ssl.message_digest_algo = argv[1];
 	while(i < argc)
 	{
-		if(argv[i][0] == '-' && argv[i][1] != '\0' && ssl.skip_if == false)
-			ft_ssl_collect_flags(argv[i], &ssl, i, argc);
-		else
+		if(argv[i][0] == '-' && argv[i][1] != '\0')// && ssl.skip_if == false)
 		{
-			ft_ssl_parse_pqrs_without_dash(argv, &ssl, i);
-/*
-			if(ssl.flag.s == true)
-				hash_message(ssl.message_digest_algo, argv[i]);
-			else if(ssl.flag.s == false)
-			{
-				fd = open(argv[i], O_RDONLY);
-				if(error_messages(fd, argv[i]) == false)
-				{
-					message_to_digest = mini_gnl(fd, argv[i]);
-					hash_message(ssl.message_digest_algo, message_to_digest);
-					free(message_to_digest);
-				}
-				(fd) && (close(fd));
-			}
-			if(ssl.flag.s == false && ssl.flag.p == false)
-				ssl.skip_if = true;
-			ssl.flag.s = false;
-			ssl.flag.p = false;
-*/
+			if(ssl.skip_if_to_collect_flags == false)
+				ft_ssl_collect_flags(argv[i], &ssl, i, argc);
 		}
+		else
+			ft_ssl_parse_pqrs_without_dash(argv, &ssl, i);
 		i++;
 	}
 }
@@ -464,7 +498,7 @@ void ft_ssl_parsing(int argc, char **argv)
 ** program, just like how the original openssl does.
 */
 
-void if_control_d(int return_of_read)
+void if_control_d_exit_program(int return_of_read)
 {
 	if(return_of_read == 0)
 		exit(EXIT_SUCCESS);
@@ -506,7 +540,7 @@ char *read_stdin_loop(char *message_digest_algorithm)
 			else
 				ft_print_usage(message_digest_algorithm);
 		}
-		if_control_d(return_of_read);
+		if_control_d_exit_program(return_of_read);
 //		if(return_of_read == 0)
 //			exit(EXIT_SUCCESS);
 	}
