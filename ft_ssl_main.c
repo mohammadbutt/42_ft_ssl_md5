@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/21 16:01:58 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/21 17:14:24 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,10 +235,45 @@ void store_message_to_digest_for_s(char *argv, t_ssl *ssl)
 	ssl->flag.s = ssl->flag.s; // Just a filler for -Wall -Wextra -Werror
 }
 */
+void ft_ssl_collect_flags_process_p(t_ssl *ssl)
+{
+	char *stdin_message_to_digest;
+
+	if(ssl->flag.p == true)
+	{
+		if(ssl->skip.mini_gnl_stdin_for_flag_p == false)
+		{
+			stdin_message_to_digest = mini_gnl_stdin();
+			hash_message(ssl->message_digest_algo, stdin_message_to_digest);
+			free(stdin_message_to_digest);
+			ssl->flag.count_of_p--;
+			ssl->skip.mini_gnl_stdin_for_flag_p = true;
+		}
+		while(ssl->flag.count_of_p)
+		{
+			hash_message(ssl->message_digest_algo, "");
+			ssl->flag.count_of_p--;
+		}
+	}
+
+}
+
+void ft_ssl_collect_flags_process_s(char *message, t_ssl *ssl, int j, int argc)
+{
+	if(ssl->flag.s == true && message[0] != '\0')
+	{
+		hash_message(ssl->message_digest_algo, message);
+		ssl->flag.s = false;
+	}
+	else if(ssl->flag.s == true && j + 1 == argc)
+		ft_option_requires_argument(ssl->message_digest_algo);
+}
+
+
 void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 {
 	int i;
-	char *stdin_message_to_digest;
+//	char *stdin_message_to_digest;
 
 	i = 1;
 	while(argv[i])
@@ -253,9 +288,11 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 			ssl_exit_illegal_option(argv[i]);
 		i++;
 	}
+	ft_ssl_collect_flags_process_p(ssl);
+	ft_ssl_collect_flags_process_s(argv + i + 1, ssl, j, argc);
+/*
 	if(ssl->flag.p == true)
 	{
-//		if(ssl->skip_mini_gnl_stdin_for_flag_p == false)
 		if(ssl->skip.mini_gnl_stdin_for_flag_p == false)
 		{
 			stdin_message_to_digest = mini_gnl_stdin();
@@ -263,7 +300,6 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 			free(stdin_message_to_digest);
 			ssl->flag.count_of_p--;
 			ssl->skip.mini_gnl_stdin_for_flag_p = true;
-//			ssl->skip_mini_gnl_stdin_for_flag_p = true;
 		}
 		while(ssl->flag.count_of_p)
 		{
@@ -278,6 +314,7 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 	}
 	else if(ssl->flag.s == true && j + 1 == argc)
 		ft_option_requires_argument(ssl->message_digest_algo);
+*/
 }
 
 /*
@@ -331,11 +368,12 @@ void ft_initialize_ssl_flag(t_ssl *ssl)
 {	
 	ft_bzero(&ssl->flag, sizeof(ssl->flag));
 	ft_bzero(&ssl->skip, sizeof(ssl->skip));
+	ssl->flag.count_of_p = 0;
+
 //	ssl->skip_if = false;
 //	ssl->skip_if_to_collect_flags = false;
 //	ssl->skip_p_stdin = false;
 //	ssl->skip_mini_gnl_stdin_for_flag_p = false;
-	ssl->flag.count_of_p = 0;
 //	ssl->flag.p_count = 0;
 //	ssl->count_of_flag_p = 0;
 //	ssl->skip_p = false;
@@ -375,7 +413,6 @@ void ft_ssl_parse_pqrs_without_dash(char **argv, t_ssl *ssl, int i)
 	char *message_to_digest;
 	int fd;
 
-//	ssl->message_digest_algo = argv[1];
 	if(ssl->flag.s == true)
 		hash_message(ssl->message_digest_algo, argv[i]);
 	else if(ssl->flag.s == false)
@@ -391,12 +428,9 @@ void ft_ssl_parse_pqrs_without_dash(char **argv, t_ssl *ssl, int i)
 	}
 	if(ssl->flag.s == false && ssl->flag.p == false)
 		ssl->skip.if_to_collect_flags = true;
-//		ssl->skip_if_to_collect_flags = true;
-//		ssl->skip_if = true;
 	ssl->flag.s = false;
 	ssl->flag.p = false;
 	ssl->flag.count_of_p = 0;
-//	ssl->count_of_flag_p = 0;
 }
 
 /*
@@ -407,18 +441,15 @@ void ft_ssl_parse_pqrs_without_dash(char **argv, t_ssl *ssl, int i)
 void ft_ssl_parse_pqrs(int argc, char **argv)
 {
 	t_ssl ssl;
-//	char *message_to_digest;
 	int i;
-//	int fd;
 
 	i = 2;
 	ft_initialize_ssl_flag(&ssl);
 	ssl.message_digest_algo = argv[1];
 	while(i < argc)
 	{
-		if(argv[i][0] == '-' && argv[i][1] != '\0')// && ssl.skip_if == false)
+		if(argv[i][0] == '-' && argv[i][1] != '\0' && ssl.flag.s == false )// && ssl.skip_
 		{
-//			if(ssl.skip_if_to_collect_flags == false)
 			if(ssl.skip.if_to_collect_flags == false)	
 				ft_ssl_collect_flags(argv[i], &ssl, i, argc);
 		}
