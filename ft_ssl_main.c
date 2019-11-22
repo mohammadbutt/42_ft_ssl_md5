@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/21 17:14:24 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/21 17:44:53 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -448,7 +448,7 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 	ssl.message_digest_algo = argv[1];
 	while(i < argc)
 	{
-		if(argv[i][0] == '-' && argv[i][1] != '\0' && ssl.flag.s == false )// && ssl.skip_
+		if(argv[i][0] == '-' && argv[i][1] != '\0' && ssl.flag.s == false)
 		{
 			if(ssl.skip.if_to_collect_flags == false)	
 				ft_ssl_collect_flags(argv[i], &ssl, i, argc);
