@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/21 17:45:54 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/22 20:38:57 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@ void error_invalid_file_permission(int fd, char *argv)
 //	exit(EXIT_SUCCESS);
 }
 
-void hash_message(char *message_digest_algo, char *message_to_digest)
+void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_digest)
 {
-	ft_printf("message digest algo: |%s|\n", message_digest_algo);
-	ft_printf("message to digest: |%s|\n", message_to_digest);
+//	ssl->flag.p = ssl->flag.p;
+	ft_printf("message digest algo: |%s|\n", ssl->message_digest_algo);
+	ft_printf("message to digest: |%s|\n", ssl->message_to_digest);
 }
 
 /*
@@ -235,34 +236,53 @@ void store_message_to_digest_for_s(char *argv, t_ssl *ssl)
 	ssl->flag.s = ssl->flag.s; // Just a filler for -Wall -Wextra -Werror
 }
 */
+
+void store_hash_free_message(t_ssl *ssl, char *message_to_digest)
+{
+	ssl->message_to_digest = message_to_digest;
+	hash_message(ssl);
+	free(message_to_digest);
+}
+
 void ft_ssl_collect_flags_process_p(t_ssl *ssl)
 {
 	char *stdin_message_to_digest;
+	char *empty_message_to_digest;
 
-	if(ssl->flag.p == true)
+	if(ssl->skip.mini_gnl_stdin_for_flag_p == false)
 	{
-		if(ssl->skip.mini_gnl_stdin_for_flag_p == false)
-		{
-			stdin_message_to_digest = mini_gnl_stdin();
-			hash_message(ssl->message_digest_algo, stdin_message_to_digest);
-			free(stdin_message_to_digest);
-			ssl->flag.count_of_p--;
-			ssl->skip.mini_gnl_stdin_for_flag_p = true;
-		}
+		stdin_message_to_digest = mini_gnl_stdin();
+		ssl->message_to_digest = stdin_message_to_digest;
+		hash_message(ssl);//, ssl->message_digest_algo, stdin_message_to_digest);
+		free(stdin_message_to_digest);
+		ssl->flag.count_of_p--;
+		ssl->skip.mini_gnl_stdin_for_flag_p = true;
+	}
+	else if(ssl->skip.mini_gnl_stdin_for_flag_p == true)
+	{
+		empty_message_to_digest = malloc(sizeof(char) * (1));
+		ft_strcpy(empty_message_to_digest, "");
+		ssl->message_to_digest = empty_message_to_digest;
 		while(ssl->flag.count_of_p)
 		{
-			hash_message(ssl->message_digest_algo, "");
+			hash_message(ssl);//, ssl->message_digest_algo, "");
 			ssl->flag.count_of_p--;
 		}
+		free(empty_message_to_digest);
 	}
-
 }
 
 void ft_ssl_collect_flags_process_s(char *message, t_ssl *ssl, int j, int argc)
 {
+	char *message_to_digest;
+
 	if(ssl->flag.s == true && message[0] != '\0')
 	{
-		hash_message(ssl->message_digest_algo, message);
+		message_to_digest = malloc(sizeof(char) * (ft_strlen(message) + 1));
+		ft_strcpy(message_to_digest, message);
+		ssl->message_to_digest = message_to_digest;
+		hash_message(ssl);//, ssl->message_digest_algo, message);
+		free(message_to_digest);
 		ssl->flag.s = false;
 	}
 	else if(ssl->flag.s == true && j + 1 == argc)
@@ -288,7 +308,8 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 			ssl_exit_illegal_option(argv[i]);
 		i++;
 	}
-	ft_ssl_collect_flags_process_p(ssl);
+	if (ssl->flag.p == true)
+		ft_ssl_collect_flags_process_p(ssl);
 	ft_ssl_collect_flags_process_s(argv + i + 1, ssl, j, argc);
 /*
 	if(ssl->flag.p == true)
@@ -403,34 +424,53 @@ void ft_ssl_parse_qr(int argc, char **argv)
 		i++;
 	}
 	message_to_digest = mini_gnl_stdin();
-	hash_message(ssl.message_digest_algo, message_to_digest);
+	ssl.message_to_digest = message_to_digest;
+	hash_message(&ssl);//, ssl.message_digest_algo, message_to_digest);
 	free(message_to_digest);
 	exit(EXIT_SUCCESS);
 }
 
-void ft_ssl_parse_pqrs_without_dash(char **argv, t_ssl *ssl, int i)
+
+void ft_ssl_parse_pqrs_no_dash_adjust_flags(t_ssl *ssl)
+{
+	if(ssl->flag.s == false && ssl->flag.p == false)
+		ssl->skip.if_to_collect_flags = true;
+	ssl->flag.s = false;
+	ssl->flag.p = false;
+	ssl->flag.count_of_p = 0;
+}
+
+void ft_ssl_parse_pqrs_no_dash(char **argv, t_ssl *ssl, int i)
 {
 	char *message_to_digest;
 	int fd;
 
 	if(ssl->flag.s == true)
-		hash_message(ssl->message_digest_algo, argv[i]);
+	{
+		message_to_digest = malloc(sizeof(ft_strlen(argv[i]) + 1));
+		ft_strcpy(message_to_digest, argv[i]);
+		ssl->message_to_digest = message_to_digest;
+		hash_message(ssl);//, ssl->message_digest_algo, argv[i]);
+		free(message_to_digest);
+	}
 	else if(ssl->flag.s == false)
 	{
 		fd = open(argv[i], O_RDONLY);
 		if(error_messages(fd, argv[i]) == false)
 		{
 			message_to_digest = mini_gnl(fd, argv[i]);
-			hash_message(ssl->message_digest_algo, message_to_digest);
+			ssl->message_to_digest = message_to_digest;
+			hash_message(ssl);//, ssl->message_digest_algo, message_to_digest);
 			free(message_to_digest);
 		}
 		(fd) && (close(fd));
 	}
-	if(ssl->flag.s == false && ssl->flag.p == false)
-		ssl->skip.if_to_collect_flags = true;
-	ssl->flag.s = false;
-	ssl->flag.p = false;
-	ssl->flag.count_of_p = 0;
+	ft_ssl_parse_pqrs_no_dash_adjust_flags(ssl);
+//	if(ssl->flag.s == false && ssl->flag.p == false)
+//		ssl->skip.if_to_collect_flags = true;
+//	ssl->flag.s = false;
+//	ssl->flag.p = false;
+//	ssl->flag.count_of_p = 0;
 }
 
 /*
@@ -454,14 +494,16 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 				ft_ssl_collect_flags(argv[i], &ssl, i, argc);
 		}
 		else
-			ft_ssl_parse_pqrs_without_dash(argv, &ssl, i);
+			ft_ssl_parse_pqrs_no_dash(argv, &ssl, i);
 		i++;
 	}
 }
 
 void ft_ssl_parsing(int argc, char **argv)
 {
+	t_ssl ssl;
 	char *message_to_digest;
+
 	if(is_md_algorithm_valid(argv[1]) == false)
 	{
 		ft_print_usage(argv[1]);
@@ -470,17 +512,17 @@ void ft_ssl_parsing(int argc, char **argv)
 	else if(is_md_algorithm_valid(argv[1]) == true && argc == 2)
 	{
 		message_to_digest = mini_gnl_stdin();
-		hash_message(argv[1], message_to_digest);
+		ssl.message_digest_algo = argv[1];
+		ssl.message_to_digest = message_to_digest;
+		hash_message(&ssl);//, argv[1], message_to_digest);
+		free(message_to_digest);
 //		ft_printf("message digest algo: %s\n", argv[1]);
 //		ft_printf("message to digest: %s", message_to_digest);
 	}
 	else
 	{
-//		ft_printf("Does it come here in ft_ssl_parsing 1\n");
 		ft_ssl_parse_qr(argc, argv);
-//		ft_printf("Does it come here in ft_ssl_parsing 2\n");
 		ft_ssl_parse_pqrs(argc, argv);
-//		ft_printf("Does it come here in ft_ssl_parsing 3\n");
 	}
 /*
 	t_ssl ssl;
@@ -548,7 +590,6 @@ char *read_stdin_loop(char *message_digest_algorithm)
 	while(1)
 	{	
 		ft_printf("ft_SSL> ");
-//		ft_printf("%d", return_of_read);
 		message_digest_algorithm[0] = 0;
 		return_of_read = read(0, message_digest_algorithm, 8);
 		if(return_of_read > 1)
@@ -568,15 +609,19 @@ char *read_stdin_loop(char *message_digest_algorithm)
 	}
 }
 
-void handle_stdin(void)
+//void handle_stdin(void)
+void handle_stdin(t_ssl *ssl)
 {
 	char message_digest_algo[8];
 	char *message_to_digest;
 
 	read_stdin_loop(message_digest_algo);
 	message_to_digest = mini_gnl_stdin();
-
-	hash_message(message_digest_algo, message_to_digest);
+	
+	ssl->message_digest_algo = message_digest_algo;
+	ssl->message_to_digest = message_to_digest;
+	hash_message(ssl);//message_digest_algo, message_to_digest);
+	free(message_to_digest);
 //	ft_printf("message digest algo: %s\n", message_digest_algo);
 //	ft_printf("message to digest: %s\n", message_to_digest);
 
@@ -608,12 +653,13 @@ void handle_stdin(void)
 
 int main(int argc, char *argv[])
 {
+	t_ssl ssl;
 //	int fd;
 
 //	fd = open(argv[1], O_RDONLY);
 
 	if(argc == 1)
-		handle_stdin();
+		handle_stdin(&ssl);
 	else if(argc > 1)
 		ft_ssl_parsing(argc, argv);
 //	system("leaks ft_ssl");
