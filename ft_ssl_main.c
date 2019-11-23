@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/22 20:38:57 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/22 20:50:57 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,9 +252,10 @@ void ft_ssl_collect_flags_process_p(t_ssl *ssl)
 	if(ssl->skip.mini_gnl_stdin_for_flag_p == false)
 	{
 		stdin_message_to_digest = mini_gnl_stdin();
-		ssl->message_to_digest = stdin_message_to_digest;
-		hash_message(ssl);//, ssl->message_digest_algo, stdin_message_to_digest);
-		free(stdin_message_to_digest);
+		store_hash_free_message(ssl, stdin_message_to_digest);
+//		ssl->message_to_digest = stdin_message_to_digest;
+//		hash_message(ssl);//, ssl->message_digest_algo, stdin_message_to_digest);
+//		free(stdin_message_to_digest);
 		ssl->flag.count_of_p--;
 		ssl->skip.mini_gnl_stdin_for_flag_p = true;
 	}
@@ -280,9 +281,10 @@ void ft_ssl_collect_flags_process_s(char *message, t_ssl *ssl, int j, int argc)
 	{
 		message_to_digest = malloc(sizeof(char) * (ft_strlen(message) + 1));
 		ft_strcpy(message_to_digest, message);
-		ssl->message_to_digest = message_to_digest;
-		hash_message(ssl);//, ssl->message_digest_algo, message);
-		free(message_to_digest);
+		store_hash_free_message(ssl, message_to_digest);
+//		ssl->message_to_digest = message_to_digest;
+//		hash_message(ssl);//, ssl->message_digest_algo, message);
+//		free(message_to_digest);
 		ssl->flag.s = false;
 	}
 	else if(ssl->flag.s == true && j + 1 == argc)
@@ -424,9 +426,10 @@ void ft_ssl_parse_qr(int argc, char **argv)
 		i++;
 	}
 	message_to_digest = mini_gnl_stdin();
-	ssl.message_to_digest = message_to_digest;
-	hash_message(&ssl);//, ssl.message_digest_algo, message_to_digest);
-	free(message_to_digest);
+	store_hash_free_message(&ssl, message_to_digest);
+//	ssl.message_to_digest = message_to_digest;
+//	hash_message(&ssl);//, ssl.message_digest_algo, message_to_digest);
+//	free(message_to_digest);
 	exit(EXIT_SUCCESS);
 }
 
@@ -449,9 +452,10 @@ void ft_ssl_parse_pqrs_no_dash(char **argv, t_ssl *ssl, int i)
 	{
 		message_to_digest = malloc(sizeof(ft_strlen(argv[i]) + 1));
 		ft_strcpy(message_to_digest, argv[i]);
-		ssl->message_to_digest = message_to_digest;
-		hash_message(ssl);//, ssl->message_digest_algo, argv[i]);
-		free(message_to_digest);
+		store_hash_free_message(ssl, message_to_digest);
+//		ssl->message_to_digest = message_to_digest;
+//		hash_message(ssl);//, ssl->message_digest_algo, argv[i]);
+//		free(message_to_digest);
 	}
 	else if(ssl->flag.s == false)
 	{
@@ -459,9 +463,10 @@ void ft_ssl_parse_pqrs_no_dash(char **argv, t_ssl *ssl, int i)
 		if(error_messages(fd, argv[i]) == false)
 		{
 			message_to_digest = mini_gnl(fd, argv[i]);
-			ssl->message_to_digest = message_to_digest;
-			hash_message(ssl);//, ssl->message_digest_algo, message_to_digest);
-			free(message_to_digest);
+			store_hash_free_message(ssl, message_to_digest);
+//			ssl->message_to_digest = message_to_digest;
+//			hash_message(ssl);//, ssl->message_digest_algo, message_to_digest);
+//			free(message_to_digest);
 		}
 		(fd) && (close(fd));
 	}
@@ -513,11 +518,10 @@ void ft_ssl_parsing(int argc, char **argv)
 	{
 		message_to_digest = mini_gnl_stdin();
 		ssl.message_digest_algo = argv[1];
-		ssl.message_to_digest = message_to_digest;
-		hash_message(&ssl);//, argv[1], message_to_digest);
-		free(message_to_digest);
-//		ft_printf("message digest algo: %s\n", argv[1]);
-//		ft_printf("message to digest: %s", message_to_digest);
+		store_hash_free_message(&ssl, message_to_digest);
+//		ssl.message_to_digest = message_to_digest;
+//		hash_message(&ssl);//, argv[1], message_to_digest);
+//		free(message_to_digest);
 	}
 	else
 	{
@@ -617,13 +621,11 @@ void handle_stdin(t_ssl *ssl)
 
 	read_stdin_loop(message_digest_algo);
 	message_to_digest = mini_gnl_stdin();
-	
 	ssl->message_digest_algo = message_digest_algo;
-	ssl->message_to_digest = message_to_digest;
-	hash_message(ssl);//message_digest_algo, message_to_digest);
-	free(message_to_digest);
-//	ft_printf("message digest algo: %s\n", message_digest_algo);
-//	ft_printf("message to digest: %s\n", message_to_digest);
+	store_hash_free_message(ssl, message_to_digest);
+//	ssl->message_to_digest = message_to_digest;
+//	hash_message(ssl);//message_digest_algo, message_to_digest);
+//	free(message_to_digest);
 
 //	char *md_command;
 //	ft_printf("%s", message_digest_buffer);
