@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/21 17:44:48 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/22 21:03:30 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 
 typedef struct	s_ssl_flag
 {	
-	int			count_of_p;
+//	int			count_of_p;
 	bool		p : 1;
 	bool		s : 1;
 	bool		q : 1;

@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/22 20:50:57 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/22 21:06:24 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ void collect_ssl_flag(t_ssl *ssl, char c)
 	if(c == 'p')
 	{
 		ssl->flag.p = true;
-		ssl->flag.count_of_p++;
+//		ssl->flag.count_of_p++;
 	}
 	else if(c == 'q')
 		ssl->flag.q = true;
@@ -256,20 +256,21 @@ void ft_ssl_collect_flags_process_p(t_ssl *ssl)
 //		ssl->message_to_digest = stdin_message_to_digest;
 //		hash_message(ssl);//, ssl->message_digest_algo, stdin_message_to_digest);
 //		free(stdin_message_to_digest);
-		ssl->flag.count_of_p--;
+//		ssl->flag.count_of_p--;
 		ssl->skip.mini_gnl_stdin_for_flag_p = true;
 	}
 	else if(ssl->skip.mini_gnl_stdin_for_flag_p == true)
 	{
 		empty_message_to_digest = malloc(sizeof(char) * (1));
 		ft_strcpy(empty_message_to_digest, "");
-		ssl->message_to_digest = empty_message_to_digest;
-		while(ssl->flag.count_of_p)
-		{
-			hash_message(ssl);//, ssl->message_digest_algo, "");
-			ssl->flag.count_of_p--;
-		}
-		free(empty_message_to_digest);
+		store_hash_free_message(ssl, empty_message_to_digest);
+//		ssl->message_to_digest = empty_message_to_digest;
+//		while(ssl->flag.count_of_p)
+//		{
+//			hash_message(ssl);
+//			ssl->flag.count_of_p--;
+//		}
+//		free(empty_message_to_digest);
 	}
 }
 
@@ -303,6 +304,8 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 		if(is_ssl_flag_valid(argv[i]) == true)
 		{
 			collect_ssl_flag(ssl, argv[i]);
+			if (ssl->flag.p == true)
+				ft_ssl_collect_flags_process_p(ssl);
 			if(ssl->flag.s == true)
 				break;
 		}
@@ -310,8 +313,8 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 			ssl_exit_illegal_option(argv[i]);
 		i++;
 	}
-	if (ssl->flag.p == true)
-		ft_ssl_collect_flags_process_p(ssl);
+//	if (ssl->flag.p == true)
+//		ft_ssl_collect_flags_process_p(ssl);
 	ft_ssl_collect_flags_process_s(argv + i + 1, ssl, j, argc);
 /*
 	if(ssl->flag.p == true)
@@ -391,7 +394,7 @@ void ft_initialize_ssl_flag(t_ssl *ssl)
 {	
 	ft_bzero(&ssl->flag, sizeof(ssl->flag));
 	ft_bzero(&ssl->skip, sizeof(ssl->skip));
-	ssl->flag.count_of_p = 0;
+//	ssl->flag.count_of_p = 0;
 
 //	ssl->skip_if = false;
 //	ssl->skip_if_to_collect_flags = false;
@@ -440,7 +443,7 @@ void ft_ssl_parse_pqrs_no_dash_adjust_flags(t_ssl *ssl)
 		ssl->skip.if_to_collect_flags = true;
 	ssl->flag.s = false;
 	ssl->flag.p = false;
-	ssl->flag.count_of_p = 0;
+//	ssl->flag.count_of_p = 0;
 }
 
 void ft_ssl_parse_pqrs_no_dash(char **argv, t_ssl *ssl, int i)
@@ -664,6 +667,8 @@ int main(int argc, char *argv[])
 		handle_stdin(&ssl);
 	else if(argc > 1)
 		ft_ssl_parsing(argc, argv);
+	
+//	while(1);
 //	system("leaks ft_ssl");
 //	while(1);
 
