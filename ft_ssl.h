@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/22 21:07:51 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/24 20:46:32 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <errno.h>
+#include <math.h>
 
 #include <stdio.h>
 /*
@@ -25,6 +26,7 @@
 ** #include <fcntl.h> 	to access open(2).
 ** #include <string.h>	to access strerror(3).
 ** #include <errno.h>	to access errno(3)
+** #include <math.h>	to access sin(3).
 */
 
 /*

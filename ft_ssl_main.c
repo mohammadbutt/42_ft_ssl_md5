@@ -6,12 +6,61 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/22 21:21:41 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/24 21:04:45 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
+/*
+** Add the below functions in math.c file
+*/
+
+uint64_t ft_pow(int base, int exponent)
+{
+	uint64_t	total;
+	int			i;
+
+	total = base;
+	i = 1;
+	while(i < exponent)
+	{
+		total = total * base;
+		i++;
+	}
+	return(total);
+}
+
+/*
+** ft_fabs is used to convert negative floating point values into positive.
+**
+** Note: Has to be double, data type cannot be float because absolute value will
+** be different if the data type is float instead of double.
+*/
+
+double ft_fabs(double num)
+{
+	if(num < 0)
+		num = -1 * num;
+	return(num);
+}
+
+void compute_md5_table(unsigned int *num)
+{
+	int i;
+	int base;
+	int exponent;
+
+	i = 0;
+	base = 2;
+	exponent = 32;
+	while(i < 64)
+	{
+		num[i] = (unsigned int)(ft_pow(base, exponent) * ft_fabs(sin(i + 1)));
+		i++;
+	}
+		
+}
 /*
 ** print_error_messages takes a 2d array and if the file descriptor is -1, then
 ** the error message is printed.
@@ -28,11 +77,48 @@ void error_invalid_file_permission(int fd, char *argv)
 //	exit(EXIT_SUCCESS);
 }
 
+void test_md5_table(void)
+{
+	unsigned int num[64];
+	int i;
+
+	i = 0;
+	compute_md5_table(num);
+	while(i < 64)
+	{
+		if(((i) % 4) == 0)
+			printf("{ ");
+		printf("%#x, ", num[i]);
+		if(((i + 1) % 4) == 0)
+			printf("}\n\n");
+		i++;
+	}
+
+}
+
 void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_digest)
 {
 //	ssl->flag.p = ssl->flag.p;
+//	unsigned int num[64];
+//	int i = 0;
+
 	ft_printf("message digest algo: |%s|\n", ssl->message_digest_algo);
 	ft_printf("message to digest: |%s|\n", ssl->message_to_digest);
+
+//	compute_md5_table(num);
+//	printf("{ ");
+//	while(i < 64)
+//	{
+//		if(((i) % 4) == 0)
+//			printf("{ ");
+//		printf("%#x, ", num[i]);
+//		if(((i + 1) % 4) == 0)
+//			printf("}\n\n");
+//		if((i + 1) % 4 == 0)
+//			printf("\n");
+//		i++;
+//	}
+	test_md5_table();
 }
 
 /*
