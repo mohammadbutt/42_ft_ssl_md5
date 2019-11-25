@@ -66,3 +66,4 @@ Additional functions: strerror(3), exit(3).
 9. [The MD5 Message-Digest Algorithm - tools.ietf.org](https://tools.ietf.org/html/rfc1321)
 10. [MD5 Implementation in C# - Rosettacode](https://rosettacode.org/wiki/MD5/Implementation#C)
 11. [MD5 Source Code - tls.mbed.org](https://tls.mbed.org/md5-source-code)
+12. [MD5 Source Code - Github](https://github.com/t-crest/patmos-benchmarks/tree/master/Mediabench/pgp/rsaref/source)
