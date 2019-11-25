@@ -63,6 +63,7 @@ Additional functions: strerror(3), exit(3).
 6. [md5 padding - stackoverflow](https://crypto.stackexchange.com/questions/29685/computing-the-padding-of-md5)
 7. [Big Endian, Little Endian - Stackoverflow](https://stackoverflow.com/questions/46109815/convert-string-from-big-endian-to-little-endian-or-vice-versa-in-python)
 8. [Big Endian, Little Endian - Yolinux](http://www.yolinux.com/TUTORIALS/Endian-Byte-Order.html)
+9. [MD5 - Wikipedia](https://en.wikipedia.org/wiki/MD5)
 9. [The MD5 Message-Digest Algorithm - tools.ietf.org](https://tools.ietf.org/html/rfc1321)
 10. [MD5 Implementation in C# - Rosettacode](https://rosettacode.org/wiki/MD5/Implementation#C)
 11. [MD5 Implementation in C - Rosettacode](https://rosettacode.org/wiki/MD5#C)
