@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/24 21:04:45 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/24 21:58:15 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,56 @@ double ft_fabs(double num)
 	return(num);
 }
 
-void compute_md5_table(unsigned int *num)
+
+void compute_md5_table_s_0_to_31(unsigned int *num)
+{
+	int i;
+
+	i = 0;
+	while(i >= 0 && i <= 15)
+	{
+		num[i++] = 7;
+		num[i++] = 12;
+		num[i++] = 17;
+		num[i++] = 22;
+	}
+	while(i >= 16 && i <= 31)
+	{
+		num[i++] = 5;
+		num[i++] = 9;
+		num[i++] = 14;
+		num[i++] = 20;
+	}
+}
+
+void compute_md5_table_s_32_to_63(unsigned int *num)
+{
+	int i;
+
+	i = 32;
+	while (i >= 32 && i <= 47)
+	{
+		num[i++] = 4;
+		num[i++] = 11;
+		num[i++] = 16;
+		num[i++] = 23;
+	}
+	while (i >= 48 && i <= 63)
+	{
+		num[i++] = 6;
+		num[i++] = 10;
+		num[i++] = 15;
+		num[i++] = 21;
+	}
+}
+void compute_md5_table_s(unsigned int *num)
+{
+	ft_bzero(num, sizeof(num));
+	compute_md5_table_s_0_to_31(num);
+	compute_md5_table_s_32_to_63(num);
+}
+
+void compute_md5_table_k(unsigned int *num)
 {
 	int i;
 	int base;
@@ -54,6 +103,7 @@ void compute_md5_table(unsigned int *num)
 	i = 0;
 	base = 2;
 	exponent = 32;
+	ft_bzero(num, sizeof(num));
 	while(i < 64)
 	{
 		num[i] = (unsigned int)(ft_pow(base, exponent) * ft_fabs(sin(i + 1)));
@@ -77,19 +127,39 @@ void error_invalid_file_permission(int fd, char *argv)
 //	exit(EXIT_SUCCESS);
 }
 
-void test_md5_table(void)
+void test_md5_table_k(void)
 {
 	unsigned int num[64];
 	int i;
 
 	i = 0;
-	compute_md5_table(num);
+	ft_bzero(num, sizeof(num));
+	compute_md5_table_k(num);
 	while(i < 64)
 	{
 		if(((i) % 4) == 0)
 			printf("{ ");
 		printf("%#x, ", num[i]);
 		if(((i + 1) % 4) == 0)
+			printf("}\n\n");
+		i++;
+	}
+
+}
+
+void test_md5_table_s(void)
+{
+	unsigned int num[64];
+	int i;
+
+	i = 0;
+	compute_md5_table_s(num);
+	while(i < 64)
+	{
+		if(i == 0 || i == 16 || i == 32 || i == 48)
+			printf("{ ");
+		printf("%u, ", num[i]);
+		if(i == 15 || i == 31 || i == 47 || i == 63)
 			printf("}\n\n");
 		i++;
 	}
@@ -104,6 +174,8 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 
 	ft_printf("message digest algo: |%s|\n", ssl->message_digest_algo);
 	ft_printf("message to digest: |%s|\n", ssl->message_to_digest);
+	test_md5_table_k();
+	test_md5_table_s();
 
 //	compute_md5_table(num);
 //	printf("{ ");
@@ -118,7 +190,6 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 //			printf("\n");
 //		i++;
 //	}
-	test_md5_table();
 }
 
 /*
