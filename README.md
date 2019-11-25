@@ -54,6 +54,13 @@ Additional functions: strerror(3), exit(3).
    ./ft_ssl md5 -q
    ./ft_ssl md5 -r
    ```
+   
+### Five steps are performed to compute the message digest of the message.
+   1. Append padding bits.
+   2. Append Langth.
+   3. Initialize MD Buffer
+   4. Process Message in 16-word blocks
+   5. Final Output
 
 # Resources and References:
 1. [Reading from stdin - stackoverflow](https://stackoverflow.com/questions/15883568/reading-from-stdin)
