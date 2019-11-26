@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 17:06:33 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/25 17:30:28 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/25 17:34:06 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 ** Memcpy vs strcpy. strcpy stops copying as soon as it comes across a null
 ** terminator, '\0'. But memcpy copies over n number of bytes.
 ** Which is also why there is no null termination in memcpy.
+**
+** It is helpful to print a string in a while loop character by character.
+** 
 ** To ensure that a string is properly null terminated, bzero should be
 ** performed on destination and source string and then memcpy should be
 ** performed.
