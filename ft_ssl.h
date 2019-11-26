@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/24 20:46:32 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/25 21:59:06 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,17 @@ typedef struct	s_ssl_skip
 	bool		mini_gnl_stdin_for_flag_p : 1;
 }				t_ssl_skip;
 
-typedef struct	s_ssl
+typedef struct	s_ssl_context
 {
-	t_ssl_flag	flag;
-	t_ssl_skip	skip;
+	uint32_t	state[4];
+	uint32_t	count[2];
+}				t_ssl_context;
+
+typedef struct		s_ssl
+{
+	t_ssl_flag		flag;
+	t_ssl_skip		skip;
+	t_ssl_context	context;
 //	bool		skip_if_to_collect_flags;
 //	bool		skip_mini_gnl_stdin_for_flag_p;
 //	int			count_of_flag_p;

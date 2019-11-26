@@ -6,15 +6,143 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/25 19:11:50 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/25 22:23:38 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
 /*
-** Adding md5 functions
+** Bitwise guide:
+** Bitwise & operator is a binary operator. It takes two numbers.
+** & stands for AND operator.
+** Result of & AND is 1 when both bits are 1:
+** 7 ->   0 1 1 1
+** 4 -> & 0 1 0 0
+**       --------
+** 4 <-   0 1 0 0
+**       --------
+** 7 & 4 = 4
+**
+** -----------------------------------------------------------------------------
+**
+** Bitwise | operator is a binary operator. It takes two numbers.
+** | stands for OR operator.
+** Result of | OR is 0 when both bits are 0:
+** 7 ->   0 1 1 1
+** 4 -> | 0 1 0 0
+**       --------
+** 7 <-   0 1 1 1
+**       --------
+** 7 | 4 = 7
+**
+** -----------------------------------------------------------------------------
+**
+** Bitwise ~ operator is unary operator. It takes one number.
+** ~ stands for NOT operator.
+** Result of ~ NOT is 0 when bit is 1, and 1 when bit is 0:
+** 7 -> ~  0 1 1 1
+**        --------
+** 8 <-    1 0 0 0
+**        --------
+** ~ 7  = -8
+** How is it -8? because we have to look at the data type 7 is stored in.
+** If 7 is stored in a 32 bit int, then:
+** 7 -> ~ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1
+**       ----------------------------------------------------------------
+** 8 <-   1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0
+** ~ 7 = -8
+** Since the number overflow and goes over the int max value, it becomes -8.
+**
+** -----------------------------------------------------------------------------
+** 
+** Bitwise ^ operator is binary operator. It takes two numbers.
+** ^ stands for XOR operator.
+** Result of ^ XOR is 1 when two bits are different.
+** Result of ^ XOR is 0 when two bits are same.
+**
+** 7 ->    0 1 1 1
+** 4 -> ^  0 1 0 0
+**         -------
+** 3 <-    0 0 1 1
+**         -------
+** 7 ^ 4 =  3
+** Can be used to swap values
 */
+
+/*
+** Adding md5 core functions
+*/
+
+uint32_t function_f(uint32_t x, uint32_t y, uint32_t z)
+{
+	uint32_t f;
+
+	f = (((x) & (y)) | ((~x) & (z)));
+	return(f);
+}
+
+uint32_t function_g(uint32_t x, uint32_t y, uint32_t z)
+{
+	uint32_t g;
+
+	g = (((x) & (z)) | ((y) & (~z)));
+	return(g);
+}
+
+uint32_t function_h(uint32_t x, uint32_t y, uint32_t z)
+{
+	uint32_t h;
+	
+	h = ((x) ^ (y) ^ (z));
+	return(h);
+}
+
+uint32_t function_i(uint32_t x, uint32_t y, uint32_t z)
+{
+	uint32_t i;
+
+	i = ((y) ^ ((x) | (~z)));
+	return(i);
+}
+
+/*
+** rotate_left rotates x by n bits
+*/
+uint32_t rotate_left(uint32_t x, uint32_t n_bits)
+{
+	uint32_t rotated_number;
+
+	rotated_number = (((x) << (n_bits)) | ((x) >> (32 - (n_bits))));
+	return(rotated_number);
+}
+
+/*
+** Adding remaining md5 algos.
+** F, G, H, I	✓
+** rotate_left	✓
+** md5_init		✓
+** FF, GG, HH, II
+** md5_transform
+** md5_update
+** md5_final
+*/
+
+void ft_md5_init(t_ssl *ssl)
+{
+	int i;
+
+	i = 0;
+	ssl->context.state[i++] = 0x67452301;
+	ssl->context.state[i++] = 0xefcdab89;
+	ssl->context.state[i++] = 0x98badcfe;
+	ssl->context.state[i] = 0x10325476;
+	ssl->context.count[0] = 0;
+	ssl->context.count[1] = 0;
+
+//	ft_bzero(ssl->context.count, sizeof(ssl->context.count));
+}
+
 
 /*
 ** Add the below functions in math.c file
@@ -187,7 +315,7 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 	ft_printf("message to digest: |%s|\n", ssl->message_to_digest);
 	test_md5_table_k();
 	test_md5_table_s();
-
+	ft_md5_init(ssl);
 //	compute_md5_table(num);
 //	printf("{ ");
 //	while(i < 64)
