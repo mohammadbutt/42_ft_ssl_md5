@@ -6,11 +6,15 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/25 12:40:19 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/25 19:11:50 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
+
+/*
+** Adding md5 functions
+*/
 
 /*
 ** Add the below functions in math.c file
@@ -46,7 +50,8 @@ double ft_fabs(double num)
 }
 
 
-void compute_md5_table_s_0_to_31(unsigned int *num)
+//void compute_md5_table_s_0_to_31(unsigned int *num)
+void compute_md5_table_s_0_to_31(uint32_t *num)
 {
 	int i;
 
@@ -67,7 +72,8 @@ void compute_md5_table_s_0_to_31(unsigned int *num)
 	}
 }
 
-void compute_md5_table_s_32_to_63(unsigned int *num)
+//void compute_md5_table_s_32_to_63(unsigned int *num)
+void compute_md5_table_s_32_to_63(uint32_t *num)
 {
 	int i;
 
@@ -90,16 +96,18 @@ void compute_md5_table_s_32_to_63(unsigned int *num)
 /*
 ** s specifies the pre round shift amount
 */
-void compute_md5_table_s(unsigned int *num)
+//void compute_md5_table_s(unsigned int *num)
+void compute_md5_table_s(uint32_t *num)
 {
 	ft_bzero(num, sizeof(num));
 	compute_md5_table_s_0_to_31(num);
 	compute_md5_table_s_32_to_63(num);
 }
 
-void compute_md5_table_k(unsigned int *num)
+//void compute_md5_table_k(unsigned int *num)
+void compute_md5_table_k(uint32_t *num)
 {
-	int i;
+	uint32_t i;
 	int base;
 	int exponent;
 
@@ -109,7 +117,7 @@ void compute_md5_table_k(unsigned int *num)
 	ft_bzero(num, sizeof(num));
 	while(i < 64)
 	{
-		num[i] = (unsigned int)(ft_pow(base, exponent) * ft_fabs(sin(i + 1)));
+		num[i] = (uint32_t)(ft_pow(base, exponent) * ft_fabs(sin(i + 1)));
 		i++;
 	}
 		
@@ -132,8 +140,8 @@ void error_invalid_file_permission(int fd, char *argv)
 
 void test_md5_table_k(void)
 {
-	unsigned int num[64];
-	int i;
+	uint32_t num[64];
+	uint32_t i;
 
 	i = 0;
 //	ft_bzero(num, sizeof(num));
@@ -152,8 +160,8 @@ void test_md5_table_k(void)
 
 void test_md5_table_s(void)
 {
-	unsigned int num[64];
-	int i;
+	uint32_t num[64];
+	uint32_t i;
 
 	i = 0;
 	compute_md5_table_s(num);
