@@ -68,6 +68,7 @@ Additional functions: strerror(3), exit(3).
 4. [md5 47 parsing - Open Source Apple](https://opensource.apple.com/source/text_cmds/text_cmds-47/md5/md5.c.auto.html)
 5. [md5 99 parsing - Open Source Apple](https://opensource.apple.com/source/text_cmds/text_cmds-99/md5/md5.c.auto.html)
 6. [md5 algo - Open Source Apple](https://opensource.apple.com/source/cvs/cvs-19/cvs/lib/md5.c)
+6. [md5 algo - Open Source Apple](https://opensource.apple.com/source/xnu/xnu-1504.7.4/libkern/crypto/md5.c)
 6. [md5 padding - stackoverflow](https://crypto.stackexchange.com/questions/29685/computing-the-padding-of-md5)
 7. [Big Endian, Little Endian - Stackoverflow](https://stackoverflow.com/questions/46109815/convert-string-from-big-endian-to-little-endian-or-vice-versa-in-python)
 8. [Big Endian, Little Endian - Yolinux](http://www.yolinux.com/TUTORIALS/Endian-Byte-Order.html)
