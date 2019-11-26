@@ -6,7 +6,7 @@
 #    By: mbutt <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/07 15:20:38 by mbutt             #+#    #+#              #
-#    Updated: 2019/11/22 21:19:07 by mbutt            ###   ########.fr        #
+#    Updated: 2019/11/25 17:30:57 by mbutt            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,6 +60,7 @@ MINI_LIBFT = srcs/mini_libft/ft_atoi.c			\
 			 srcs/mini_libft/ft_strjoin.c \
 			 srcs/mini_libft/ft_swap.c 	  \
 			 srcs/mini_libft/ft_strrev.c  \
+			 srcs/mini_libft/ft_memcpy.c  \
 
 OBJ = *.o
 

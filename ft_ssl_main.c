@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/24 21:58:15 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/25 12:40:19 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,9 @@ void compute_md5_table_s_32_to_63(unsigned int *num)
 		num[i++] = 21;
 	}
 }
+/*
+** s specifies the pre round shift amount
+*/
 void compute_md5_table_s(unsigned int *num)
 {
 	ft_bzero(num, sizeof(num));
@@ -133,7 +136,7 @@ void test_md5_table_k(void)
 	int i;
 
 	i = 0;
-	ft_bzero(num, sizeof(num));
+//	ft_bzero(num, sizeof(num));
 	compute_md5_table_k(num);
 	while(i < 64)
 	{

@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/09 15:50:24 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/22 21:21:45 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/25 17:28:25 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,5 +156,11 @@ void				ft_swap(char *a, char *b);
 */
 
 char				*ft_strrev(char *str);
+
+/*
+** ft_memcpy.c------------------------------------------------------------------
+*/
+
+void *ft_memcpy(void *original_dest, const void *original_source, size_t n);
 
 #endif
