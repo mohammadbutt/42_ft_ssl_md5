@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/25 22:23:38 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/26 16:46:20 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 ** If 7 is stored in a 32 bit int, then:
 ** 7 -> ~ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1
 **       ----------------------------------------------------------------
-** 8 <-   1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0
+** -8 <-  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0
 ** ~ 7 = -8
 ** Since the number overflow and goes over the int max value, it becomes -8.
 **
@@ -177,6 +177,15 @@ double ft_fabs(double num)
 	return(num);
 }
 
+void ft_bzero_num_array(uint32_t *num, int number_of_elements)
+{
+	int i;
+
+	i = 0;
+	while(i < number_of_elements)
+		num[i++] = 0;
+}
+
 
 //void compute_md5_table_s_0_to_31(unsigned int *num)
 void compute_md5_table_s_0_to_31(uint32_t *num)
@@ -223,11 +232,19 @@ void compute_md5_table_s_32_to_63(uint32_t *num)
 }
 /*
 ** s specifies the pre round shift amount
+** compute_table_functions:
+** compute_md5_table_s ✓
+** compute_md5_table_k ✓
+** compute_md5_table_m, g_md5_table_m -> in header ✓ 
+** compute_md5_table_padding ✓
 */
 //void compute_md5_table_s(unsigned int *num)
 void compute_md5_table_s(uint32_t *num)
 {
-	ft_bzero(num, sizeof(num));
+//	ft_printf(BGREEN"%lu"NC,(sizeof(num) * sizeof(num)));
+//	ft_printf("\n");
+//	ft_bzero(num, (sizeof(num) * sizeof(num)));
+	ft_bzero(num, (64 * 4));
 	compute_md5_table_s_0_to_31(num);
 	compute_md5_table_s_32_to_63(num);
 }
@@ -242,14 +259,32 @@ void compute_md5_table_k(uint32_t *num)
 	i = 0;
 	base = 2;
 	exponent = 32;
-	ft_bzero(num, sizeof(num));
+//	ft_printf(BGREEN"%lu"NC,(sizeof(num) * sizeof(num)));
+//	ft_printf("\n");
+//	ft_bzero(num, (sizeof(num) * sizeof(num)));
+//	bzero(num, sizeof(num));
+	ft_bzero(num, (64 * 4));
 	while(i < 64)
 	{
 		num[i] = (uint32_t)(ft_pow(base, exponent) * ft_fabs(sin(i + 1)));
 		i++;
-	}
-		
+	}		
 }
+
+
+void compute_md5_table_padding(uint32_t *num)
+{
+//	ft_printf(BBLUE"%lu"NC, (sizeof(num)) * (sizeof(num) * sizeof(*num)));
+//	ft_printf("\n");
+//	ft_bzero(num, (sizeof(num) * sizeof(num)));
+//	bzero(num, (sizeof(num) * sizeof(64)));
+//	ft_bzero_num_array(num, 64);
+	ft_bzero(num, (64 * 4));
+	num[0] = 0x80;
+}
+
+//void compute_md5_table_padding()
+
 /*
 ** print_error_messages takes a 2d array and if the file descriptor is -1, then
 ** the error message is printed.
@@ -265,6 +300,7 @@ void error_invalid_file_permission(int fd, char *argv)
 	close(fd);
 //	exit(EXIT_SUCCESS);
 }
+
 
 void test_md5_table_k(void)
 {
@@ -305,6 +341,29 @@ void test_md5_table_s(void)
 
 }
 
+void test_md5_table_m(void)
+{
+//	uint32_t num[64];
+	uint32_t i;
+
+	i = 0;
+	while(i < 64)
+		printf("%d\n", g_md5_table_m[i++]);
+	printf("\nDone printing table_m\n");
+
+}
+void test_md5_table_padding(void)
+{
+	uint32_t num[64];
+	uint32_t i;
+
+	i = 0;
+	compute_md5_table_padding(num);
+	while(i < 64)
+		printf("%d\n", num[i++]);
+	printf("\nDone printing table_padding\n");
+}
+
 void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_digest)
 {
 //	ssl->flag.p = ssl->flag.p;
@@ -315,6 +374,8 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 	ft_printf("message to digest: |%s|\n", ssl->message_to_digest);
 	test_md5_table_k();
 	test_md5_table_s();
+	test_md5_table_m();
+	test_md5_table_padding();
 	ft_md5_init(ssl);
 //	compute_md5_table(num);
 //	printf("{ ");
