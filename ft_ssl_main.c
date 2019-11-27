@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/26 16:46:20 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/26 17:19:58 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,16 +259,33 @@ void compute_md5_table_k(uint32_t *num)
 	i = 0;
 	base = 2;
 	exponent = 32;
-//	ft_printf(BGREEN"%lu"NC,(sizeof(num) * sizeof(num)));
-//	ft_printf("\n");
-//	ft_bzero(num, (sizeof(num) * sizeof(num)));
-//	bzero(num, sizeof(num));
 	ft_bzero(num, (64 * 4));
 	while(i < 64)
 	{
 		num[i] = (uint32_t)(ft_pow(base, exponent) * ft_fabs(sin(i + 1)));
 		i++;
 	}		
+}
+
+/*
+** Formula from https://en.wikipedia.org/wiki/MD5
+*/
+
+void compute_md5_table_x(uint32_t *num)
+{
+	uint32_t i;
+	uint32_t j;
+
+	i = 0;
+	j = 0;
+	while(j < 16)
+		num[i++] = j++;
+	while(j < 32)
+		num[i++] = ((5 * j++) + 1) % 16;
+	while(j < 48)
+		num[i++] = ((3 * j++) + 5) % 16;
+	while(j < 64)
+		num[i++] = (7 * j++) % 16;
 }
 
 
@@ -341,15 +358,20 @@ void test_md5_table_s(void)
 
 }
 
-void test_md5_table_m(void)
+void test_md5_table_x(void)
 {
-//	uint32_t num[64];
+	uint32_t num[64];
 	uint32_t i;
 
 	i = 0;
+	compute_md5_table_x(num);
+
 	while(i < 64)
-		printf("%d\n", g_md5_table_m[i++]);
-	printf("\nDone printing table_m\n");
+	{
+		printf("|%d| |%d|\n", g_md5_table_x[i], num[i]);
+		i++;
+	}
+	printf("\nDone printing table_x\n");
 
 }
 void test_md5_table_padding(void)
@@ -374,7 +396,7 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 	ft_printf("message to digest: |%s|\n", ssl->message_to_digest);
 	test_md5_table_k();
 	test_md5_table_s();
-	test_md5_table_m();
+	test_md5_table_x();
 	test_md5_table_padding();
 	ft_md5_init(ssl);
 //	compute_md5_table(num);
