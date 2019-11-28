@@ -56,9 +56,9 @@ Additional functions: strerror(3), exit(3).
    ```
    
 ### Five steps are performed to compute the message digest of the message.
-   1. Append padding bits. :white_check_mark:
-   2. Append Langth. :white_check_mark:
-   3. Initialize MD Buffer. :white_check_mark:
+   1. Append padding bits. ✔
+   2. Append Langth. ✔
+   3. Initialize MD Buffer. ✔
    4. Process Message in 16-word blocks
    5. Final Output
 
