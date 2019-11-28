@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 17:06:33 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/25 18:03:32 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/27 20:38:32 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ void *ft_memcpy(void *original_dest, const void *original_source, size_t n)
 	i = 0;
 	while (n)
 	{
-		dest[i] = source[i];
+		if(source)
+			dest[i] = source[i];
+		else
+			dest[i] = 0;
 		i++;
 		n--;
 	}

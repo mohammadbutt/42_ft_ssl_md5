@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/26 17:19:58 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/27 20:51:20 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,15 +289,41 @@ void compute_md5_table_x(uint32_t *num)
 }
 
 
-void compute_md5_table_padding(uint32_t *num)
+void compute_md5_table_padding(unsigned char *num)
 {
-//	ft_printf(BBLUE"%lu"NC, (sizeof(num)) * (sizeof(num) * sizeof(*num)));
+//	ft_printf(BBLUE"%lu"NC, (sizeof(num)));
 //	ft_printf("\n");
-//	ft_bzero(num, (sizeof(num) * sizeof(num)));
-//	bzero(num, (sizeof(num) * sizeof(64)));
-//	ft_bzero_num_array(num, 64);
-	ft_bzero(num, (64 * 4));
+	ft_bzero(num, 64);
 	num[0] = 0x80;
+}
+
+void md5_padding(t_ssl *ssl)
+{
+	uint32_t	ft_64_bit_representation;
+	char		*padded_message;
+	int			padded_len;
+	int			len;
+	int			i;
+
+	i = 0;
+	len = ft_strlen(ssl->message_to_digest);	
+	padded_len = len;
+	ft_64_bit_representation = len * 8;
+	if(padded_len % (512/8) == (448/8))
+		padded_len = padded_len + 64;
+	else
+		while(padded_len % (512/8) != (448/8))
+			padded_len++;
+	padded_message = malloc(sizeof(char) * (padded_len + (padded_len/8)));
+	if(padded_message == NULL)
+		return;
+	ft_strcpy(padded_message, ssl->message_to_digest);
+	i = len;
+	padded_message[i++] = 0x80;
+	while(i < len)
+		padded_message[i++] = 0;
+	*(uint32_t*)(padded_message + i) = ft_64_bit_representation;
+	ft_printf("padded_message:|%s|\n", padded_message);
 }
 
 //void compute_md5_table_padding()
@@ -371,18 +397,18 @@ void test_md5_table_x(void)
 		printf("|%d| |%d|\n", g_md5_table_x[i], num[i]);
 		i++;
 	}
-	printf("\nDone printing table_x\n");
+	printf("\nDone printing table_x\n\n");
 
 }
-void test_md5_table_padding(void)
+void test_md5_padding(t_ssl *ssl)
 {
-	uint32_t num[64];
-	uint32_t i;
+	unsigned char	num[64];
+	uint32_t		i;
 
 	i = 0;
-	compute_md5_table_padding(num);
+	md5_padding(ssl);
 	while(i < 64)
-		printf("%d\n", num[i++]);
+		printf("%u\n", num[i++]);
 	printf("\nDone printing table_padding\n");
 }
 
@@ -397,7 +423,7 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 	test_md5_table_k();
 	test_md5_table_s();
 	test_md5_table_x();
-	test_md5_table_padding();
+	test_md5_padding(ssl);
 	ft_md5_init(ssl);
 //	compute_md5_table(num);
 //	printf("{ ");
