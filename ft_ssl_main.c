@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/27 20:51:20 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/27 21:20:11 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,30 +300,29 @@ void compute_md5_table_padding(unsigned char *num)
 void md5_padding(t_ssl *ssl)
 {
 	uint32_t	ft_64_bit_representation;
-	char		*padded_message;
-	int			padded_len;
+	int			padding;
 	int			len;
 	int			i;
 
 	i = 0;
 	len = ft_strlen(ssl->message_to_digest);	
-	padded_len = len;
+	padding = len;
 	ft_64_bit_representation = len * 8;
-	if(padded_len % (512/8) == (448/8))
-		padded_len = padded_len + 64;
+	if(padding % (512/8) == (448/8))
+		padding = padding + 64;
 	else
-		while(padded_len % (512/8) != (448/8))
-			padded_len++;
-	padded_message = malloc(sizeof(char) * (padded_len + (padded_len/8)));
-	if(padded_message == NULL)
+		while(padding % (512/8) != (448/8))
+			padding++;
+	ssl->md5_padded_message = malloc(sizeof(char) * (padding + (padding/8)));
+	if(ssl->md5_padded_message == NULL)
 		return;
-	ft_strcpy(padded_message, ssl->message_to_digest);
+	ft_strcpy(ssl->md5_padded_message, ssl->message_to_digest);
 	i = len;
-	padded_message[i++] = 0x80;
+	ssl->md5_padded_message[i++] = 0x80;
 	while(i < len)
-		padded_message[i++] = 0;
-	*(uint32_t*)(padded_message + i) = ft_64_bit_representation;
-	ft_printf("padded_message:|%s|\n", padded_message);
+		ssl->md5_padded_message[i++] = 0;
+	*(uint32_t*)(ssl->md5_padded_message + i) = ft_64_bit_representation;
+//	ft_printf("ssl->md5_padded_message:|%s|\n", ssl->md5_padded_message);
 }
 
 //void compute_md5_table_padding()

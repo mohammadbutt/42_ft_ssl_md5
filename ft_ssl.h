@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/27 18:01:38 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/27 21:20:57 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,13 @@ typedef struct	s_ssl_context
 	uint32_t	count[2];
 }				t_ssl_context;
 
+/*
+typedef struct s_md5
+{
+	char		
+}
+*/
+
 typedef struct		s_ssl
 {
 	t_ssl_flag		flag;
@@ -96,6 +103,7 @@ typedef struct		s_ssl
 //	int			count_of_flag_p;
 	char		*message_digest_algo;
 	char		*message_to_digest;
+	char		*md5_padded_message;
 }				t_ssl;
 
 
