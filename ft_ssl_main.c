@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/27 21:20:11 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/28 21:22:31 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,29 @@ uint32_t rotate_left(uint32_t x, uint32_t n_bits)
 
 	rotated_number = (((x) << (n_bits)) | ((x) >> (32 - (n_bits))));
 	return(rotated_number);
+}
+
+uint32_t ft_swap_bits_1(uint32_t x)
+{
+      uint32_t y;
+
+	  y = (x >> 24) & 0xff;
+      y |= ((x >> 16) & 0xff) << 8;
+      y |= ((x >> 8) & 0xff) << 16;
+      y |= (x & 0xff) << 24;
+	  return(y);
+}
+
+uint32_t ft_swap_bits_2(uint32_t value)
+{
+	uint32_t swapped;
+
+	swapped = 0;
+	swapped |= (value & 0x000000FF) << 24;
+	swapped |= (value & 0x0000FF00) << 8;
+	swapped |= (value & 0x00FF0000) >> 8;
+	swapped |= (value & 0xFF000000) >> 24;
+    return(swapped);
 }
 
 /*
