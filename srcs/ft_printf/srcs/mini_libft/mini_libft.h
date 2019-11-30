@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/09 15:50:24 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/25 17:28:25 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/29 18:04:14 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,5 +162,10 @@ char				*ft_strrev(char *str);
 */
 
 void *ft_memcpy(void *original_dest, const void *original_source, size_t n);
+
+/*
+** ft_binary.c------------------------------------------------------------------
+*/
+char	*ft_binary(uint_fast64_t value, int base, char str[]);
 
 #endif
