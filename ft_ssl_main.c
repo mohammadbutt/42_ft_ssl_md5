@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/01 13:04:20 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/01 13:18:25 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,19 @@ uint32_t ft_swap_bits_1(uint32_t x)
 	  return(y);
 }
 
+void	set_md5_to_zero(t_ssl *ssl)
+{
+	ssl->md5.padded_message_len = 0;
+	ssl->md5.a0 = 0;
+	ssl->md5.b0 = 0;
+	ssl->md5.c0 = 0;
+	ssl->md5.d0 = 0;
+	ssl->md5.a = 0;
+	ssl->md5.b = 0;
+	ssl->md5.c = 0;
+	ssl->md5.d = 0;
+}
+
 /*
 ** Swapping bits of value: 123456789
 **                                      1        2        3        4
@@ -215,10 +228,17 @@ void ft_md5_init(t_ssl *ssl)
 */
 void ft_md5_init(t_ssl *ssl)
 {
+/*
 	ssl->state.a0 = 0x67452301;
 	ssl->state.b0 = 0xefcdab89;
 	ssl->state.c0 = 0x98badcfe;
 	ssl->state.d0 = 0x10325476;
+*/
+
+	ssl->md5.a0 = 0x67452301;
+	ssl->md5.b0 = 0xefcdab89;
+	ssl->md5.c0 = 0x98badcfe;
+	ssl->md5.d0 = 0x10325476;
 }
 
 /*
@@ -402,16 +422,16 @@ void ft_md5_padding(t_ssl *ssl)
 	else
 		while(padding % (512/8) != (448/8))
 			padding++;
-	ssl->md5_padded_message = malloc(sizeof(char) * (padding + (padding/8)));
-	if(ssl->md5_padded_message == NULL)
+	ssl->md5.padded_message = malloc(sizeof(char) * (padding + (padding/8)));
+	if(ssl->md5.padded_message == NULL)
 		return;
-	ft_strcpy(ssl->md5_padded_message, ssl->message_to_digest);
+	ft_strcpy(ssl->md5.padded_message, ssl->message_to_digest);
 	i = len;
-	ssl->md5_padded_message[i++] = 0x80;
+	ssl->md5.padded_message[i++] = 0x80;
 	while(i < len)
-		ssl->md5_padded_message[i++] = 0;
-	ssl->md5_padded_message_len = padding;
-	*(uint32_t*)(ssl->md5_padded_message + i) = ft_64_bit_representation;
+		ssl->md5.padded_message[i++] = 0;
+	ssl->md5.padded_message_len = padding;
+	*(uint32_t*)(ssl->md5.padded_message + i) = ft_64_bit_representation;
 }
 
 /*
@@ -434,23 +454,30 @@ void ft_md5_update_context_abcd(t_ssl *ssl)
 ** md5_update_state_abcd initializes and updates values to be used in the while
 ** loop.
 ** Values mapped based on wiki page.
-** ssl->state.a = A of wiki
-** ssl->state.b = B of wiki
-** ssl->state.c = C of wiki
-** ssl->state.d = D of wiki
+** ssl->md5.a = A of wiki
+** ssl->md5.b = B of wiki
+** ssl->md5.c = C of wiki
+** ssl->md5.d = D of wiki
 **
-** ssl->state.a0 = a0 of wiki
-** ssl->state.b0 = b0 of wiki
-** ssl->state.c0 = c0 of wiki
-** ssl->state.d0 = d0 of wiki
+** ssl->md5.a0 = a0 of wiki
+** ssl->md5.b0 = b0 of wiki
+** ssl->md5.c0 = c0 of wiki
+** ssl->md5.d0 = d0 of wiki
 */
 
 void ft_md5_update_state_abcd(t_ssl *ssl)
 {
+/*
 	ssl->state.a = ssl->state.a0;
 	ssl->state.b = ssl->state.b0;
 	ssl->state.c = ssl->state.c0;
 	ssl->state.d = ssl->state.d0;
+*/
+
+	ssl->md5.a = ssl->md5.a0;
+	ssl->md5.b = ssl->md5.b0;
+	ssl->md5.c = ssl->md5.c0;
+	ssl->md5.d = ssl->md5.d0;
 }
 
 /*
@@ -470,10 +497,17 @@ void ft_md5_add_context_state_and_abcd(t_ssl *ssl)
 
 void ft_md5_add_state_abcd_to_a0b0c0d0(t_ssl *ssl)
 {
+/*
 	ssl->state.a0 = ssl->state.a0 + ssl->state.a;
 	ssl->state.b0 = ssl->state.b0 + ssl->state.b;
 	ssl->state.c0 = ssl->state.c0 + ssl->state.c;
 	ssl->state.d0 = ssl->state.d0 + ssl->state.d;
+*/
+
+	ssl->md5.a0 = ssl->md5.a0 + ssl->md5.a;
+	ssl->md5.b0 = ssl->md5.b0 + ssl->md5.b;
+	ssl->md5.c0 = ssl->md5.c0 + ssl->md5.c;
+	ssl->md5.d0 = ssl->md5.d0 + ssl->md5.d;
 }
 
 
@@ -586,7 +620,7 @@ void test_md5_table_g(void)
 
 void test_md5_padding(t_ssl *ssl)
 {
-	ft_printf("|%s|\n", ssl->md5_padded_message);
+	ft_printf("|%s|\n", ssl->md5.padded_message);
 }
 
 void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_digest)
@@ -1001,7 +1035,8 @@ void ft_ssl_parse_qr(int argc, char **argv)
 	int i;
 
 	i = 2;
-	ssl.md5_padded_message_len = 0;
+//	ssl.md5_padded_message_len = 0;
+	set_md5_to_zero(&ssl);
 	ft_initialize_ssl_flag(&ssl);
 	ssl.message_digest_algo = argv[1];
 	while(i < argc)
@@ -1078,7 +1113,8 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 	int i;
 
 	i = 2;
-	ssl.md5_padded_message_len = 0;
+//	ssl.md5_padded_message_len = 0;
+	set_md5_to_zero(&ssl);
 	ft_initialize_ssl_flag(&ssl);
 	ssl.message_digest_algo = argv[1];
 	while(i < argc)
@@ -1099,7 +1135,8 @@ void ft_ssl_parsing(int argc, char **argv)
 	t_ssl ssl;
 	char *message_to_digest;
 	
-	ssl.md5_padded_message_len = 0;
+//	ssl.md5_padded_message_len = 0;
+	set_md5_to_zero(&ssl);
 	if(is_md_algorithm_valid(argv[1]) == false)
 	{
 		ft_print_usage(argv[1]);
@@ -1210,7 +1247,8 @@ void handle_stdin(t_ssl *ssl)
 	char message_digest_algo[8];
 	char *message_to_digest;
 	
-	ssl->md5_padded_message_len = 0;
+//	ssl->md5.padded_message_len = 0;
+	set_md5_to_zero(ssl);
 	read_stdin_loop(message_digest_algo);
 	message_to_digest = mini_gnl_stdin();
 	ssl->message_digest_algo = message_digest_algo;

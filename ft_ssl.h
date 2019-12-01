@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/01 12:44:03 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/01 13:20:23 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct	s_ssl_skip
 	bool		mini_gnl_stdin_for_flag_p : 1;
 }				t_ssl_skip;
 
+/*
 typedef struct	s_ssl_context
 {
 	uint32_t	state[4];
@@ -92,7 +93,7 @@ typedef struct	s_ssl_context
 	uint32_t	c;
 	uint32_t	d;
 }				t_ssl_context;
-
+*/
 /*
 ** Values a0, b0, c0, d0 and A, B, C, D are mapped based on wiki page of md5
 ** 
@@ -153,13 +154,14 @@ typedef struct		s_ssl
 	t_ssl_flag		flag;
 	t_ssl_skip		skip;
 	t_ssl_md5		md5;
+	char			*message_digest_algo;
+	char			*message_to_digest;
+
 //	t_ssl_state		state;
 //	t_ssl_context	context;
 //	bool		skip_if_to_collect_flags;
 //	bool		skip_mini_gnl_stdin_for_flag_p;
 //	int			count_of_flag_p;
-	char		*message_digest_algo;
-	char		*message_to_digest;
 // put below md5 variables in a md5_substruct
 //	char		*md5_padded_message; // malloced
 //	uint32_t	md5_padded_message_len;
