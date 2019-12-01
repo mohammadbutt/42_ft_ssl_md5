@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/29 18:06:51 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/01 13:04:20 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,22 @@ uint32_t function_i(uint32_t x, uint32_t y, uint32_t z)
 	return(i);
 }
 
+uint32_t function_fghi(uint32_t i, uint32_t x, uint32_t y, uint32_t z)
+{
+	uint32_t value;
+	
+	value = 0;
+	if(i >= 0 && i <= 15)
+		value = function_f(x, y, z);
+	else if(i >= 16 && i <= 31)
+		value = function_g(x, y, z);
+	else if(i >= 32 && i <= 47)
+		value = function_h(x, y, z);
+	else if(i >= 48 && i <= 63)
+		value = function_i(x, y, z);
+	return(value);
+}
+
 /*
 ** rotate_left rotates x by n bits
 */
@@ -182,6 +198,7 @@ uint64_t ft_swap_64_bits(uint64_t value)
 ** md5_final
 */
 
+/*
 void ft_md5_init(t_ssl *ssl)
 {
 	int i;
@@ -193,10 +210,16 @@ void ft_md5_init(t_ssl *ssl)
 	ssl->context.state[i] = 0x10325476;
 	ssl->context.count[0] = 0;
 	ssl->context.count[1] = 0;
-
 //	ft_bzero(ssl->context.count, sizeof(ssl->context.count));
 }
-
+*/
+void ft_md5_init(t_ssl *ssl)
+{
+	ssl->state.a0 = 0x67452301;
+	ssl->state.b0 = 0xefcdab89;
+	ssl->state.c0 = 0x98badcfe;
+	ssl->state.d0 = 0x10325476;
+}
 
 /*
 ** Add the below functions in math.c file
@@ -323,9 +346,20 @@ void compute_md5_table_k(uint32_t *num)
 
 /*
 ** Formula from https://en.wikipedia.org/wiki/MD5
+** if 0 ≤ i ≤ 15 then
+** 		g := i
+** else if 16 ≤ i ≤ 31 then
+** 		g := (5×i + 1) mod 16
+** else if 32 ≤ i ≤ 47 then
+** 		g := (3×i + 5) mod 16
+** else if 48 ≤ i ≤ 63 then
+** 		g := (7×i) mod 16
+**
+** Note: Change name from compute_md5_table_x to compute_md5_table_g
 */
 
-void compute_md5_table_x(uint32_t *num)
+//void compute_md5_table_x(uint32_t *num)
+void compute_md5_table_g(uint32_t *num)
 {
 	uint32_t i;
 	uint32_t j;
@@ -351,15 +385,16 @@ void compute_md5_table_padding(unsigned char *num)
 	num[0] = 0x80;
 }
 
-void md5_padding(t_ssl *ssl)
+void ft_md5_padding(t_ssl *ssl)
 {
 	uint32_t	ft_64_bit_representation;
-	int			padding;
-	int			len;
-	int			i;
+	uint32_t	padding;
+	uint32_t	len;
+	uint32_t	i;
 
 	i = 0;
-	len = ft_strlen(ssl->message_to_digest);	
+//	len = ft_strlen(ssl->message_to_digest);	
+	len = ft_strlen_uint32(ssl->message_to_digest);
 	padding = len;
 	ft_64_bit_representation = len * 8;
 	if(padding % (512/8) == (448/8))
@@ -375,10 +410,104 @@ void md5_padding(t_ssl *ssl)
 	ssl->md5_padded_message[i++] = 0x80;
 	while(i < len)
 		ssl->md5_padded_message[i++] = 0;
+	ssl->md5_padded_message_len = padding;
 	*(uint32_t*)(ssl->md5_padded_message + i) = ft_64_bit_representation;
-//	ft_printf("ssl->md5_padded_message:|%s|\n", ssl->md5_padded_message);
 }
 
+/*
+** update md5_update_context_abcd_values initializes and updates values to be
+** used in the while loop.
+*/
+/*
+void ft_md5_update_context_abcd(t_ssl *ssl)
+{
+
+	ssl->context.a = ssl->context.state[0];
+	ssl->context.b = ssl->context.state[1];
+	ssl->context.c = ssl->context.state[2];
+	ssl->context.d = ssl->context.state[3];
+
+}
+*/
+
+/*
+** md5_update_state_abcd initializes and updates values to be used in the while
+** loop.
+** Values mapped based on wiki page.
+** ssl->state.a = A of wiki
+** ssl->state.b = B of wiki
+** ssl->state.c = C of wiki
+** ssl->state.d = D of wiki
+**
+** ssl->state.a0 = a0 of wiki
+** ssl->state.b0 = b0 of wiki
+** ssl->state.c0 = c0 of wiki
+** ssl->state.d0 = d0 of wiki
+*/
+
+void ft_md5_update_state_abcd(t_ssl *ssl)
+{
+	ssl->state.a = ssl->state.a0;
+	ssl->state.b = ssl->state.b0;
+	ssl->state.c = ssl->state.c0;
+	ssl->state.d = ssl->state.d0;
+}
+
+/*
+** Adds the newly retrieved values of a, b, c, d to ssl->context.state[0],
+** state[1], state[2], and state[3].
+*/
+
+/*
+void ft_md5_add_context_state_and_abcd(t_ssl *ssl)
+{
+	ssl->context.state[0] = ssl->context.state[0] + ssl->context.a;
+	ssl->context.state[1] = ssl->context.state[1] + ssl->context.b;
+	ssl->context.state[2] = ssl->context.state[2] + ssl->context.c;
+	ssl->context.state[3] = ssl->context.state[3] + ssl->context.d;
+}
+*/
+
+void ft_md5_add_state_abcd_to_a0b0c0d0(t_ssl *ssl)
+{
+	ssl->state.a0 = ssl->state.a0 + ssl->state.a;
+	ssl->state.b0 = ssl->state.b0 + ssl->state.b;
+	ssl->state.c0 = ssl->state.c0 + ssl->state.c;
+	ssl->state.d0 = ssl->state.d0 + ssl->state.d;
+}
+
+
+/*
+** break chunk into sixteen 32-bit words
+** chunk_of_64_byte = 512 bits
+*/
+
+/*
+void ft_md5_transformation(t_ssl *ssl)
+{
+//	uint32_t ft_64_byte_chunk;
+	uint32_t chunk_of_64_byte;
+	uint32_t i;
+	uint32_t *str;
+
+//	ft_64_byte_chunk = 0;
+//	chunk_of_512_bit = 0;
+	chunk_of_64_byte = 0;
+	i = 0;
+	while(chunk_of_64_byte < ssl->md5_padded_message_len)
+	{
+		ft_md5_update_state_abcd(ssl);
+		str = *(uint32_t *)(ssl->md5_padded_message + chunk_of_64_byte);
+		while(i < FT_64_BYTE)
+		{
+
+		}
+		chunk_of_64_byte = chunk_of_64_byte + FT_64_BYTE;
+	}
+
+
+}
+*/
 //void compute_md5_table_padding()
 
 /*
@@ -437,32 +566,27 @@ void test_md5_table_s(void)
 
 }
 
-void test_md5_table_x(void)
+void test_md5_table_g(void)
 {
 	uint32_t num[64];
 	uint32_t i;
 
 	i = 0;
-	compute_md5_table_x(num);
+//	compute_md5_table_x(num);
+	compute_md5_table_g(num);
 
 	while(i < 64)
 	{
-		printf("|%d| |%d|\n", g_md5_table_x[i], num[i]);
+		printf("|%d| |%d|\n", g_md5_table_g[i], num[i]);
 		i++;
 	}
 	printf("\nDone printing table_x\n\n");
 
 }
+
 void test_md5_padding(t_ssl *ssl)
 {
-	unsigned char	num[64];
-	uint32_t		i;
-
-	i = 0;
-	md5_padding(ssl);
-	while(i < 64)
-		printf("%u\n", num[i++]);
-	printf("\nDone printing table_padding\n");
+	ft_printf("|%s|\n", ssl->md5_padded_message);
 }
 
 void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_digest)
@@ -471,13 +595,16 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 //	unsigned int num[64];
 //	int i = 0;
 
-	ft_printf("message digest algo: |%s|\n", ssl->message_digest_algo);
-	ft_printf("message to digest: |%s|\n", ssl->message_to_digest);
-	test_md5_table_k();
-	test_md5_table_s();
-	test_md5_table_x();
-	test_md5_padding(ssl);
+	ft_printf("message digest algo: |%s|\n", ssl->message_digest_algo); // Remove
+	ft_printf("message to digest: |%s|\n", ssl->message_to_digest); // Remove
+	test_md5_table_k(); // Remove
+	test_md5_table_s(); // Remove
+	test_md5_table_g(); // Remove
 	ft_md5_init(ssl);
+	ft_md5_padding(ssl);
+	test_md5_padding(ssl); // Remove
+//	ft_md5_transformation(ssl);
+
 //	compute_md5_table(num);
 //	printf("{ ");
 //	while(i < 64)
@@ -874,6 +1001,7 @@ void ft_ssl_parse_qr(int argc, char **argv)
 	int i;
 
 	i = 2;
+	ssl.md5_padded_message_len = 0;
 	ft_initialize_ssl_flag(&ssl);
 	ssl.message_digest_algo = argv[1];
 	while(i < argc)
@@ -950,6 +1078,7 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 	int i;
 
 	i = 2;
+	ssl.md5_padded_message_len = 0;
 	ft_initialize_ssl_flag(&ssl);
 	ssl.message_digest_algo = argv[1];
 	while(i < argc)
@@ -969,7 +1098,8 @@ void ft_ssl_parsing(int argc, char **argv)
 {
 	t_ssl ssl;
 	char *message_to_digest;
-
+	
+	ssl.md5_padded_message_len = 0;
 	if(is_md_algorithm_valid(argv[1]) == false)
 	{
 		ft_print_usage(argv[1]);
@@ -1079,7 +1209,8 @@ void handle_stdin(t_ssl *ssl)
 {
 	char message_digest_algo[8];
 	char *message_to_digest;
-
+	
+	ssl->md5_padded_message_len = 0;
 	read_stdin_loop(message_digest_algo);
 	message_to_digest = mini_gnl_stdin();
 	ssl->message_digest_algo = message_digest_algo;

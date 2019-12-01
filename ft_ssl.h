@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/27 22:30:47 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/01 12:44:03 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 
 # define SSL_VALID_FLAG "pqrs"
 # define FT_64_BIT_LENGTH 64
+# define FT_64_BYTE 64
 /*
 ** Structs----------------------------------------------------------------------
 */
@@ -54,10 +55,12 @@
 ** 4 = 0x4, 5 = 0x5, 6 = 0x6, 7 = 0x7,
 ** 8 = 0x8, 9 = 0x9, 10 = 0xa, 11 = 0xb,
 ** 12 = 0xc, 13 = 0xd, 14 = 0xe, 15 = 0xf
-** Also have a compute_md5_table_x
+** Also have a compute_md5_table_g
+**
+** Will not use g_md5_table_x[64];
 */
 
-static uint32_t g_md5_table_x[64] =
+static uint32_t g_md5_table_g[64] =
 {
 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
 	1, 6, 11, 0, 5, 10, 15, 4, 9, 14, 3, 8, 13, 2, 7, 12,
@@ -84,26 +87,83 @@ typedef struct	s_ssl_context
 {
 	uint32_t	state[4];
 	uint32_t	count[2];
+	uint32_t	a;
+	uint32_t	b;
+	uint32_t	c;
+	uint32_t	d;
 }				t_ssl_context;
 
 /*
-typedef struct s_md5
-{
-	char		
-}
+** Values a0, b0, c0, d0 and A, B, C, D are mapped based on wiki page of md5
+** 
+** state.a0 = a0 of wiki
+** state.b0 = b0 of wiki
+** state.c0 = c0 of wiki
+** state.d0 = d0 of wiki
+**
+** state.a = A of wiki
+** state.b = B of wiki
+** state.c = C of wiki
+** state.d = D of wiki
+**
+** a0, b0, c0, d0 gets initialized first to below values based on wiki md5 page:
+** a0 = 0x67452301
+** b0 = 0xefcdab89
+** c0 = 0x98badcfe
+** d0 = 0x10325476
+** 
+** a, b, c, d gets values from a0, b0, c0, d0
 */
+
+/*
+typedef struct	s_ssl_state
+{
+	uint32_t	a0;
+	uint32_t	b0;
+	uint32_t	c0;
+	uint32_t	d0;
+	uint32_t	a;
+	uint32_t	b;
+	uint32_t	c;
+	uint32_t	d;
+}				t_ssl_state;
+*/
+
+typedef struct s_ssl_md5
+{
+
+	uint32_t	table_g[64];
+	uint32_t	table_k[64];
+	uint32_t	table_s[64];
+	char		*padded_message; // malloced
+	uint32_t	padded_message_len;
+	uint32_t	a0;
+	uint32_t	b0;
+	uint32_t	c0;
+	uint32_t	d0;
+	uint32_t	a;
+	uint32_t	b;
+	uint32_t	c;
+	uint32_t	d;
+}				t_ssl_md5;
+
 
 typedef struct		s_ssl
 {
 	t_ssl_flag		flag;
 	t_ssl_skip		skip;
-	t_ssl_context	context;
+	t_ssl_md5		md5;
+//	t_ssl_state		state;
+//	t_ssl_context	context;
 //	bool		skip_if_to_collect_flags;
 //	bool		skip_mini_gnl_stdin_for_flag_p;
 //	int			count_of_flag_p;
 	char		*message_digest_algo;
 	char		*message_to_digest;
-	char		*md5_padded_message;
+// put below md5 variables in a md5_substruct
+//	char		*md5_padded_message; // malloced
+//	uint32_t	md5_padded_message_len;
+//	uint32_t	md5_table
 }				t_ssl;
 
 

@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/11 15:50:22 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/07 02:07:45 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/11/30 21:19:37 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,24 @@ int				ft_strlen(char *str)
 				return (i + 1);
 			else if (str[i + 2] == '\0')
 				return (i + 2);
+			else
+				i = i + 3;
+		}
+	return (i);
+}
+
+uint32_t		ft_strlen_uint32(char *str)
+{
+	uint32_t i;
+
+	i = 0;
+	if (str)
+		while (str[i])
+		{
+			if (str[i + 1] == '\0')
+				return (i + 1);
+			else if (str[i + 2] == '\0')
+				return (i+ 2);
 			else
 				i = i + 3;
 		}
