@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/01 13:20:23 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/01 13:41:21 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@
 ** 12 = 0xc, 13 = 0xd, 14 = 0xe, 15 = 0xf
 ** Also have a compute_md5_table_g
 **
-** Will not use g_md5_table_x[64];
+** Will not use g_md5_table_g[64], but might keep it fo reference
 */
 
 static uint32_t g_md5_table_g[64] =
@@ -162,7 +162,6 @@ typedef struct		s_ssl
 //	bool		skip_if_to_collect_flags;
 //	bool		skip_mini_gnl_stdin_for_flag_p;
 //	int			count_of_flag_p;
-// put below md5 variables in a md5_substruct
 //	char		*md5_padded_message; // malloced
 //	uint32_t	md5_padded_message_len;
 //	uint32_t	md5_table

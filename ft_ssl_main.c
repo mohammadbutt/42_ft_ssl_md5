@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/01 13:18:25 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/01 13:42:49 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -396,7 +396,14 @@ void compute_md5_table_g(uint32_t *num)
 		num[i++] = (7 * j++) % 16;
 }
 
+void compute_md5_table_g_k_s(t_ssl *ssl)
+{
+	compute_md5_table_g(ssl->md5.table_g);
+	compute_md5_table_k(ssl->md5.table_k);
+	compute_md5_table_s(ssl->md5.table_s);
+}
 
+/*
 void compute_md5_table_padding(unsigned char *num)
 {
 //	ft_printf(BBLUE"%lu"NC, (sizeof(num)));
@@ -404,7 +411,7 @@ void compute_md5_table_padding(unsigned char *num)
 	ft_bzero(num, 64);
 	num[0] = 0x80;
 }
-
+*/
 void ft_md5_padding(t_ssl *ssl)
 {
 	uint32_t	ft_64_bit_representation;
@@ -511,37 +518,8 @@ void ft_md5_add_state_abcd_to_a0b0c0d0(t_ssl *ssl)
 }
 
 
-/*
-** break chunk into sixteen 32-bit words
-** chunk_of_64_byte = 512 bits
-*/
-
-/*
-void ft_md5_transformation(t_ssl *ssl)
-{
-//	uint32_t ft_64_byte_chunk;
-	uint32_t chunk_of_64_byte;
-	uint32_t i;
-	uint32_t *str;
-
-//	ft_64_byte_chunk = 0;
-//	chunk_of_512_bit = 0;
-	chunk_of_64_byte = 0;
-	i = 0;
-	while(chunk_of_64_byte < ssl->md5_padded_message_len)
-	{
-		ft_md5_update_state_abcd(ssl);
-		str = *(uint32_t *)(ssl->md5_padded_message + chunk_of_64_byte);
-		while(i < FT_64_BYTE)
-		{
-
-		}
-		chunk_of_64_byte = chunk_of_64_byte + FT_64_BYTE;
-	}
 
 
-}
-*/
 //void compute_md5_table_padding()
 
 /*
@@ -561,19 +539,20 @@ void error_invalid_file_permission(int fd, char *argv)
 }
 
 
-void test_md5_table_k(void)
+//void test_md5_table_k(void)
+void test_md5_table_k(t_ssl *ssl)
 {
-	uint32_t num[64];
+//	uint32_t num[64];
 	uint32_t i;
 
 	i = 0;
 //	ft_bzero(num, sizeof(num));
-	compute_md5_table_k(num);
+//	compute_md5_table_k(num);
 	while(i < 64)
 	{
 		if(((i) % 4) == 0)
 			printf("{ ");
-		printf("%#x, ", num[i]);
+		printf("%#x, ", ssl->md5.table_k[i]);
 		if(((i + 1) % 4) == 0)
 			printf("}\n\n");
 		i++;
@@ -581,18 +560,19 @@ void test_md5_table_k(void)
 
 }
 
-void test_md5_table_s(void)
+//void test_md5_table_s(void)
+void	test_md5_table_s(t_ssl *ssl)
 {
-	uint32_t num[64];
+//	uint32_t num[64];
 	uint32_t i;
 
 	i = 0;
-	compute_md5_table_s(num);
+//	compute_md5_table_s(num);
 	while(i < 64)
 	{
 		if(i == 0 || i == 16 || i == 32 || i == 48)
 			printf("{ ");
-		printf("%u, ", num[i]);
+		printf("%u, ", ssl->md5.table_s[i]);
 		if(i == 15 || i == 31 || i == 47 || i == 63)
 			printf("}\n\n");
 		i++;
@@ -600,21 +580,56 @@ void test_md5_table_s(void)
 
 }
 
-void test_md5_table_g(void)
+void test_md5_table_g(t_ssl *ssl)
 {
-	uint32_t num[64];
+//	uint32_t num[64];
 	uint32_t i;
 
 	i = 0;
 //	compute_md5_table_x(num);
-	compute_md5_table_g(num);
+//	compute_md5_table_g(num);
 
 	while(i < 64)
 	{
-		printf("|%d| |%d|\n", g_md5_table_g[i], num[i]);
+		printf("|%d|\n", ssl->md5.table_g[i]);
 		i++;
 	}
 	printf("\nDone printing table_x\n\n");
+
+}
+/*
+** break chunk into sixteen 32-bit words
+** chunk_of_64_byte = 512 bits
+*/
+void ft_md5_transformation(t_ssl *ssl)
+{
+//	uint32_t ft_64_byte_chunk;
+	uint32_t chunk_of_64_byte;
+	uint32_t i;
+	uint32_t *str;
+
+//	ft_64_byte_chunk = 0;
+//	chunk_of_512_bit = 0;
+	chunk_of_64_byte = 0;
+	i = 0;
+	compute_md5_table_g_k_s(ssl);
+//	test_md5_table_k(ssl);
+//	test_md5_table_s(ssl);
+//	test_md5_table_g(ssl);
+
+	return;
+
+	while(chunk_of_64_byte < ssl->md5.padded_message_len)
+	{
+		ft_md5_update_state_abcd(ssl);
+		str = (uint32_t *)(ssl->md5.padded_message + chunk_of_64_byte);
+		while(i < FT_64_BYTE)
+		{
+
+		}
+		chunk_of_64_byte = chunk_of_64_byte + FT_64_BYTE;
+	}
+
 
 }
 
@@ -631,13 +646,13 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 
 	ft_printf("message digest algo: |%s|\n", ssl->message_digest_algo); // Remove
 	ft_printf("message to digest: |%s|\n", ssl->message_to_digest); // Remove
-	test_md5_table_k(); // Remove
-	test_md5_table_s(); // Remove
-	test_md5_table_g(); // Remove
+//	test_md5_table_k(); // Remove
+//	test_md5_table_s(); // Remove
+//	test_md5_table_g(); // Remove
 	ft_md5_init(ssl);
 	ft_md5_padding(ssl);
 	test_md5_padding(ssl); // Remove
-//	ft_md5_transformation(ssl);
+	ft_md5_transformation(ssl);
 
 //	compute_md5_table(num);
 //	printf("{ ");
