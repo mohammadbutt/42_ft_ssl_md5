@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/09 15:50:24 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/30 21:20:18 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/02 17:56:22 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int					ft_hex_numlen(uint_fast64_t value, int base);
 */
 
 char				*ft_strcpy(char *dest, char *source);
+char				*ft_strcpy_const(char *dest, const char *source);
 char				*ft_strncpy(char *dest, char *source, int len);
 
 /*

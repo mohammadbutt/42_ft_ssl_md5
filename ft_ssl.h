@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/01 13:41:21 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/03 15:32:59 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,27 +94,6 @@ typedef struct	s_ssl_context
 	uint32_t	d;
 }				t_ssl_context;
 */
-/*
-** Values a0, b0, c0, d0 and A, B, C, D are mapped based on wiki page of md5
-** 
-** state.a0 = a0 of wiki
-** state.b0 = b0 of wiki
-** state.c0 = c0 of wiki
-** state.d0 = d0 of wiki
-**
-** state.a = A of wiki
-** state.b = B of wiki
-** state.c = C of wiki
-** state.d = D of wiki
-**
-** a0, b0, c0, d0 gets initialized first to below values based on wiki md5 page:
-** a0 = 0x67452301
-** b0 = 0xefcdab89
-** c0 = 0x98badcfe
-** d0 = 0x10325476
-** 
-** a, b, c, d gets values from a0, b0, c0, d0
-*/
 
 /*
 typedef struct	s_ssl_state
@@ -129,6 +108,31 @@ typedef struct	s_ssl_state
 	uint32_t	d;
 }				t_ssl_state;
 */
+/*
+** Values a0, b0, c0, d0 and A, B, C, D are mapped based on wiki page of md5
+** 
+** ssl->md5.a0 = a0 of wiki
+** ssl->md5.b0 = b0 of wiki
+** ssl->md5.c0 = c0 of wiki
+** ssl->md5.d0 = d0 of wiki
+**
+** ssl->md5.a = A of wiki
+** ssl->md5.b = B of wiki
+** ssl->md5.c = C of wiki
+** ssl->md5.d = D of wiki
+**
+** a0, b0, c0, d0 gets initialized first to below values based on wiki md5 page:
+** a0 = 0x67452301
+** b0 = 0xefcdab89
+** c0 = 0x98badcfe
+** d0 = 0x10325476
+** 
+** a, b, c, d gets values from a0, b0, c0, d0
+*/
+
+/*
+** padded_message can be char or uint8_t
+*/
 
 typedef struct s_ssl_md5
 {
@@ -136,8 +140,9 @@ typedef struct s_ssl_md5
 	uint32_t	table_g[64];
 	uint32_t	table_k[64];
 	uint32_t	table_s[64];
-	char		*padded_message; // malloced
-	uint32_t	padded_message_len;
+//	char		*padded_message;
+	uint8_t		*padded_message;
+	size_t		padded_message_len; // should this be size_t?
 	uint32_t	a0;
 	uint32_t	b0;
 	uint32_t	c0;
