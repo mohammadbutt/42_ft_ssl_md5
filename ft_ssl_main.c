@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/03 17:18:02 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/03 21:11:30 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -419,7 +419,7 @@ void compute_md5_table_padding(unsigned char *num)
 	num[0] = 0x80;
 }
 */
-/*
+
 void ft_md5_padding(t_ssl *ssl)
 {
 	uint32_t	ft_64_bit_representation;
@@ -440,25 +440,24 @@ void ft_md5_padding(t_ssl *ssl)
 	ssl->md5.padded_message = malloc(sizeof(char) * (padding + (padding/8)));
 	if(ssl->md5.padded_message == NULL)
 		return;
-	ft_strcpy(ssl->md5.padded_message, ssl->message_to_digest);
+	ft_strcpy((char *)ssl->md5.padded_message, ssl->message_to_digest);
 	i = len;
 	ssl->md5.padded_message[i++] = 0x80;
 	while(i < padding)
 		ssl->md5.padded_message[i++] = 0;
 	ssl->md5.padded_message_len = padding;
 	*(uint32_t*)(ssl->md5.padded_message + i) = ft_64_bit_representation;
-	ft_printf("len|%u|\n", len);
-	ft_printf("i|%u|\n", i);
-	ft_printf("padding|%u|\n", padding);
-	ft_printf("ssl->md5.padded_message_len|%u|\n", ssl->md5.padded_message_len);
-	ft_printf("str1   |%s|\n", ssl->md5.padded_message);
-	ft_printf("str1_u |%u|\n", ssl->md5.padded_message);
-	ft_printf("str1_u0|%u|\n", ssl->md5.padded_message[0]);
-	ft_printf("str1_u1|%u|\n", ssl->md5.padded_message[1]);
-	ft_printf("str1_u2|%u|\n", ssl->md5.padded_message[2]);
-	ft_printf("Entering hashing\n\n");
+//	ft_printf("ft_64_bit_representation|%u|\n", ft_64_bit_representation);
+//	ft_printf("len        |%u|\n", len);
+//	ft_printf("i          |%u|\n", i);
+//	ft_printf("message_len|%u|\n", ssl->md5.padded_message_len);
+//	ft_printf("message    |%s|\n", ssl->md5.padded_message);
+//	ft_printf("total_u    |%u|\n", ssl->md5.padded_message);
+//	ft_printf("total_u    |%u|\n", ssl->message_to_digest);
+//	exit (EXIT_SUCCESS);
 }
-*/
+
+
 
 void test_stored_string(t_ssl *ssl)
 {
@@ -482,7 +481,7 @@ void test_stored_string(t_ssl *ssl)
 	ft_printf("\nFinished printing stored string with padding\n");
 }
 
-
+/*
 //void ft_md5_padding(t_ssl *ssl, char *msg, size_t len)
 void ft_md5_padding(t_ssl *ssl, uint8_t *msg, size_t len)
 {
@@ -490,7 +489,7 @@ void ft_md5_padding(t_ssl *ssl, uint8_t *msg, size_t len)
 	uint32_t	ft_64_bit_representation;
 
 	ssl->md5.padded_message_len = len;
-	ft_64_bit_representation = (uint32_t)len * 8;
+	ft_64_bit_representation = len * 8;
 	if (ssl->md5.padded_message_len % (512/8) == (448/8))
 		ssl->md5.padded_message_len = ssl->md5.padded_message_len + 64;
 	else
@@ -500,7 +499,8 @@ void ft_md5_padding(t_ssl *ssl, uint8_t *msg, size_t len)
 	if(ssl->md5.padded_message == NULL)
 		return;
 //	ft_bzero(ssl->md5.padded_message, ssl->md5.padded_message_len);
-	ft_strcpy_const((char *)ssl->md5.padded_message, (const char *)msg);
+//	ft_strcpy_const((char *)ssl->md5.padded_message, (const char *)msg);
+	ft_strcpy((char *)ssl->md5.padded_message, (char *)msg);
 	i = len;
 	ssl->md5.padded_message[i++] = 0x80;
 	while(i < ssl->md5.padded_message_len)
@@ -509,7 +509,6 @@ void ft_md5_padding(t_ssl *ssl, uint8_t *msg, size_t len)
 
 //	test_stored_string(ssl);
 
-	int j = 0;
 
 	ft_printf("ft_64_bit_representation|%u|\n", ft_64_bit_representation);
 	ft_printf("len        |%u|\n", len);
@@ -518,22 +517,23 @@ void ft_md5_padding(t_ssl *ssl, uint8_t *msg, size_t len)
 	ft_printf("message    |%s|\n", ssl->md5.padded_message);
 	ft_printf("total_u    |%u|\n", ssl->md5.padded_message);
 
-	while(j < 100)
-	{
-		if(j + 1 == (int)ssl->md5.padded_message_len)
-		{
-			ft_printf("char[%02d]    |%c|%u|\n", j, ssl->md5.padded_message[j], ssl->md5.padded_message[j]);
-			ft_printf(BRED"char[%02d]    |%c|%u|"NC, j, '*', ssl->md5.padded_message[j]);
-			write(1, "\n", 1);
-		}
-		else
-		ft_printf("char[%02d]    |%c|%u|\n", j, ssl->md5.padded_message[j], ssl->md5.padded_message[j]);
-		j++;
-	}
+//	int j = 0;
+//	while(j < 100)
+//	{
+//		if(j + 1 == (int)ssl->md5.padded_message_len)
+//		{
+//			ft_printf("char[%02d]    |%c|%u|\n", j, ssl->md5.padded_message[j], ssl->md5.padded_message[j]);
+//			ft_printf(BRED"char[%02d]    |%c|%u|"NC, j, '*', ssl->md5.padded_message[j]);
+//			write(1, "\n", 1);
+//		}
+//		else
+//		ft_printf("char[%02d]    |%c|%u|\n", j, ssl->md5.padded_message[j], ssl->md5.padded_message[j]);
+//		j++;
+//	}
 
 	exit(EXIT_SUCCESS);
 }
-
+*/
 
 //void compute_md5_table_padding()
 
@@ -768,7 +768,7 @@ void ft_md5_transformation(t_ssl *ssl)
 	str = NULL;
 	set_variables_to_zero(&chunk_of_64_byte, &i, &f);
 	compute_md5_table_g_k_s(ssl);
-	test_md5_table_k(ssl);
+//	test_md5_table_k(ssl);
 	f = 0;
 
 	while(chunk_of_64_byte < ssl->md5.padded_message_len)
@@ -790,17 +790,17 @@ void ft_md5_transformation(t_ssl *ssl)
 			}
 			else if(i >= 16 && i <= 31)
 			{
-//				f = function_g(ssl->md5.b, ssl->md5.c, ssl->md5.d);
+				f = function_g(ssl->md5.b, ssl->md5.c, ssl->md5.d);
 //				ft_printf("|%u|%u|", i, f);
 			}
 			else if(i >= 32 && i <= 47)
 			{
-//				f = function_h(ssl->md5.b, ssl->md5.c, ssl->md5.d);
+				f = function_h(ssl->md5.b, ssl->md5.c, ssl->md5.d);
 //				ft_printf("|%u|%u|", i, f);
 			}
 			else if(i >= 48 && i <= 63)
 			{
-//				f = function_i(ssl->md5.b, ssl->md5.c, ssl->md5.d);
+				f = function_i(ssl->md5.b, ssl->md5.c, ssl->md5.d);
 //				ft_printf("|%u|%u|", i, f);
 			}
 
@@ -810,8 +810,8 @@ void ft_md5_transformation(t_ssl *ssl)
 			ssl->md5.d = ssl->md5.c;
 			ssl->md5.c = ssl->md5.b;
 			ssl->md5.b = ssl->md5.b + rotate_left(f, ssl->md5.table_s[i]);
-			ft_printf("%u|%u|", ssl->md5.table_k[i], ssl->md5.table_g[i]);
-			ft_printf("%u|%u|\n", str[ssl->md5.table_g[i]], ssl->md5.table_s[i]);	
+//			ft_printf("%u|%u|", ssl->md5.table_k[i], ssl->md5.table_g[i]);
+//			ft_printf("%u|%u|\n", str[ssl->md5.table_g[i]], ssl->md5.table_s[i]);	
 //			swap_md5_adc_with_dcb(ssl);
 //			ssl->md5.b = ssl->md5.b + rotate_left(f, ssl->md5.table_s[i]);
 
@@ -834,7 +834,7 @@ void ft_md5_transformation(t_ssl *ssl)
 void ft_md5_print(t_ssl *ssl)
 {
 
-	ft_printf("%x%x%x%x\n", ssl->md5.a0, ssl->md5.b0, ssl->md5.c0, ssl->md5.d0);
+//	ft_printf("%x%x%x%x\n", ssl->md5.a0, ssl->md5.b0, ssl->md5.c0, ssl->md5.d0);
 	swap_bits_to_fix_endian(ssl);
 	ft_printf("%x%x%x%x\n", ssl->md5.a0, ssl->md5.b0, ssl->md5.c0, ssl->md5.d0);
 /*
@@ -867,23 +867,23 @@ void set_ssl_md5_to_zero(t_ssl *ssl)
 	ssl->md5.d = 0;
 }
 
+
 void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_digest)
 {
 //	ssl->flag.p = ssl->flag.p;
 //	unsigned int num[64];
 //	int i = 0;
 
-	ft_printf("message digest algo: |%s|\n", ssl->message_digest_algo); // Remove
-	ft_printf("message to digest: |%s|\n", ssl->message_to_digest); // Remove
+//	ft_printf("message digest algo: |%s|\n", ssl->message_digest_algo); // Remove
+//	ft_printf("message to digest: |%s|\n", ssl->message_to_digest); // Remove
 //	test_md5_table_k(ssl); // Remove
 //	test_md5_table_s(); // Remove
 //	test_md5_table_g(); // Remove
 //	ft_bzero(&ssl->md5, sizeof(ssl->md5));
+
 	set_ssl_md5_to_zero(ssl);
 	ft_md5_init(ssl);
-//	ft_md5_padding(ssl);
-	ft_md5_padding(ssl, (uint8_t *)ssl->message_to_digest, ft_strlen(ssl->message_to_digest));
-	test_md5_padding(ssl); // Remove
+	ft_md5_padding(ssl);
 	ft_md5_transformation(ssl);
 	ft_md5_print(ssl);
 
@@ -901,6 +901,10 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 //		i++;
 //	}
 }
+
+
+
+
 
 /*
 ** print_error_message_dir prints error message for the directory
@@ -1121,6 +1125,7 @@ void store_hash_free_message(t_ssl *ssl, char *message_to_digest)
 
 	message_len = ft_strlen(message_to_digest);
 	ssl->message_to_digest = malloc(sizeof(char) * (message_len + 1));
+//	ft_printf(BGREEN"testing_u|%u|\n"NC, message_to_digest);
 	if(ssl->message_to_digest == NULL)
 		return;
 //	ft_bzero(ssl->message_to_digest, message_len + 1);
@@ -1161,6 +1166,14 @@ void ft_ssl_collect_flags_process_p(t_ssl *ssl)
 	}
 }
 
+/*
+** ft_ssl_collect_flags_process_s works as following
+** ./ft_ssl md5 -s123
+** String to hash appears right after -s without a space.
+** Or if the -s flag is true but there are no arguments right after it.
+** ./ft_ssl md5 -s
+*/
+
 void ft_ssl_collect_flags_process_s(char *message, t_ssl *ssl, int j, int argc)
 {
 	char *message_to_digest;
@@ -1168,6 +1181,8 @@ void ft_ssl_collect_flags_process_s(char *message, t_ssl *ssl, int j, int argc)
 	if(ssl->flag.s == true && message[0] != '\0')
 	{
 		message_to_digest = malloc(sizeof(char) * (ft_strlen(message) + 1));
+//		ft_printf(BBLUE"|%s|%u|\n", message, message);
+
 		ft_strcpy(message_to_digest, message);
 		store_hash_free_message(ssl, message_to_digest);
 //		ssl->message_to_digest = message_to_digest;
@@ -1176,7 +1191,11 @@ void ft_ssl_collect_flags_process_s(char *message, t_ssl *ssl, int j, int argc)
 		ssl->flag.s = false;
 	}
 	else if(ssl->flag.s == true && j + 1 == argc)
+	{
+
+//		ft_printf(BBLUE"|%s|%u|\n", message, message);
 		ft_option_requires_argument(ssl->message_digest_algo);
+	}
 }
 
 
@@ -1554,6 +1573,21 @@ void handle_stdin(t_ssl *ssl)
 int main(int argc, char *argv[])
 {
 	t_ssl ssl;
+
+
+//	ft_printf(BYELLOW"|%s|"NC, argv[1]);
+//	ft_printf(BYELLOW"%u|\n"NC, argv[1]);
+//	ft_printf(BYELLOW"|%s|"NC, argv[2]);
+//	ft_printf(BYELLOW"%u|\n"NC, argv[2]);
+//	ft_printf(BYELLOW"|%s|"NC, argv[3]);
+//	ft_printf(BYELLOW"%u|\n"NC, argv[3]);
+//	ft_printf(BYELLOW"|%s|"NC, argv[4]);
+//	ft_printf(BYELLOW"%u|\n"NC, argv[4]);
+
+
+
+
+
 //	int fd;
 
 //	fd = open(argv[1], O_RDONLY);
