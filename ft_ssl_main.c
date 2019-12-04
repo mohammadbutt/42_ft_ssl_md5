@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/03 22:29:42 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/04 12:47:33 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -739,7 +739,7 @@ void ft_md5_transformation(t_ssl *ssl)
 		ft_add_md5_abcd_to_a0b0c0d0(ssl);
 		chunk_of_64_byte = chunk_of_64_byte + FT_64_BYTE;
 	}
-//	swap_bits_to_fix_endian(ssl);
+	free(ssl->md5.padded_message);
 }
 
 void ft_md5_format_print(t_ssl *ssl)
@@ -806,6 +806,7 @@ void hash_message_md5(t_ssl *ssl)
 	ft_md5_transformation(ssl);
 	swap_bits_to_fix_endian(ssl);
 	ft_md5_format_print(ssl);
+
 }
 
 
