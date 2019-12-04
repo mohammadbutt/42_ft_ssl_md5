@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/04 12:47:33 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/04 13:30:50 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -742,39 +742,45 @@ void ft_md5_transformation(t_ssl *ssl)
 	free(ssl->md5.padded_message);
 }
 
+void ft_md5_print(t_ssl *ssl, char character)
+{
+//	uint32_t	a0;
+//	uint32_t	b0;
+//	uint32_t	c0;
+//	uint32_t	d0;
+
+//	a0 = ssl->md5.a0;
+//	b0 = ssl->md5.b0;
+//	c0 = ssl->md5.c0;
+//	d0 = ssl->md5.d0;
+//	ft_printf("%x%x%x%x%c", a0, b0, c0, d0, character);
+	ft_printf("%x%x%x", ssl->md5.a0, ssl->md5.b0, ssl->md5.c0);
+	ft_printf("%x%c", ssl->md5.d0, character);
+}
+
 void ft_md5_format_print(t_ssl *ssl)
 {
-//	ft_printf("|%s|\n", ssl->message_to_digest);
-
-//	ft_printf("MD5 (%s) = ", ssl->message_to_digest);
 	if(ssl->flag.q == true  && ssl->flag.s == true)
-	{
-		ft_printf("%x%x", ssl->md5.a0, ssl->md5.b0);
-		ft_printf("%x%x\n", ssl->md5.c0, ssl->md5.d0);
-	}
+		ft_md5_print(ssl, '\n');
 	else if(ssl->flag.r == true && ssl->flag.s == true)
 	{
-		ft_printf("%x%x", ssl->md5.a0, ssl->md5.b0);
-		ft_printf("%x%x ", ssl->md5.c0, ssl->md5.d0);
+		ft_md5_print(ssl, ' ');
 		ft_printf("\"%s\"\n", ssl->message_to_digest);
 	}
 	else if(ssl->flag.p == true)
 	{
-		ft_printf("%x%x", ssl->md5.a0, ssl->md5.b0);
-		ft_printf("%x%x\n", ssl->md5.c0, ssl->md5.d0);
+		ft_md5_print(ssl, '\n');
 		ssl->flag.p = false;
 	}
 	else if(ssl->flag.r == false && ssl->flag.q == false && ssl->flag.s == true)
 	{
 		ft_printf("MD5 (\"%s\") = ", ssl->message_to_digest);
-		ft_printf("%x%x", ssl->md5.a0, ssl->md5.b0);
-		ft_printf("%x%x\n", ssl->md5.c0, ssl->md5.d0);
+		ft_md5_print(ssl, '\n');
 	}
 	else if(ssl->flag.s == false)
 	{
 		ft_printf("MD5 (%s) = ", ssl->file_name);
-		ft_printf("%x%x", ssl->md5.a0, ssl->md5.b0);
-		ft_printf("%x%x\n", ssl->md5.c0, ssl->md5.d0);
+		ft_md5_print(ssl, '\n');
 	}
 
 //	else if(ssl->flag.q == false && ssl->flag.r == false && ssl->flag.p == true)
@@ -1080,8 +1086,8 @@ void ft_ssl_collect_flags_process_p(t_ssl *ssl)
 	}
 	else if(ssl->skip.mini_gnl_stdin_for_flag_p == true)
 	{
-		empty_message_to_digest = malloc(sizeof(char) * (1));
-		ft_strcpy(empty_message_to_digest, "");
+		empty_message_to_digest = malloc(sizeof(char) * (2));
+		ft_strcpy(empty_message_to_digest, "\0");
 		store_hash_free_message(ssl, empty_message_to_digest);
 //		ssl->message_to_digest = empty_message_to_digest;
 //		while(ssl->flag.count_of_p)
