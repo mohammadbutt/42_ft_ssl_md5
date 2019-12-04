@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/03 21:51:45 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/03 22:29:42 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -744,13 +744,15 @@ void ft_md5_transformation(t_ssl *ssl)
 
 void ft_md5_format_print(t_ssl *ssl)
 {
+//	ft_printf("|%s|\n", ssl->message_to_digest);
 
-	if(ssl->flag.q == true && ssl->flag.p == false)
+//	ft_printf("MD5 (%s) = ", ssl->message_to_digest);
+	if(ssl->flag.q == true  && ssl->flag.s == true)
 	{
 		ft_printf("%x%x", ssl->md5.a0, ssl->md5.b0);
 		ft_printf("%x%x\n", ssl->md5.c0, ssl->md5.d0);
 	}
-	else if(ssl->flag.r == true && ssl->flag.p == false)
+	else if(ssl->flag.r == true && ssl->flag.s == true)
 	{
 		ft_printf("%x%x", ssl->md5.a0, ssl->md5.b0);
 		ft_printf("%x%x ", ssl->md5.c0, ssl->md5.d0);
@@ -760,7 +762,26 @@ void ft_md5_format_print(t_ssl *ssl)
 	{
 		ft_printf("%x%x", ssl->md5.a0, ssl->md5.b0);
 		ft_printf("%x%x\n", ssl->md5.c0, ssl->md5.d0);
+		ssl->flag.p = false;
 	}
+	else if(ssl->flag.r == false && ssl->flag.q == false && ssl->flag.s == true)
+	{
+		ft_printf("MD5 (\"%s\") = ", ssl->message_to_digest);
+		ft_printf("%x%x", ssl->md5.a0, ssl->md5.b0);
+		ft_printf("%x%x\n", ssl->md5.c0, ssl->md5.d0);
+	}
+	else if(ssl->flag.s == false)
+	{
+		ft_printf("MD5 (%s) = ", ssl->file_name);
+		ft_printf("%x%x", ssl->md5.a0, ssl->md5.b0);
+		ft_printf("%x%x\n", ssl->md5.c0, ssl->md5.d0);
+	}
+
+//	else if(ssl->flag.q == false && ssl->flag.r == false && ssl->flag.p == true)
+//	{
+//		ft_print
+//	}
+
 }
 
 
@@ -1278,6 +1299,7 @@ void ft_ssl_parse_pqrs_no_dash(char **argv, t_ssl *ssl, int i)
 		fd = open(argv[i], O_RDONLY);
 		if(error_messages(fd, argv[i]) == false)
 		{
+			ssl->file_name = argv[i];
 			message_to_digest = mini_gnl(fd, argv[i]);
 			store_hash_free_message(ssl, message_to_digest);
 //			ssl->message_to_digest = message_to_digest;
