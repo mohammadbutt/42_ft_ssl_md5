@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/03 15:32:59 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/03 21:26:32 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,8 +140,8 @@ typedef struct s_ssl_md5
 	uint32_t	table_g[64];
 	uint32_t	table_k[64];
 	uint32_t	table_s[64];
-//	char		*padded_message;
-	uint8_t		*padded_message;
+	char		*padded_message;
+//	uint8_t		*padded_message;
 	size_t		padded_message_len; // should this be size_t?
 	uint32_t	a0;
 	uint32_t	b0;
