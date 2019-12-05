@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/04 13:30:50 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/04 16:12:21 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -420,6 +420,8 @@ void compute_md5_table_padding(unsigned char *num)
 }
 */
 
+void	*ft_memalloc(size_t size);
+
 void ft_md5_padding(t_ssl *ssl)
 {
 	uint32_t	ft_64_bit_representation;
@@ -428,7 +430,6 @@ void ft_md5_padding(t_ssl *ssl)
 	uint32_t	i;
 
 	i = 0;
-//	len = ft_strlen(ssl->message_to_digest);	
 	len = ft_strlen_uint32(ssl->message_to_digest);
 	padding = len;
 	ft_64_bit_representation = len * 8;
@@ -437,7 +438,7 @@ void ft_md5_padding(t_ssl *ssl)
 	else
 		while(padding % (512/8) != (448/8))
 			padding++;
-	ssl->md5.padded_message = malloc(sizeof(char) * (padding + (padding/8)));
+	ssl->md5.padded_message = ft_memalloc(padding + (padding/8));
 	if(ssl->md5.padded_message == NULL)
 		return;
 	ft_strcpy((char *)ssl->md5.padded_message, ssl->message_to_digest);
@@ -447,14 +448,6 @@ void ft_md5_padding(t_ssl *ssl)
 		ssl->md5.padded_message[i++] = 0;
 	ssl->md5.padded_message_len = padding;
 	*(uint32_t*)(ssl->md5.padded_message + i) = ft_64_bit_representation;
-//	ft_printf("ft_64_bit_representation|%u|\n", ft_64_bit_representation);
-//	ft_printf("len        |%u|\n", len);
-//	ft_printf("i          |%u|\n", i);
-//	ft_printf("message_len|%u|\n", ssl->md5.padded_message_len);
-//	ft_printf("message    |%s|\n", ssl->md5.padded_message);
-//	ft_printf("total_u    |%u|\n", ssl->md5.padded_message);
-//	ft_printf("total_u    |%u|\n", ssl->message_to_digest);
-//	exit (EXIT_SUCCESS);
 }
 
 
@@ -723,6 +716,7 @@ void ft_md5_transformation(t_ssl *ssl)
 
 	set_variables_to_zero(&chunk_of_64_byte, &i, &f);
 	compute_md5_table_g_k_s(ssl);
+	str = NULL;
 	while(chunk_of_64_byte < ssl->md5.padded_message_len)
 	{
 		ft_update_md5_abcd(ssl);
@@ -739,7 +733,11 @@ void ft_md5_transformation(t_ssl *ssl)
 		ft_add_md5_abcd_to_a0b0c0d0(ssl);
 		chunk_of_64_byte = chunk_of_64_byte + FT_64_BYTE;
 	}
+//	size_t j = 0;
+//	while(j < ssl->md5.padded_message_len)
+//		ssl->md5.padded_message[j++] = 0;
 	free(ssl->md5.padded_message);
+	ssl->md5.padded_message = NULL;
 }
 
 void ft_md5_print(t_ssl *ssl, char character)
@@ -769,6 +767,7 @@ void ft_md5_format_print(t_ssl *ssl)
 	}
 	else if(ssl->flag.p == true)
 	{
+//		ft_printf("MD5 (\"%s\") = ", ssl->message_to_digest);
 		ft_md5_print(ssl, '\n');
 		ssl->flag.p = false;
 	}
@@ -793,25 +792,33 @@ void ft_md5_format_print(t_ssl *ssl)
 
 void set_ssl_md5_to_zero(t_ssl *ssl)
 {
-	ssl->md5.padded_message_len = 0;
-	ssl->md5.a0 = 0;
-	ssl->md5.b0 = 0;
-	ssl->md5.c0 = 0;
-	ssl->md5.d0 = 0;
-	ssl->md5.a = 0;
-	ssl->md5.b = 0;
-	ssl->md5.c = 0;
-	ssl->md5.d = 0;
+
+//	ft_printf("Cmes here\n");
+	ft_bzero(&ssl->md5, sizeof(t_ssl_md5));
+
+//	ssl->md5.padded_message_len = 0;
+//	ssl->md5.a0 = 0;
+//	ssl->md5.b0 = 0;
+//	ssl->md5.c0 = 0;
+//	ssl->md5.d0 = 0;
+//	ssl->md5.a = 0;
+//	ssl->md5.b = 0;
+//	ssl->md5.c = 0;
+//	ssl->md5.d = 0;
+//	ft_bzero(ssl->md5.padded_message,);
+
 }
 
 void hash_message_md5(t_ssl *ssl)
 {
 	set_ssl_md5_to_zero(ssl);
+	
 	ft_md5_init(ssl);
 	ft_md5_padding(ssl);
 	ft_md5_transformation(ssl);
 	swap_bits_to_fix_endian(ssl);
 	ft_md5_format_print(ssl);
+//	ft_md5_init(ssl);
 
 }
 
@@ -1050,18 +1057,40 @@ void store_hash_free_message(t_ssl *ssl, char *message_to_digest)
 }
 */
 
+void	*ft_memalloc(size_t size)
+{
+	unsigned char	*memory;
+	size_t			i;
+
+	i = 0;
+	memory = (unsigned char *)malloc(sizeof(unsigned char) * (size));
+	if ((!(memory)) || size > SIZE_T_MAX)
+		return (NULL);
+	else
+	{
+		while (i <= size)
+			memory[i++] = '\0';
+	}
+	return (memory);
+}
 
 void store_hash_free_message(t_ssl *ssl, char *message_to_digest)
 {
 	int message_len;
 
 	message_len = ft_strlen(message_to_digest);
-	ssl->message_to_digest = malloc(sizeof(char) * (message_len + 1));
+//	ft_printf("%d\n", message_len);
+	ssl->message_to_digest = ft_memalloc(message_len + 1);
+//	ssl->message_to_digest = malloc(sizeof(char) * (message_len + 1));
 //	ft_printf(BGREEN"testing_u|%u|\n"NC, message_to_digest);
 	if(ssl->message_to_digest == NULL)
 		return;
 //	ft_bzero(ssl->message_to_digest, message_len + 1);
-	ft_strcpy(ssl->message_to_digest, message_to_digest);
+//
+	
+	ssl->message_to_digest[0] = 0;
+	ft_strcpy(ssl->message_to_digest, message_to_digest); // put it back on
+//	ft_printf(BBLUE"%s\n"NC, message_to_digest);
 	hash_message(ssl);
 	free(message_to_digest);
 	free(ssl->message_to_digest);
@@ -1072,11 +1101,14 @@ void ft_ssl_collect_flags_process_p(t_ssl *ssl)
 {
 	char *stdin_message_to_digest;
 	char *empty_message_to_digest;
+	char temp[1];
 
+	ft_strcpy(temp, "");
+	empty_message_to_digest = NULL;
 	if(ssl->skip.mini_gnl_stdin_for_flag_p == false)
 	{
 		stdin_message_to_digest = mini_gnl_stdin();
-		ft_printf("%s", stdin_message_to_digest);
+//		ft_printf("%s", stdin_message_to_digest);
 		store_hash_free_message(ssl, stdin_message_to_digest);
 //		ssl->message_to_digest = stdin_message_to_digest;
 //		hash_message(ssl);//, ssl->message_digest_algo, stdin_message_to_digest);
@@ -1086,8 +1118,13 @@ void ft_ssl_collect_flags_process_p(t_ssl *ssl)
 	}
 	else if(ssl->skip.mini_gnl_stdin_for_flag_p == true)
 	{
-		empty_message_to_digest = malloc(sizeof(char) * (2));
-		ft_strcpy(empty_message_to_digest, "\0");
+
+//		ft_printf("Comes into ft_ssl_collect_flags_process_p\n");
+//		empty_message_to_digest = malloc(sizeof(char) * (1));
+//		ft_bzero(empty_message_to_digest, 1);
+//		ft_strcpy(empty_message_to_digest, temp);
+//		ft_strcpy(empty_message_to_digest, "");
+		empty_message_to_digest = ft_strdup("");
 		store_hash_free_message(ssl, empty_message_to_digest);
 //		ssl->message_to_digest = empty_message_to_digest;
 //		while(ssl->flag.count_of_p)
@@ -1113,9 +1150,9 @@ void ft_ssl_collect_flags_process_s(char *message, t_ssl *ssl, int j, int argc)
 
 	if(ssl->flag.s == true && message[0] != '\0')
 	{
-		message_to_digest = malloc(sizeof(char) * (ft_strlen(message) + 1));
+//		message_to_digest = malloc(sizeof(char) * (ft_strlen(message) + 1));
 //		ft_printf(BBLUE"|%s|%u|\n", message, message);
-
+		message_to_digest = ft_memalloc(ft_strlen(message) + 1);
 		ft_strcpy(message_to_digest, message);
 		store_hash_free_message(ssl, message_to_digest);
 //		ssl->message_to_digest = message_to_digest;
