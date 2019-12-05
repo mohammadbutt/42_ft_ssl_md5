@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/04 16:12:21 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/04 16:21:34 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -420,7 +420,7 @@ void compute_md5_table_padding(unsigned char *num)
 }
 */
 
-void	*ft_memalloc(size_t size);
+//void	*ft_memalloc(size_t size);
 
 void ft_md5_padding(t_ssl *ssl)
 {
@@ -441,7 +441,7 @@ void ft_md5_padding(t_ssl *ssl)
 	ssl->md5.padded_message = ft_memalloc(padding + (padding/8));
 	if(ssl->md5.padded_message == NULL)
 		return;
-	ft_strcpy((char *)ssl->md5.padded_message, ssl->message_to_digest);
+	ft_strcpy(ssl->md5.padded_message, ssl->message_to_digest);
 	i = len;
 	ssl->md5.padded_message[i++] = 0x80;
 	while(i < padding)
@@ -1057,23 +1057,22 @@ void store_hash_free_message(t_ssl *ssl, char *message_to_digest)
 }
 */
 
+/*
 void	*ft_memalloc(size_t size)
 {
 	unsigned char	*memory;
 	size_t			i;
 
 	i = 0;
-	memory = (unsigned char *)malloc(sizeof(unsigned char) * (size));
-	if ((!(memory)) || size > SIZE_T_MAX)
+	memory = malloc(sizeof(unsigned char) * (size));
+	if (memory == NULL || size > SIZE_T_MAX)
 		return (NULL);
 	else
-	{
 		while (i <= size)
 			memory[i++] = '\0';
-	}
 	return (memory);
 }
-
+*/
 void store_hash_free_message(t_ssl *ssl, char *message_to_digest)
 {
 	int message_len;
