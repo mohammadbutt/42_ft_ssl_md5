@@ -81,3 +81,4 @@ Additional functions: strerror(3), exit(3).
 13. [SHA256 in Lua](http://lua-users.org/wiki/SecureHashAlgorithmBw)
 14. [SHA256 - tls.mbed.org](https://tls.mbed.org/sha-256-source-code)
 15. [SHA256 - Github](https://github.com/ogay/sha2/blob/master/sha2.c)
+16. [SHA256 - Apple Source Code](https://opensource.apple.com/source/xnu/xnu-344/bsd/crypto/sha2/sha2.c.auto.html)
