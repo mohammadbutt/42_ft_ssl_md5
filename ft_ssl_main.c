@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/04 22:22:39 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/05 14:50:43 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,18 @@ uint64_t	shift_right_64bit(uint64_t value, uint64_t shift_n_bits)
 
 	new_value = value >> shift_n_bits;
 	return(new_value);
+}
+
+void	ft_sha256_init(t_ssl *ssl)
+{
+	ssl->sha256.h0 = 0x6a09e667;
+	ssl->sha256.h1 = 0xbb67ae85;
+	ssl->sha256.h2 = 0x3c6ef372;
+	ssl->sha256.h3 = 0xa54ff53a;
+	ssl->sha256.h4 = 0x510e527f;
+	ssl->sha256.h5 = 0x9b05688c;
+	ssl->sha256.h6 = 0x1f83d9ab;
+	ssl->sha256.h7 = 0x5be0cd19;
 }
 
 /*
@@ -785,7 +797,6 @@ void ft_md5_transformation(t_ssl *ssl)
 
 	set_variables_to_zero(&chunk_of_64_byte, &i, &f);
 	compute_md5_table_g_k_s(ssl);
-	str = NULL;
 	while(chunk_of_64_byte < ssl->md5.padded_message_len)
 	{
 		ft_update_md5_abcd(ssl);
@@ -802,11 +813,7 @@ void ft_md5_transformation(t_ssl *ssl)
 		ft_add_md5_abcd_to_a0b0c0d0(ssl);
 		chunk_of_64_byte = chunk_of_64_byte + FT_64_BYTE;
 	}
-//	size_t j = 0;
-//	while(j < ssl->md5.padded_message_len)
-//		ssl->md5.padded_message[j++] = 0;
 	free(ssl->md5.padded_message);
-	ssl->md5.padded_message = NULL;
 }
 
 void ft_md5_print(t_ssl *ssl, char character)
