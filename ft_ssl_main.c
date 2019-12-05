@@ -6,11 +6,67 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/04 19:43:11 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/04 22:05:05 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
+
+/*
+** Adding sha-256 and sha-512 functions
+**
+** function rotate_right_32_bit is used for sha-224 and sha-256
+**
+** function rotate_right_64_bit is used for sha-384 and sha-512
+*/
+uint32_t rotate_right_32bit(uint32_t value, uint32_t rotate_n_bits)
+{
+	uint32_t new_value;
+
+	new_value = ((value >> rotate_n_bits) | (value << (32 - rotate_n_bits)));
+	return(new_value);
+}
+
+uint64_t rotate_right_64bit(uint64_t value, uint64_t rotate_n_bits)
+{
+	uint64_t new_value;
+
+	new_value = ((value >> rotate_n_bits) | (value << (64 - rotate_n_bits)));
+	return(new_value);
+}
+
+/*
+** How does shifting bits work? Below is a table that shows numerical and binary
+** representation:
+** Value - binary
+**   1   -     1
+**   2   -    10
+**   4   -   100
+**   8   -  1000
+**   16  - 10000
+**
+** So when a value of 16 is bit shifted to the right by 1, it becomes 8.
+** And if the value of 16 is bit shifted to the right by 2, it becomes 4.
+** Shifting it to the left will move the bit the left and add zero at the tail.
+** So when value 16 is bit shifted to left by 1, it becomes 32.
+*/
+
+uint32_t	shift_right_32bit(uint32_t value, uint32_t shift_n_bits)
+{
+	uint32_t new_value;
+
+	new_value = value >> shift_n_bits;
+	return(new_value);
+}
+
+
+uint64_t	shift_right_64bit(uint64_t value, uint64_t shift_n_bits)
+{
+	uint64_t new_value;
+
+	new_value = value >> shift_n_bits;
+	return(new_value);
+}
 
 /*
 ** Bitwise guide:
@@ -69,6 +125,7 @@
 ** 7 ^ 4 =  3
 ** Can be used to swap values
 */
+
 
 /*
 ** Adding md5 core functions
@@ -159,15 +216,15 @@ void compute_md5_table_g(uint32_t *num)
 }
 
 /*
-** rotate_left rotates x by n bits
+** rotate_left rotates x by n bits for md5
 */
-uint32_t rotate_left(uint32_t f, uint32_t n_bits)
+uint32_t rotate_left_32bit(uint32_t value, uint32_t rotate_n_bits)
 {
-	uint32_t rotated_number;
+	uint32_t new_value;
 
 //	rotated_number = (((f) << (n_bits)) | ((f) >> (32 - (n_bits))));
-	rotated_number = ((f << n_bits) | (f >> (32 - n_bits)));
-	return(rotated_number);
+	new_value = ((value << rotate_n_bits) | (value >> (32 - rotate_n_bits)));
+	return(new_value);
 }
 
 /*
@@ -727,7 +784,7 @@ void ft_md5_transformation(t_ssl *ssl)
 			f = md5_function_fghi(i, ssl->md5.b, ssl->md5.c, ssl->md5.d);	
 			f = f + ssl->md5.a + ssl->md5.table_k[i] + str[ssl->md5.table_g[i]];
 			swap_md5_adc_with_dcb(ssl);
-			ssl->md5.b = ssl->md5.b + rotate_left(f, ssl->md5.table_s[i]);
+			ssl->md5.b = ssl->md5.b + rotate_left_32bit(f, ssl->md5.table_s[i]);
 			i++;
 		}
 		ft_add_md5_abcd_to_a0b0c0d0(ssl);
@@ -1587,3 +1644,4 @@ int main(int argc, char *argv[])
 
 //	ft_printf("|This is just a test for %*d_ft_ssl|\n", 0, 42);
 }
+
