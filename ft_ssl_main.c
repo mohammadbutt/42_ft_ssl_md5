@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/04 22:05:05 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/04 22:22:39 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,28 @@ uint64_t rotate_right_64bit(uint64_t value, uint64_t rotate_n_bits)
 ** How does shifting bits work? Below is a table that shows numerical and binary
 ** representation:
 ** Value - binary
-**   1   -     1
-**   2   -    10
-**   4   -   100
-**   8   -  1000
-**   16  - 10000
+**   1   -      1
+**   2   -     10
+**   4   -    100
+**   8   -   1000
+**   16  -  10000
 **
 ** So when a value of 16 is bit shifted to the right by 1, it becomes 8.
 ** And if the value of 16 is bit shifted to the right by 2, it becomes 4.
 ** Shifting it to the left will move the bit the left and add zero at the tail.
 ** So when value 16 is bit shifted to left by 1, it becomes 32.
+**
+** If the seems like values are just getting multiplied and divided by 2, that
+** is not what's happening.
+** Following are some odd Values with binary representation:
+** Value - binary   
+**  5    -    101
+** When value 5 is bit shifted by 1 to the right it becomes 2:
+**  2    -     10
+**
+**  7    -   1001
+** When value 7 is bit shifted by 1 to the right it becomes 3:
+** 3     -   100
 */
 
 uint32_t	shift_right_32bit(uint32_t value, uint32_t shift_n_bits)
@@ -263,7 +275,7 @@ void	set_md5_to_zero(t_ssl *ssl)
 ** Step4: bit shift 24 to the right: 00010101 11001101 01011011 00000111
 **                                      4        3        2        1
 */
-uint32_t ft_swap_32_bit(uint32_t value)
+uint32_t ft_swap_32bit(uint32_t value)
 {
 	uint32_t swapped;
 
@@ -279,7 +291,7 @@ uint32_t ft_swap_32_bit(uint32_t value)
 ** Swaps bits of a uint64_t number
 */
 
-uint64_t ft_swap_64_bit(uint64_t value)
+uint64_t ft_swap_64bit(uint64_t value)
 {
 	uint64_t swapped;
 
@@ -746,10 +758,10 @@ void set_variables_to_zero(uint32_t *a, uint32_t *b, uint32_t *c)
 
 void swap_bits_to_fix_endian(t_ssl *ssl)
 {
-	ssl->md5.a0 = ft_swap_32_bit(ssl->md5.a0);
-	ssl->md5.b0 = ft_swap_32_bit(ssl->md5.b0);
-	ssl->md5.c0 = ft_swap_32_bit(ssl->md5.c0);
-	ssl->md5.d0 = ft_swap_32_bit(ssl->md5.d0);
+	ssl->md5.a0 = ft_swap_32bit(ssl->md5.a0);
+	ssl->md5.b0 = ft_swap_32bit(ssl->md5.b0);
+	ssl->md5.c0 = ft_swap_32bit(ssl->md5.c0);
+	ssl->md5.d0 = ft_swap_32bit(ssl->md5.d0);
 }
 
 void swap_md5_adc_with_dcb(t_ssl *ssl)
