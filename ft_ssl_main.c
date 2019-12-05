@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/04 16:21:34 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/04 19:43:11 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@
 ** Adding md5 core functions
 */
 
-uint32_t function_f(uint32_t b, uint32_t c, uint32_t d)
+uint32_t md5_function_f(uint32_t b, uint32_t c, uint32_t d)
 {
 	uint32_t f;
 
@@ -83,7 +83,7 @@ uint32_t function_f(uint32_t b, uint32_t c, uint32_t d)
 	return(f);
 }
 
-uint32_t function_g(uint32_t b, uint32_t c, uint32_t d)
+uint32_t md5_function_g(uint32_t b, uint32_t c, uint32_t d)
 {
 	uint32_t g;
 
@@ -92,7 +92,7 @@ uint32_t function_g(uint32_t b, uint32_t c, uint32_t d)
 	return(g);
 }
 
-uint32_t function_h(uint32_t b, uint32_t c, uint32_t d)
+uint32_t md5_function_h(uint32_t b, uint32_t c, uint32_t d)
 {
 	uint32_t h;
 	
@@ -101,7 +101,7 @@ uint32_t function_h(uint32_t b, uint32_t c, uint32_t d)
 	return(h);
 }
 
-uint32_t function_i(uint32_t b, uint32_t c, uint32_t d)
+uint32_t md5_function_i(uint32_t b, uint32_t c, uint32_t d)
 {
 	uint32_t i;
 
@@ -110,19 +110,19 @@ uint32_t function_i(uint32_t b, uint32_t c, uint32_t d)
 	return(i);
 }
 
-uint32_t function_fghi(uint32_t i, uint32_t b, uint32_t c, uint32_t d)
+uint32_t md5_function_fghi(uint32_t i, uint32_t b, uint32_t c, uint32_t d)
 {
 	uint32_t f;
 	
 	f = 0;
 	if(i >= 0 && i <= 15)
-		f = function_f(b, c, d);
+		f = md5_function_f(b, c, d);
 	else if(i >= 16 && i <= 31)
-		f = function_g(b, c, d);
+		f = md5_function_g(b, c, d);
 	else if(i >= 32 && i <= 47)
-		f = function_h(b, c, d);
+		f = md5_function_h(b, c, d);
 	else if(i >= 48 && i <= 63)
-		f = function_i(b, c, d);
+		f = md5_function_i(b, c, d);
 	return(f);
 }
 
@@ -724,7 +724,7 @@ void ft_md5_transformation(t_ssl *ssl)
 		i = 0;
 		while(i < FT_64_BYTE)
 		{
-			f = function_fghi(i, ssl->md5.b, ssl->md5.c, ssl->md5.d);	
+			f = md5_function_fghi(i, ssl->md5.b, ssl->md5.c, ssl->md5.d);	
 			f = f + ssl->md5.a + ssl->md5.table_k[i] + str[ssl->md5.table_g[i]];
 			swap_md5_adc_with_dcb(ssl);
 			ssl->md5.b = ssl->md5.b + rotate_left(f, ssl->md5.table_s[i]);
@@ -819,7 +819,6 @@ void hash_message_md5(t_ssl *ssl)
 	swap_bits_to_fix_endian(ssl);
 	ft_md5_format_print(ssl);
 //	ft_md5_init(ssl);
-
 }
 
 
