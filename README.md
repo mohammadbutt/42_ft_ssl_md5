@@ -82,4 +82,5 @@ Additional functions: strerror(3), exit(3).
 14. [SHA256 - tls.mbed.org](https://tls.mbed.org/sha-256-source-code)
 15. [SHA256 - Github](https://github.com/ogay/sha2/blob/master/sha2.c)
 16. [SHA256 - Open Source Apple](https://opensource.apple.com/source/xnu/xnu-344/bsd/crypto/sha2/sha2.c.auto.html)
-17. [SHA256 & 512 - Open Source Apple](https://opensource.apple.com/source/CommonCrypto/CommonCrypto-7/Source/sha2.c)
+17. [SHA256 & SHA512 - Open Source Apple](https://opensource.apple.com/source/CommonCrypto/CommonCrypto-7/Source/sha2.c)
+18. [SHA256 & SHA512 - tools.ietf.org](https://tools.ietf.org/html/rfc4634#page-6)
