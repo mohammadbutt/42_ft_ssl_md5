@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/05 14:50:43 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/05 21:52:08 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -503,6 +503,31 @@ void compute_md5_table_padding(unsigned char *num)
 
 //void	*ft_memalloc(size_t size);
 
+uint32_t calculate_ssl_padding_32bit(uint32_t padding)
+{
+	if(padding % (512/8) == (448/8))
+		padding = padding + 64;
+	else
+		while(padding % (512/8) != (448/8))
+			padding++;
+	return(padding);
+}
+
+/*
+** why do we malloc padding + 64 ?
+** Because in md5 padded string will be 64 bits less than 512, and the final
+** padded string will be a multiple of 512 which is why 64 bits are added.
+** Below are some examples:
+** padding = 448
+** malloc (padding + 64) => 448 + 64 => 512 is a multiple of 512
+**
+** padding = 960
+** malloc (padding + 64) => 960 + 64 => 1024 is a multiple of 512
+**
+** padding = 1472
+** malloc (padding + 64) => 1472 + 64 = 1536 is a multiple of 512
+*/
+
 void ft_md5_padding(t_ssl *ssl)
 {
 	uint32_t	ft_64_bit_representation;
@@ -514,23 +539,76 @@ void ft_md5_padding(t_ssl *ssl)
 	len = ft_strlen_uint32(ssl->message_to_digest);
 	padding = len;
 	ft_64_bit_representation = len * 8;
-	if(padding % (512/8) == (448/8))
-		padding = padding + 64;
-	else
-		while(padding % (512/8) != (448/8))
-			padding++;
-	ssl->md5.padded_message = ft_memalloc(padding + (padding/8));
-	if(ssl->md5.padded_message == NULL)
-		return;
+//	if(padding % (512/8) == (448/8))
+//		padding = padding + 64;
+//	else
+//		while(padding % (512/8) != (448/8))
+//			padding++;
+	padding = calculate_ssl_padding_32bit(padding);
+	ssl->md5.padded_message = ft_memalloc(padding + 64);
+//	if(ssl->md5.padded_message == NULL) ft_memalloc has this built in
+//		return;
 	ft_strcpy(ssl->md5.padded_message, ssl->message_to_digest);
 	i = len;
 	ssl->md5.padded_message[i++] = 0x80;
-	while(i < padding)
-		ssl->md5.padded_message[i++] = 0;
+
+
+	while(i < padding)                    // Can be removed since we used memalloc
+		ssl->md5.padded_message[i++] = 0; // Cane be remove since we use memalloc
+//	i = padding;                          // Can be used instead;
+
 	ssl->md5.padded_message_len = padding;
 	*(uint32_t*)(ssl->md5.padded_message + i) = ft_64_bit_representation;
 }
 
+void test_ft_sha256_padding(t_ssl *ssl)
+{
+	uint32_t i;
+
+	i = 0;
+	while(i < ssl->sha256.padded_message_len)
+	{
+		printf("|%u|%u|\n", i, ssl->sha256.padded_message[i]);
+		i++;
+	}
+}
+
+void ft_sha256_padding(t_ssl *ssl)
+{
+	uint32_t	ft_64_bit_representation;
+	uint32_t	padding;
+	uint32_t	len;
+	uint32_t	i;
+	uint32_t	swapped_message;
+
+	i = 0;
+	len = ft_strlen_uint32(ssl->message_to_digest);
+	padding = len;
+	ft_64_bit_representation = len * 8;
+	ft_printf("Comes here\n");
+	padding = calculate_ssl_padding_32bit(padding);
+	ft_printf("Comes here\n");
+	ssl->sha256.padded_message = ft_memalloc(padding + 64);
+	ft_printf(BGREEN"Malloc succesful\n"NC);
+	ft_strcpy(ssl->sha256.padded_message, ssl->message_to_digest);
+	i = len;
+	ssl->sha256.padded_message[i++] = 0x80;
+	while(i < padding)
+		ssl->sha256.padded_message[i++] = 0;
+	i = 0;
+	ft_printf("%s\n", ssl->sha256.padded_message);
+	while(i < padding)
+	{
+		swapped_message = ft_swap_32bit((uint32_t)ssl->sha256.padded_message[i]);
+		ssl->sha256.padded_message[i] = swapped_message;
+		ft_printf("|%02u|%c|\n", i, ssl->sha256.padded_message[i]);
+		i++;
+	}
+	ssl->sha256.padded_message_len = padding;
+	*(uint32_t *)(ssl->sha256.padded_message + i) = ft_64_bit_representation;
+
+//	test_ft_sha256_padding(ssl);
+}
 
 
 void test_stored_string(t_ssl *ssl)
@@ -865,36 +943,41 @@ void ft_md5_format_print(t_ssl *ssl)
 
 }
 
-
-void set_ssl_md5_to_zero(t_ssl *ssl)
-{
-
-//	ft_printf("Cmes here\n");
-	ft_bzero(&ssl->md5, sizeof(t_ssl_md5));
-
-//	ssl->md5.padded_message_len = 0;
-//	ssl->md5.a0 = 0;
-//	ssl->md5.b0 = 0;
-//	ssl->md5.c0 = 0;
-//	ssl->md5.d0 = 0;
-//	ssl->md5.a = 0;
-//	ssl->md5.b = 0;
-//	ssl->md5.c = 0;
-//	ssl->md5.d = 0;
-//	ft_bzero(ssl->md5.padded_message,);
-
-}
+/*
+** ft_bzero(&ssl->md5, sizeof(t_ssl_md5)); is the same as below:
+** ft_bzero(&ssl->md5, sizeof(ssl->md5));
+*/
 
 void hash_message_md5(t_ssl *ssl)
 {
-	set_ssl_md5_to_zero(ssl);
-	
+	ft_bzero(&ssl->md5, sizeof(ssl->md5));
 	ft_md5_init(ssl);
 	ft_md5_padding(ssl);
 	ft_md5_transformation(ssl);
 	swap_bits_to_fix_endian(ssl);
 	ft_md5_format_print(ssl);
-//	ft_md5_init(ssl);
+}
+
+/*
+void	ft_sha256_padding(t_ssl *ssl)
+{
+
+}
+*/
+
+/*
+** ft_bzero(&ssl->sha256, sizeof(t_ssl_sha256)); is the same as below:
+** ft_bzero(&ssl->sha256, sizeof(ssl->sha256));
+*/
+
+void hash_message_sha256(t_ssl *ssl)
+{
+	ft_bzero(&ssl->sha256, sizeof(ssl->sha256));
+	ft_sha256_init(ssl);
+	ft_sha256_padding(ssl);
+//	ft_sha256_transformation(ssl);
+//	ft_sha256_format_print(ssl);
+
 }
 
 
@@ -913,11 +996,10 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 	
 	if(ft_strcmp(ssl->message_digest_algo, "md5") == 0)
 		hash_message_md5(ssl);
+	else if(ft_strcmp(ssl->message_digest_algo, "sha256") == 0)
+		hash_message_sha256(ssl);
 
 }
-
-
-
 
 
 /*
@@ -1153,6 +1235,7 @@ void store_hash_free_message(t_ssl *ssl, char *message_to_digest)
 	int message_len;
 
 	message_len = ft_strlen(message_to_digest);
+//	ssl->message_to_digest_len = message_len;
 //	ft_printf("%d\n", message_len);
 	ssl->message_to_digest = ft_memalloc(message_len + 1);
 //	ssl->message_to_digest = malloc(sizeof(char) * (message_len + 1));
@@ -1402,7 +1485,7 @@ void ft_ssl_parse_pqrs_no_dash(char **argv, t_ssl *ssl, int i)
 {
 	char *message_to_digest;
 	int fd;
-
+	
 	if(ssl->flag.s == true)
 	{
 		message_to_digest = malloc(sizeof(ft_strlen(argv[i]) + 1));
@@ -1663,4 +1746,3 @@ int main(int argc, char *argv[])
 
 //	ft_printf("|This is just a test for %*d_ft_ssl|\n", 0, 42);
 }
-

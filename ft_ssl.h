@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/05 14:45:58 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/05 21:52:04 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@
 # define SSL_VALID_FLAG "pqrs"
 # define FT_64_BIT_LENGTH 64
 # define FT_64_BYTE 64
+# define FT_512_BIT 64
+# define FT_448_BIT 56
+
 /*
 ** Structs----------------------------------------------------------------------
 */
@@ -177,10 +180,23 @@ typedef struct s_ssl_md5
 	uint32_t	d;
 }				t_ssl_md5;
 
+/*
+** Values in struct t_ssl_sha256 follows the naming convention from wikipedia
+**
+** Note about ss0 and ss1;
+** ss0 denotes capital S0 from wiki
+** ss1 denotes capital S1 from wiki
+**
+** Norminette does not allow capital lettered variable names and I dont want to
+** put S0 and S1 in macros.
+*/
+
 typedef struct	s_ssl_sha256
 {
 //	uint32_t	table_k[64]; Have global table
 	uint32_t	table_w[64];
+	uint32_t	*padded_message;
+	uint32_t	padded_message_len;
 	uint32_t	h0;
 	uint32_t	h1;
 	uint32_t	h2;
@@ -197,6 +213,15 @@ typedef struct	s_ssl_sha256
 	uint32_t	f;
 	uint32_t	g;
 	uint32_t	h;
+	uint32_t	s0;
+	uint32_t	s1;
+	uint32_t	ss0;
+	uint32_t	ss1;
+	uint32_t	ch;
+	uint32_t	maj;
+	uint32_t	temp1;
+	uint32_t	temp2;
+
 }				t_ssl_sha256;
 
 typedef struct		s_ssl
@@ -207,6 +232,7 @@ typedef struct		s_ssl
 	t_ssl_sha256	sha256;
 	char			*message_digest_algo;
 	char			*message_to_digest;
+//	int				message_to_digest_len;
 	char			*file_name;
 
 //	t_ssl_state		state;
