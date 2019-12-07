@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/05 21:52:04 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/06 20:13:05 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@
 # define FT_64_BYTE 64
 # define FT_512_BIT 64
 # define FT_448_BIT 56
+# define FT_64_BIT 8
 
 /*
 ** Structs----------------------------------------------------------------------
@@ -221,6 +222,7 @@ typedef struct	s_ssl_sha256
 	uint32_t	maj;
 	uint32_t	temp1;
 	uint32_t	temp2;
+	uint32_t	number_of_512bit_chunk;
 
 }				t_ssl_sha256;
 

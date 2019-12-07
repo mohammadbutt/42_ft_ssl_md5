@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/05 21:52:08 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/06 20:32:34 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -505,27 +505,53 @@ void compute_md5_table_padding(unsigned char *num)
 
 uint32_t calculate_ssl_padding_32bit(uint32_t padding)
 {
+/*
 	if(padding % (512/8) == (448/8))
 		padding = padding + 64;
 	else
 		while(padding % (512/8) != (448/8))
 			padding++;
 	return(padding);
+*/
+/*
+	if(padding % FT_512_BIT == FT_448_BIT)
+		padding = padding + FT_512_BIT;
+	else
+		while(padding % FT_512_BIT != FT_448_BIT)
+			padding++;
+	return(padding);
+*/
+	uint32_t ft_64_byte;
+	uint32_t ft_56_byte;
+
+	ft_64_byte = 512/8;
+	ft_56_byte = 448/8;
+	if(padding % ft_64_byte == ft_56_byte)
+		padding = padding + ft_64_byte;
+	else
+		while(padding % ft_64_byte != ft_56_byte)
+			padding++;
+	return(padding);
 }
 
 /*
-** why do we malloc padding + 64 ?
+** why do we malloc padding + 8 ?
 ** Because in md5 padded string will be 64 bits less than 512, and the final
-** padded string will be a multiple of 512 which is why 64 bits are added.
-** Below are some examples:
-** padding = 448
-** malloc (padding + 64) => 448 + 64 => 512 is a multiple of 512
-**
+** padded string will be a multiple of 512 bits  or 64 bytes which is why 8 bits
+** are added.
+** Below are some examples in Bits and bytes:
+** padding = 448 bits or 56 bytes
+** Bits: malloc (padding + 64 bits) => 448 + 64 => 512bit is a multiple of 512
+** Byte: malloc (padding + 8 byte)  => 56 + 8 =>   64byte is a multiple of 512
+
 ** padding = 960
 ** malloc (padding + 64) => 960 + 64 => 1024 is a multiple of 512
 **
 ** padding = 1472
 ** malloc (padding + 64) => 1472 + 64 = 1536 is a multiple of 512
+**
+** A lot of my caluclations are in bytes, instead of bits.
+** 1 byte = 8 bits
 */
 
 void ft_md5_padding(t_ssl *ssl)
@@ -533,9 +559,9 @@ void ft_md5_padding(t_ssl *ssl)
 	uint32_t	ft_64_bit_representation;
 	uint32_t	padding;
 	uint32_t	len;
-	uint32_t	i;
+//	uint32_t	i;
 
-	i = 0;
+//	i = 0;
 	len = ft_strlen_uint32(ssl->message_to_digest);
 	padding = len;
 	ft_64_bit_representation = len * 8;
@@ -545,34 +571,61 @@ void ft_md5_padding(t_ssl *ssl)
 //		while(padding % (512/8) != (448/8))
 //			padding++;
 	padding = calculate_ssl_padding_32bit(padding);
-	ssl->md5.padded_message = ft_memalloc(padding + 64);
-//	if(ssl->md5.padded_message == NULL) ft_memalloc has this built in
-//		return;
+	ft_printf("padding:|%u|\n", padding);
+
+//	ssl->md5.padded_message = ft_memalloc(padding + 8);
+
+	ssl->md5.padded_message = ft_memalloc(padding + 8);
+//	ssl->md5.padded_message = ft_memalloc(padding + 64);
 	ft_strcpy(ssl->md5.padded_message, ssl->message_to_digest);
-	i = len;
-	ssl->md5.padded_message[i++] = 0x80;
+//	i = len;
+//	ssl->md5.padded_message[i++] = 0x80;
+	ssl->md5.padded_message[len] = 0x80;
 
-
-	while(i < padding)                    // Can be removed since we used memalloc
-		ssl->md5.padded_message[i++] = 0; // Cane be remove since we use memalloc
+//	while(i < padding)                    // Can be removed since we used memalloc
+//		ssl->md5.padded_message[i++] = 0; // Cane be remove since we use memalloc
 //	i = padding;                          // Can be used instead;
 
 	ssl->md5.padded_message_len = padding;
-	*(uint32_t*)(ssl->md5.padded_message + i) = ft_64_bit_representation;
+//	*(uint32_t*)(ssl->md5.padded_message + i) = ft_64_bit_representation;
+
+	*(uint32_t*)(ssl->md5.padded_message + padding) = ft_64_bit_representation;
+//	ssl->md5.padded_message[(int)i] = ft_64_bit_representation;
 }
 
-void test_ft_sha256_padding(t_ssl *ssl)
+
+void ft_sha256_padding(t_ssl *ssl)
 {
-	uint32_t i;
+	uint32_t	ft_64_bit_representation;
+	uint32_t	padding;
+	uint32_t	len;
+	uint32_t	i;
+	uint32_t	swapped_number;
+//	uint32_t	number_of_512bit_chunk;
 
 	i = 0;
-	while(i < ssl->sha256.padded_message_len)
+	len = ft_strlen_uint32(ssl->message_to_digest);
+	padding = len;
+	ft_64_bit_representation = len * 8;
+	padding = calculate_ssl_padding_32bit(padding);
+//	ssl->sha256.number_of_512bit_chunk = (padding + (64/8)) / (512/8);
+
+	ssl->sha256.number_of_512bit_chunk = (padding + 8) / 64;
+//	ssl->sha256.number_of_512bit_chunk = (padding + FT_64_BIT) / (FT_512_BIT);
+	ssl->sha256.padded_message = ft_memalloc(padding + 8);
+	ft_strcpy((char *)ssl->sha256.padded_message, ssl->message_to_digest);
+	ssl->sha256.padded_message[len] = 0x80;
+	while(i < (ssl->sha256.number_of_512bit_chunk * 16))
 	{
-		printf("|%u|%u|\n", i, ssl->sha256.padded_message[i]);
-		i++;
+		swapped_number = ft_swap_32bit((uint32_t)ssl->sha256.padded_message[i]);
+		ssl->sha256.padded_message[i++] = swapped_number;
 	}
+	i--;
+//	ssl->sha256.number_of_512bit_chunk = number_of_512bit_chunk;
+	*(uint32_t *)(ssl->sha256.padded_message + i) = ft_64_bit_representation;
 }
 
+/*
 void ft_sha256_padding(t_ssl *ssl)
 {
 	uint32_t	ft_64_bit_representation;
@@ -590,7 +643,7 @@ void ft_sha256_padding(t_ssl *ssl)
 	ft_printf("Comes here\n");
 	ssl->sha256.padded_message = ft_memalloc(padding + 64);
 	ft_printf(BGREEN"Malloc succesful\n"NC);
-	ft_strcpy(ssl->sha256.padded_message, ssl->message_to_digest);
+//	ft_strcpy(ssl->sha256.padded_message, ssl->message_to_digest);
 	i = len;
 	ssl->sha256.padded_message[i++] = 0x80;
 	while(i < padding)
@@ -609,7 +662,7 @@ void ft_sha256_padding(t_ssl *ssl)
 
 //	test_ft_sha256_padding(ssl);
 }
-
+*/
 
 void test_stored_string(t_ssl *ssl)
 {
