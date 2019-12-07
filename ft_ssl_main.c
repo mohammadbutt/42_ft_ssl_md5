@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/06 20:32:34 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/06 22:03:05 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -614,16 +614,16 @@ void ft_sha256_padding(t_ssl *ssl)
 //	ssl->sha256.number_of_512bit_chunk = (padding + FT_64_BIT) / (FT_512_BIT);
 	ssl->sha256.padded_message = ft_memalloc(padding + 8);
 	ft_strcpy((char *)ssl->sha256.padded_message, ssl->message_to_digest);
-	ssl->sha256.padded_message[len] = 0x80;
+	((char *)ssl->sha256.padded_message)[len] = 0x80;
 	while(i < (ssl->sha256.number_of_512bit_chunk * 16))
 	{
 		swapped_number = ft_swap_32bit((uint32_t)ssl->sha256.padded_message[i]);
 		ssl->sha256.padded_message[i++] = swapped_number;
 	}
 	i--;
-//	ssl->sha256.number_of_512bit_chunk = number_of_512bit_chunk;
 	*(uint32_t *)(ssl->sha256.padded_message + i) = ft_64_bit_representation;
 }
+
 
 /*
 void ft_sha256_padding(t_ssl *ssl)
@@ -946,6 +946,45 @@ void ft_md5_transformation(t_ssl *ssl)
 	}
 	free(ssl->md5.padded_message);
 }
+void ft_update_sha256_abcdefgh(t_ssl *ssl)
+{
+	ssl->sha256.a = ssl->sha256.h0;
+	ssl->sha256.b = ssl->sha256.h1;
+	ssl->sha256.c = ssl->sha256.h2;
+	ssl->sha256.d = ssl->sha256.h3;
+	ssl->sha256.e = ssl->sha256.h4;
+	ssl->sha256.f = ssl->sha256.h5;
+	ssl->sha256.g = ssl->sha256.h6;
+	ssl->sha256.h = ssl->sha256.h7;
+}
+
+void calculate_sha256_s0_s1_w(t_ssl *ssl)
+{
+	uint32_t i;
+
+	i = 16;
+	while()
+}
+
+void ft_sha256_transformation(t_ssl *ssl)
+{
+	uint32_t	chunk;
+	uint32_t	i;
+
+	chunk = 0;
+//	i = 16;
+	while(chunk < ssl->sha256.number_of_512bit_chunk)
+	{
+		i = 16;
+		ft_update_sha256_abcdefgh(ssl);
+		while(i < 64)
+		{
+
+		}
+
+	}
+}
+
 
 void ft_md5_print(t_ssl *ssl, char character)
 {
@@ -1028,7 +1067,7 @@ void hash_message_sha256(t_ssl *ssl)
 	ft_bzero(&ssl->sha256, sizeof(ssl->sha256));
 	ft_sha256_init(ssl);
 	ft_sha256_padding(ssl);
-//	ft_sha256_transformation(ssl);
+	ft_sha256_transformation(ssl);
 //	ft_sha256_format_print(ssl);
 
 }
