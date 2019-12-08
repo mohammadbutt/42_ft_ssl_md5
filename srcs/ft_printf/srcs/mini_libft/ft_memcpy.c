@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 17:06:33 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/27 21:11:54 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/07 17:18:47 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,29 @@
 ** performed.
 */
 
+void *ft_memcpy(void *dst0, void *srce0, int len)
+{
+	int i;
+	int j;
+	char *source;
+	char *dest;
+
+	i = 0;
+	j = 0;
+	source = srce0;
+	dest = dst0;
+	while(i < len)
+	{
+		if(source[j] != '\0')
+			dest[i] = source[j++];
+		else
+			dest[i] = 0;
+		i++;
+	}
+	return(dst0);
+}
+
+/*
 void *ft_memcpy(void *original_dest, const void *original_source, size_t n)
 {
 	char		*dest;
@@ -45,7 +68,7 @@ void *ft_memcpy(void *original_dest, const void *original_source, size_t n)
 	}
 	return (original_dest);
 }
-
+*/
 /*
 int main(void)
 {
