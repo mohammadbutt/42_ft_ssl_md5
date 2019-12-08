@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/07 21:52:45 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/08 14:40:47 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -591,6 +591,16 @@ void ft_md5_padding(t_ssl *ssl)
 
 	*(uint32_t*)(ssl->md5.padded_message + padding) = ft_64_bit_representation;
 //	ssl->md5.padded_message[(int)i] = ft_64_bit_representation;
+/*
+	ft_printf("printing from ft_md5_padding\n");
+	uint32_t j;
+	j = 0;
+	while(j < 64)
+	{
+		ft_printf("|%u|%u|\n", j, (uint8_t)ssl->message_to_digest[j]);
+		j++;
+	}
+*/
 }
 
 
@@ -601,7 +611,6 @@ void ft_sha256_padding(t_ssl *ssl)
 	uint32_t	len;
 	uint32_t	i;
 	uint32_t	swapped_number;
-//	uint32_t	number_of_512bit_chunk;
 
 	i = 0;
 	len = ft_strlen_uint32(ssl->message_to_digest);
@@ -609,22 +618,37 @@ void ft_sha256_padding(t_ssl *ssl)
 	ft_64_bit_representation = len * 8;
 	padding = calculate_ssl_padding_32bit(padding);
 //	ssl->sha256.number_of_512bit_chunk = (padding + (64/8)) / (512/8);
-
 //	ssl->sha256.number_of_512bit_chunk = (padding + 8) / 64;
-
-	ssl->sha256.chunk_of_512bit = (padding + 8) / 64;
 //	ssl->sha256.number_of_512bit_chunk = (padding + FT_64_BIT) / (FT_512_BIT);
+	ssl->sha256.chunk_of_512bit = (padding + 8) / 64;
 	ssl->sha256.padded_message = ft_memalloc(padding + 8);
 	ft_strcpy((char *)ssl->sha256.padded_message, ssl->message_to_digest);
 	((char *)ssl->sha256.padded_message)[len] = 0x80;
-//	while(i < (ssl->sha256.number_of_512bit_chunk * 16))	
 	while(i < (ssl->sha256.chunk_of_512bit * 16))
 	{
-		swapped_number = ft_swap_32bit((uint32_t)ssl->sha256.padded_message[i]);
-		ssl->sha256.padded_message[i++] = swapped_number;
+		swapped_number = ft_swap_32bit(ssl->sha256.padded_message[i]);
+		ssl->sha256.padded_message[i] = swapped_number;
+		i++;
 	}
 	i--;
 	*(uint32_t *)(ssl->sha256.padded_message + i) = ft_64_bit_representation;
+
+	ft_printf("printing from ft_sha256_padding\n");
+	uint32_t j = 0;
+	while(j < 64)
+	{
+		ft_printf("|%u|%u|\n", j, (uint8_t)ssl->message_to_digest[j]);
+		j++;
+	}
+	j = 0;
+	ft_printf("\n");
+	while(j < 64)
+	{
+		ft_printf("|%u|%u|\n", j, ssl->sha256.padded_message[j]);
+		j++;
+	}
+
+//	exit(EXIT_SUCCESS);
 }
 
 
@@ -972,7 +996,7 @@ void ft_add_sha256_abcdefgh_to_h_values(t_ssl *ssl)
 	ssl->sha256.h6 = ssl->sha256.h6 + ssl->sha256.g;
 	ssl->sha256.h7 = ssl->sha256.h7 + ssl->sha256.h;
 }
-/*
+
 uint32_t sha256_rotate_shift_w_for_s0(t_ssl *ssl, uint32_t i)
 {
 	uint32_t s0;
@@ -980,10 +1004,17 @@ uint32_t sha256_rotate_shift_w_for_s0(t_ssl *ssl, uint32_t i)
 	uint32_t value2;
 	uint32_t value3;
 
-	value1 = rotate_right_32bit(w[i - 15], 7);
-	value2 = rotate_right_32bit(w[i - 15], 18);
-	value3 = shift_right_32bit(w[i - 15], 3);
-	s0 = valu1 ^ value2 ^ value3;
+	uint32_t j = 0;
+	while(j < 64)
+	{
+		ft_printf("|%u|%u|\n", j, ssl->sha256.table_w[j]);
+		j++;
+	}
+
+	value1 = rotate_right_32bit(ssl->sha256.table_w[i - 15], 7);
+	value2 = rotate_right_32bit(ssl->sha256.table_w[i - 15], 18);
+	value3 = shift_right_32bit(ssl->sha256.table_w[i - 15], 3);
+	s0 = value1 ^ value2 ^ value3;
 	return(s0);
 }
 
@@ -994,12 +1025,13 @@ uint32_t sha256_rotate_shift_w_for_s1(t_ssl *ssl, uint32_t i)
 	uint32_t value2;
 	uint32_t value3;
 
-	value1 = rotate_right_32bit(w[i - 2], 17);
-	value2 = rotate_right_32bit(w[i - 2], 19);
-	value3 = shift_right_32bit(w[i - 2], 10);
+	value1 = rotate_right_32bit(ssl->sha256.table_w[i - 2], 17);
+	value2 = rotate_right_32bit(ssl->sha256.table_w[i - 2], 19);
+	value3 = shift_right_32bit(ssl->sha256.table_w[i - 2], 10);
+	s1 = value1 ^ value2 ^ value3;
 	return(s1);
 }
-*/
+
 void ft_sha256_process_512bit_chunk(t_ssl *ssl)
 {
 	uint32_t i;
@@ -1007,20 +1039,33 @@ void ft_sha256_process_512bit_chunk(t_ssl *ssl)
 	uint32_t *padded_message;
 	uint32_t chunk_of_512bit;
 
-	i = 0;
+	i = 16;
 	w = ssl->sha256.table_w;
 	padded_message = ssl->sha256.padded_message;
 	chunk_of_512bit = ssl->sha256.chunk_of_512bit;
 	ft_bzero_num_array_32bit(w, 64);
 	ft_memcpy(w, padded_message + (16 * chunk_of_512bit), 64);
+
+	uint32_t j = 0;
+	ft_printf("printing padded_message values\n");
+	while(j < 64)
+	{
+		ft_printf("|%u|%u|\n", j, padded_message[j]);
+		j++;
+	}
+//	while(j )
 	while(i < 64)
 	{
+
 		ssl->sha256.s0 = rotate_right_32bit(w[i - 15], 7) ^\
 						 rotate_right_32bit(w[i - 15], 18) ^\
 						 shift_right_32bit(w[i - 15], 3);
 		ssl->sha256.s1 = rotate_right_32bit(w[i - 2], 17) ^\
 						 rotate_right_32bit(w[i - 2], 19) ^\
 						 shift_right_32bit(w[i - 2], 10);
+
+//		ssl->sha256.s0 = sha256_rotate_shift_w_for_s0(ssl, i);
+//		ssl->sha256.s1 = sha256_rotate_shift_w_for_s1(ssl, i);
 		w[i] = w[i - 16] + ssl->sha256.s0 + w[i - 7] + ssl->sha256.s1;
 		i++;
 	}
@@ -1177,10 +1222,15 @@ void	ft_sha256_format_print(t_ssl *ssl)
 
 void hash_message_sha256(t_ssl *ssl)
 {
-	ft_bzero(&ssl->sha256, sizeof(ssl->sha256));
-	ft_sha256_init(ssl);
-	ft_sha256_padding(ssl);
-	ft_sha256_transformation(ssl);
+	ft_printf("hahs_message_sha256: cp1\n");
+	ft_bzero(&ssl->sha256, sizeof(ssl->sha256));	
+	ft_printf("hahs_message_sha256: cp2\n");
+	ft_sha256_init(ssl);	
+	ft_printf("hahs_message_sha256: cp3\n");
+	ft_sha256_padding(ssl);	
+	ft_printf("hahs_message_sha256: cp4\n");
+	ft_sha256_transformation(ssl);	
+	ft_printf("hahs_message_sha256: cp5\n");
 	ft_sha256_format_print(ssl);
 
 }

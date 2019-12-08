@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/07 19:35:14 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/08 13:30:43 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ typedef struct	s_ssl_sha256
 {
 //	uint32_t	table_k[64]; Have global table
 	uint32_t	table_w[64];
-	uint32_t	*padded_message;
+	uint32_t	*padded_message; // malloc
 	uint32_t	padded_message_len;
 	uint32_t	h0;
 	uint32_t	h1;
