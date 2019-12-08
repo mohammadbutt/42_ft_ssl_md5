@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 17:06:33 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/07 17:18:47 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/07 17:59:56 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,35 @@
 ** performed.
 */
 
-void *ft_memcpy(void *dst0, void *srce0, int len)
+void *ft_memcpy(void *dst0, const void *src0, size_t len)
+{
+	size_t i;
+	unsigned char *dest;
+	unsigned char *source;
+
+	i = 0;
+	dest = (unsigned char *)dst0;
+	source = (unsigned char *)src0;
+	while(i < len)
+	{
+		dest[i] = source[i];
+		i++;
+	}
+	return(dst0);
+}
+
+/*
+void *ft_memcpy(void *dst0, const void *srce0, int len)
 {
 	int i;
 	int j;
-	char *source;
-	char *dest;
+	unsigned char *source;
+	unsigned char *dest;
 
 	i = 0;
 	j = 0;
-	source = srce0;
-	dest = dst0;
+	source = (unsigned char *)srce0;
+	dest = (unsigned char *)dst0;
 	while(i < len)
 	{
 		if(source[j] != '\0')
@@ -46,7 +64,7 @@ void *ft_memcpy(void *dst0, void *srce0, int len)
 	}
 	return(dst0);
 }
-
+*/
 /*
 void *ft_memcpy(void *original_dest, const void *original_source, size_t n)
 {

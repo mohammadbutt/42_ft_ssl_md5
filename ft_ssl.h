@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/06 20:13:05 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/07 19:35:14 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,8 @@ typedef struct	s_ssl_sha256
 	uint32_t	maj;
 	uint32_t	temp1;
 	uint32_t	temp2;
-	uint32_t	number_of_512bit_chunk;
+//	uint32_t	number_of_512bit_chunk;
+	uint32_t	chunk_of_512bit;
 
 }				t_ssl_sha256;
 

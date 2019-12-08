@@ -6,7 +6,7 @@
 #    By: mbutt <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/11 14:35:05 by mbutt             #+#    #+#              #
-#    Updated: 2019/12/05 17:39:08 by mbutt            ###   ########.fr        #
+#    Updated: 2019/12/07 21:51:32 by mbutt            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ CC = gcc
 CFLAGS = -I. -c -g
 WFLAGS = -Wall -Wextra -Werror
 DEBUG = -fsanitize=address -g #-ggdb
-#DEBUG = -fsanitize=undefined
+#DEBUG = -fsanitize=undefined # Cannot be used for md5, sha256, and so on...
 
 SRC = *.c
 OBJ = *.o
