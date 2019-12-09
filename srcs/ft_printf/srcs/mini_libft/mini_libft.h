@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/09 15:50:24 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/08 18:52:28 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/08 21:57:34 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ int					ft_isdigit1(char c);
 int					ft_strlen(char *str);
 int_fast32_t		ft_strlen_fast(char *str);
 uint32_t			ft_strlen_uint32(char *str);
+uint64_t			ft_strlen_uint64(char *str);
 
 /*
 ** ft_itoa_base.c---------------------------------------------------------------

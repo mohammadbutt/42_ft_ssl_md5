@@ -6,7 +6,7 @@
 #    By: mbutt <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/11 14:35:05 by mbutt             #+#    #+#              #
-#    Updated: 2019/12/08 14:48:19 by mbutt            ###   ########.fr        #
+#    Updated: 2019/12/08 23:01:45 by mbutt            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ NAME = ft_ssl
 CC = gcc
 CFLAGS = -I. -c -g
 WFLAGS = -Wall -Wextra -Werror
-#DEBUG = -fsanitize=address -g #-ggdb
+DEBUG = -fsanitize=address -g #-ggdb
 #DEBUG = -fsanitize=undefined # Cannot be used for md5, sha256, and so on...
 
 SRC = *.c

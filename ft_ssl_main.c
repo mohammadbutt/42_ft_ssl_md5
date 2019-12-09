@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/08 20:47:13 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/08 23:04:30 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,18 @@ void ft_sha224_init(t_ssl *ssl)
 	ssl->sha256.h5 = 0x68581511;
 	ssl->sha256.h6 = 0x64f98fa7;
 	ssl->sha256.h7 = 0xbefa4fa4;
+}
+
+void ft_sha512_init(t_ssl *ssl)
+{
+	ssl->sha512.h0 = 0x6a09e667f3bcc908;
+	ssl->sha512.h1 = 0xbb67ae8584caa73b;
+	ssl->sha512.h2 = 0x3c6ef372fe94f82b;
+	ssl->sha512.h3 = 0xa54ff53a5f1d36f1;
+	ssl->sha512.h4 = 0x510e527fade682d1;
+	ssl->sha512.h5 = 0x9b05688c2b3e6c1f;
+	ssl->sha512.h6 = 0x1f83d9abfb41bd6b;
+	ssl->sha512.h7 = 0x5be0cd19137e2179;
 }
 
 /*
@@ -460,6 +472,15 @@ void ft_bzero_num_array_32bit(uint32_t *num, uint32_t number_of_elements)
 		num[i++] = 0;
 }
 
+void ft_bzero_num_array_64bit(uint64_t *num, uint64_t number_of_elements)
+{
+	uint64_t i;
+
+	i = 0;
+	while(i < number_of_elements)
+		num[i++] = 0;
+}
+
 
 //void compute_md5_table_s_0_to_31(unsigned int *num)
 void compute_md5_table_s_0_to_31(uint32_t *num)
@@ -591,6 +612,21 @@ uint32_t calculate_ssl_padding_32bit(uint32_t padding)
 	return(padding);
 }
 
+uint64_t calculate_ssl_padding_64bit(uint64_t padding)
+{
+	uint64_t ft_128_byte;
+	uint64_t ft_112_byte;
+
+	ft_128_byte = (512 * 2)/8;
+	ft_112_byte = (448 * 2)/8;
+	if(padding % ft_128_byte == ft_112_byte)
+		padding =  padding + ft_128_byte;
+	else
+		while(padding % ft_128_byte != ft_112_byte)
+			padding++;
+	return(padding);
+}
+
 /*
 ** why do we malloc padding + 8 ?
 ** Because in md5 padded string will be 64 bits less than 512, and the final
@@ -689,23 +725,33 @@ void ft_sha256_padding(t_ssl *ssl)
 	}
 	i--;
 	*(uint32_t *)(ssl->sha256.padded_message + i) = ft_64_bit_representation;
-/*
-	ft_printf("printing from ft_sha256_padding\n");
-	uint32_t j = 0;
-	while(j < 64)
+}
+
+void ft_sha512_padding(t_ssl *ssl)
+{
+	uint64_t	ft_128_bit_representation;
+	uint64_t	padding;
+	uint64_t	len;
+	uint64_t	i;
+	uint64_t	swapped_number;
+
+	i = 0;
+	len = ft_strlen_uint64(ssl->message_to_digest);
+	padding = len;
+	ft_128_bit_representation = len * 8;
+	padding = calculate_ssl_padding_64bit(padding);
+	ssl->sha512.chunk_of_1024bit = (padding + 16) / 128;
+	ssl->sha512.padded_message = ft_memalloc(padding + 16);
+	ft_strcpy((char *)ssl->sha512.padded_message, ssl->message_to_digest);
+	((char *)ssl->sha512.padded_message)[len] = 0x80;
+	while(i < (ssl->sha512.chunk_of_1024bit * 16))
 	{
-		ft_printf("|%u|%u|\n", j, (uint8_t)ssl->message_to_digest[j]);
-		j++;
+		swapped_number = ft_swap_64bit(ssl->sha512.padded_message[i]);
+		ssl->sha512.padded_message[i] = swapped_number;
+		i++;
 	}
-	j = 0;
-	ft_printf("\n");
-	while(j < 64)
-	{
-		ft_printf("|%u|%u|\n", j, ssl->sha256.padded_message[j]);
-		j++;
-	}
-*/
-//	exit(EXIT_SUCCESS);
+	i--;
+	*(uint64_t *)(ssl->sha512.padded_message + i) = ft_128_bit_representation;
 }
 
 
@@ -1054,6 +1100,32 @@ void ft_add_sha256_abcdefgh_to_h_values(t_ssl *ssl)
 	ssl->sha256.h7 = ssl->sha256.h7 + ssl->sha256.h;
 }
 
+void ft_update_sha512_abcdefgh(t_ssl *ssl)
+{
+	ssl->sha512.a = ssl->sha512.h0;
+	ssl->sha512.b = ssl->sha512.h1;
+	ssl->sha512.c = ssl->sha512.h2;
+	ssl->sha512.d = ssl->sha512.h3;
+	ssl->sha512.e = ssl->sha512.h4;
+	ssl->sha512.f = ssl->sha512.h5;
+	ssl->sha512.g = ssl->sha512.h6;
+	ssl->sha512.h = ssl->sha512.h7;
+}
+
+
+void ft_add_sha512_abcdefgh_to_h_values(t_ssl *ssl)
+{
+	ssl->sha512.h0 = ssl->sha512.h0 + ssl->sha512.a;
+	ssl->sha512.h1 = ssl->sha512.h1 + ssl->sha512.b;
+	ssl->sha512.h2 = ssl->sha512.h2 + ssl->sha512.c;
+	ssl->sha512.h3 = ssl->sha512.h3 + ssl->sha512.d;
+	ssl->sha512.h4 = ssl->sha512.h4 + ssl->sha512.e;
+	ssl->sha512.h5 = ssl->sha512.h5 + ssl->sha512.f;
+	ssl->sha512.h6 = ssl->sha512.h6 + ssl->sha512.g;
+	ssl->sha512.h7 = ssl->sha512.h7 + ssl->sha512.h;
+}
+
+/*
 uint32_t sha256_rotate_shift_w_for_s0(t_ssl *ssl, uint32_t i)
 {
 	uint32_t s0;
@@ -1088,7 +1160,7 @@ uint32_t sha256_rotate_shift_w_for_s1(t_ssl *ssl, uint32_t i)
 	s1 = value1 ^ value2 ^ value3;
 	return(s1);
 }
-
+*/
 /*
 uint32_t ft_abs_u32(uint32_t num)
 {
@@ -1122,6 +1194,30 @@ void ft_sha256_process_512bit_chunk(t_ssl *ssl, uint32_t chunk)
 	}
 }
 
+void ft_sha512_process_1024bit_chunk(t_ssl *ssl, uint64_t chunk)
+{
+	uint64_t i;
+	uint64_t *w;
+	uint64_t *padded_message;
+
+	i = 16;
+	w = ssl->sha512.table_w;
+	padded_message = ssl->sha512.padded_message;
+	ft_bzero_num_array_64bit(w, 128);
+	ft_memcpy(w, padded_message + (16 * chunk), 128);
+	while(i < 80)
+	{
+		ssl->sha512.s0 = rotate_right_64bit(w[i - 15], 1) ^\
+						 rotate_right_64bit(w[i - 15], 8) ^\
+						 shift_right_64bit(w[i - 15], 7);
+		ssl->sha512.s1 = rotate_right_64bit(w[i - 2], 19) ^\
+						 rotate_right_64bit(w[i - 2], 61) ^\
+						 rotate_right_64bit(w[i - 2], 6);
+		w[i] = w[i - 16] + ssl->sha512.s0 + w[i - 7] + ssl->sha512.s1;
+		i++;
+	}
+}
+
 void ft_sha256_swap_abcdefgh(t_ssl *ssl)
 {
 	ssl->sha256.h = ssl->sha256.g;
@@ -1132,6 +1228,19 @@ void ft_sha256_swap_abcdefgh(t_ssl *ssl)
 	ssl->sha256.c = ssl->sha256.b;
 	ssl->sha256.b = ssl->sha256.a;
 	ssl->sha256.a = ssl->sha256.temp1 + ssl->sha256.temp2;
+}
+
+
+void ft_sha512_swap_abcdefgh(t_ssl *ssl)
+{
+	ssl->sha512.h = ssl->sha512.g;
+	ssl->sha512.g = ssl->sha512.f;
+	ssl->sha512.f = ssl->sha512.e;
+	ssl->sha512.e = ssl->sha512.d + ssl->sha512.temp1;
+	ssl->sha512.d = ssl->sha512.c;
+	ssl->sha512.c = ssl->sha512.b;
+	ssl->sha512.b = ssl->sha512.a;
+	ssl->sha512.a = ssl->sha512.temp1 + ssl->sha512.temp2;
 }
 
 void ft_sha256_compression(t_ssl *ssl)
@@ -1161,6 +1270,35 @@ void ft_sha256_compression(t_ssl *ssl)
 	}
 	ft_add_sha256_abcdefgh_to_h_values(ssl);
 }
+
+void ft_sha512_compression(t_ssl *ssl)
+{
+	uint32_t i;
+
+	i = 0;
+	ft_update_sha512_abcdefgh(ssl);
+	while(i < 80)
+	{
+		ssl->sha512.ss1 = rotate_right_64bit(ssl->sha512.e, 14) ^ \
+						  rotate_right_64bit(ssl->sha512.e, 18) ^ \
+						  rotate_right_64bit(ssl->sha512.e, 41);
+		ssl->sha512.ch = (ssl->sha512. e & ssl->sha512.f) ^\
+						 ((~ssl->sha512.e) & ssl->sha512.g);
+		ssl->sha512.temp1 = ssl->sha512.h + ssl->sha512.ss1 + ssl->sha512.ch +\
+							g_sha512_table_k[i] + ssl->sha512.table_w[i];
+		ssl->sha512.ss0 = rotate_right_64bit(ssl->sha512.a, 28) ^\
+						  rotate_right_64bit(ssl->sha512.a, 34) ^\
+						  rotate_right_64bit(ssl->sha512.a, 39);
+		ssl->sha512.maj = (ssl->sha512.a & ssl->sha512.b) ^\
+						  (ssl->sha512.a & ssl->sha512.c) ^\
+						  (ssl->sha512.b & ssl->sha512.c);
+		ssl->sha512.temp2 = ssl->sha512.ss0 + ssl->sha512.maj;
+		ft_sha512_swap_abcdefgh(ssl);
+		i++;
+	}
+	ft_add_sha512_abcdefgh_to_h_values(ssl);
+}
+
 /*
 void calculate_sha256_s0_s1_w(t_ssl *ssl)
 {
@@ -1186,6 +1324,20 @@ void ft_sha256_transformation(t_ssl *ssl)
 	free(ssl->sha256.padded_message);
 }
 
+void ft_sha512_transformation(t_ssl *ssl)
+{
+	uint64_t chunk;
+
+	chunk = 0;
+	while(chunk < ssl->sha512.chunk_of_1024bit)
+	{
+		ft_sha512_process_1024bit_chunk(ssl, chunk);
+		ft_sha512_compression(ssl);
+		chunk++;
+	}
+	free(ssl->sha512.padded_message);
+}
+
 
 void ft_md5_print(t_ssl *ssl, char character)
 {
@@ -1203,6 +1355,20 @@ void ft_sha256_print(t_ssl *ssl, char c)
 	else if(ft_strcmp(ssl->message_digest_algo, "sha256") == 0)
 		ft_printf("%08x%c", ssl->sha256.h7, c);
 }
+
+void ft_sha512_print(t_ssl *ssl, char c)
+{
+	printf("%08llx%08llx", ssl->sha512.h0, ssl->sha512.h1);
+	printf("%08llx%08llx", ssl->sha512.h2, ssl->sha512.h3);
+	printf("%08llx%08llx", ssl->sha512.h4, ssl->sha512.h5);
+	printf("%08llx", ssl->sha512.h6);
+	printf("%c", c);
+//	if(ft_strcmp(ssl->message_digest_algo, "sha384") == 0)
+//		printf("%c", c);
+//	else if(ft_strcmp(ssl->message_digest_algo, "sha512") == 0)
+//		printf("%08llx%c", ssl->sha512.h7, c);
+}
+
 
 void ft_md5_format_print(t_ssl *ssl)
 {
@@ -1302,6 +1468,19 @@ void hash_message_sha224(t_ssl *ssl)
 		ft_sha256_format_print(ssl, "SHA224");
 }
 
+void hash_message_sha512(t_ssl *ssl)
+{
+	ft_bzero(&ssl->sha512, sizeof(ssl->sha512));
+	ft_sha512_init(ssl);
+	ft_sha512_padding(ssl);
+	ft_sha512_transformation(ssl);
+	ft_sha512_print(ssl, '\n');
+//	if(ssl->flag.ft_stdin == true)
+//		ft_sha512_print(ssl, '\n');
+//	else
+//		ft_sha512_format_print(ssl, "SHA512");
+}
+
 /*
 ** ft_bzero(&ssl->sha256, sizeof(t_ssl_sha256)); is the same as below:
 ** ft_bzero(&ssl->sha256, sizeof(ssl->sha256));
@@ -1354,10 +1533,12 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 	
 	if(ft_strcmp(ssl->message_digest_algo, "md5") == 0)
 		hash_message_md5(ssl);
-	else if(ft_strcmp(ssl->message_digest_algo, "sha256") == 0)
-		hash_message_sha256(ssl);
 	else if(ft_strcmp(ssl->message_digest_algo, "sha224") == 0)
 		hash_message_sha224(ssl);
+	else if(ft_strcmp(ssl->message_digest_algo, "sha256") == 0)
+		hash_message_sha256(ssl);
+	else if(ft_strcmp(ssl->message_digest_algo, "sha512") == 0)
+		hash_message_sha512(ssl);
 
 }
 
