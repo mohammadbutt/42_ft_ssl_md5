@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/08 13:30:43 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/08 18:15:48 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ typedef struct	s_ssl_flag
 	bool		s : 1;
 	bool		q : 1;
 	bool		r : 1;
+	bool		ft_stdin : 1;
 }				t_ssl_flag;
 
 typedef struct	s_ssl_skip

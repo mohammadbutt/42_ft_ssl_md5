@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/09 15:50:24 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/04 16:20:39 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/08 18:52:28 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int					ft_isspace(int c);
 */
 
 void				ft_bzero(void *str, size_t len);
+void				ft_bten(void *str, size_t len);
 void				ft_bzero_no_len(void *str);
 
 /*

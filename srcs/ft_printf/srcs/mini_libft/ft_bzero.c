@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 17:52:38 by mbutt             #+#    #+#             */
-/*   Updated: 2019/09/12 17:57:52 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/08 18:52:13 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,23 @@ void	ft_bzero(void *s, size_t len)
 	i = 0;
 	while (i < len)
 		str[i++] = 0;
+}
+
+/*
+** function ft_bten is created to test structs that have a lot of members
+** ft_bten is created to set values to something other than zero to test if
+** the method used in ft_bzero will be effective or not.
+*/
+
+void	ft_bten(void *s, size_t len)
+{
+	unsigned char	*str;
+	size_t 			i;
+
+	str = s;
+	i = 0;
+	while(i < len)
+		str[i++] = 10;
 }
 
 /*
