@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 12:51:28 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 13:10:00 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,22 @@ uint64_t	shift_right_64bit(uint64_t value, uint64_t shift_n_bits)
 	return(new_value);
 }
 
+void ft_md5_init(t_ssl *ssl)
+{
+/*
+	ssl->state.a0 = 0x67452301;
+	ssl->state.b0 = 0xefcdab89;
+	ssl->state.c0 = 0x98badcfe;
+	ssl->state.d0 = 0x10325476;
+*/
+
+	ssl->md5.a0 = 0x67452301;
+	ssl->md5.b0 = 0xefcdab89;
+	ssl->md5.c0 = 0x98badcfe;
+	ssl->md5.d0 = 0x10325476;
+}
+
+
 void	ft_sha256_init(t_ssl *ssl)
 {
 	ssl->sha256.h0 = 0x6a09e667;
@@ -114,6 +130,18 @@ void ft_sha512_init(t_ssl *ssl)
 	ssl->sha512.h5 = 0x9b05688c2b3e6c1f;
 	ssl->sha512.h6 = 0x1f83d9abfb41bd6b;
 	ssl->sha512.h7 = 0x5be0cd19137e2179;
+}
+
+void ft_sha384_init(t_ssl *ssl)
+{
+	ssl->sha512.h0 = 0xcbbb9d5dc1059ed8;
+	ssl->sha512.h1 = 0x629a292a367cd507;
+	ssl->sha512.h2 = 0x9159015a3070dd17;
+	ssl->sha512.h3 = 0x152fecd8f70e5939;
+	ssl->sha512.h4 = 0x67332667ffc00b31;
+	ssl->sha512.h5 = 0x8eb44a8768581511;
+	ssl->sha512.h6 = 0xdb0c2e0d64f98fa7;
+	ssl->sha512.h7 = 0x47b5481dbefa4fa4;
 }
 
 /*
@@ -415,20 +443,6 @@ void ft_md5_init(t_ssl *ssl)
 //	ft_bzero(ssl->context.count, sizeof(ssl->context.count));
 }
 */
-void ft_md5_init(t_ssl *ssl)
-{
-/*
-	ssl->state.a0 = 0x67452301;
-	ssl->state.b0 = 0xefcdab89;
-	ssl->state.c0 = 0x98badcfe;
-	ssl->state.d0 = 0x10325476;
-*/
-
-	ssl->md5.a0 = 0x67452301;
-	ssl->md5.b0 = 0xefcdab89;
-	ssl->md5.c0 = 0x98badcfe;
-	ssl->md5.d0 = 0x10325476;
-}
 
 /*
 ** Add the below functions in math.c file
@@ -1390,11 +1404,10 @@ void ft_sha512_print(t_ssl *ssl, char c)
 	ft_printf("%016llx%016llx", ssl->sha512.h0, ssl->sha512.h1);
 	ft_printf("%016llx%016llx", ssl->sha512.h2, ssl->sha512.h3);
 	ft_printf("%016llx%016llx", ssl->sha512.h4, ssl->sha512.h5);
-	ft_printf("%016llx", ssl->sha512.h6);
 	if(ft_strcmp(ssl->message_digest_algo, "sha384") == 0)
 		printf("%c", c);
 	else if(ft_strcmp(ssl->message_digest_algo, "sha512") == 0)
-		printf("%016llx%c", ssl->sha512.h7, c);
+		printf("%016llx%016llx%c", ssl->sha512.h6, ssl->sha512.h7, c);
 }
 
 
@@ -1510,8 +1523,6 @@ void hash_message_sha256(t_ssl *ssl)
 		ft_sha256_format_print(ssl, "SHA256");
 }
 
-
-
 void hash_message_sha224(t_ssl *ssl)
 {
 	ft_bzero(&ssl->sha256, sizeof(ssl->sha256));
@@ -1534,6 +1545,18 @@ void hash_message_sha512(t_ssl *ssl)
 		ft_sha512_print(ssl, '\n');
 	else
 		ft_sha512_format_print(ssl, "SHA512");
+}
+
+void hash_message_sha384(t_ssl *ssl)
+{
+	ft_bzero(&ssl->sha512, sizeof(ssl->sha512));
+	ft_sha384_init(ssl);
+	ft_sha512_padding(ssl);
+	ft_sha512_transformation(ssl);
+	if(ssl->flag.ft_stdin == true || ssl->flag.q == true)
+		ft_sha512_print(ssl, '\n');
+	else
+		ft_sha512_format_print(ssl, "SHA384");
 }
 
 /*
@@ -1592,6 +1615,8 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 		hash_message_sha224(ssl);
 	else if(ft_strcmp(ssl->message_digest_algo, "sha256") == 0)
 		hash_message_sha256(ssl);
+	else if(ft_strcmp(ssl->message_digest_algo, "sha384") == 0)
+		hash_message_sha384(ssl);
 	else if(ft_strcmp(ssl->message_digest_algo, "sha512") == 0)
 		hash_message_sha512(ssl);
 //	printf("hash_messag(t_ssl *ssl): cp6\n");
