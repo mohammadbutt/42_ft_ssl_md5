@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 13:10:00 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 14:16:19 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1390,24 +1390,42 @@ void ft_md5_print(t_ssl *ssl, char character)
 
 void ft_sha256_print(t_ssl *ssl, char c)
 {
+	char *algo;
+
+	algo = ssl->message_digest_algo;
 	ft_printf("%08x%08x%08x", ssl->sha256.h0, ssl->sha256.h1, ssl->sha256.h2);
 	ft_printf("%08x%08x%08x", ssl->sha256.h3, ssl->sha256.h4, ssl->sha256.h5);
 	ft_printf("%08x", ssl->sha256.h6);
+	if (ft_strcmp(algo, "sha224") == 0 || ft_strcmp(algo, "SHA224") == 0)
+		ft_printf("%c", c);
+	else if(ft_strcmp(algo, "sha256") == 0 || ft_strcmp(algo, "SHA256") == 0)
+		ft_printf("%08x%c", ssl->sha256.h7, c);
+/*
 	if(ft_strcmp(ssl->message_digest_algo, "sha224") == 0)
 		ft_printf("%c", c);
 	else if(ft_strcmp(ssl->message_digest_algo, "sha256") == 0)
 		ft_printf("%08x%c", ssl->sha256.h7, c);
+*/
 }
 
 void ft_sha512_print(t_ssl *ssl, char c)
 {
+	char *algo;
+
+	algo = ssl->message_digest_algo;
 	ft_printf("%016llx%016llx", ssl->sha512.h0, ssl->sha512.h1);
 	ft_printf("%016llx%016llx", ssl->sha512.h2, ssl->sha512.h3);
 	ft_printf("%016llx%016llx", ssl->sha512.h4, ssl->sha512.h5);
+	if (ft_strcmp(algo, "sha384") == 0 || ft_strcmp(algo, "SHA384") == 0)
+		ft_printf("%c", c);
+	else if (ft_strcmp(algo, "sha512") == 0 || ft_strcmp(algo, "SHA512") == 0)
+		ft_printf("%016llx%016llx%c", ssl->sha512.h6, ssl->sha512.h7, c);
+/*
 	if(ft_strcmp(ssl->message_digest_algo, "sha384") == 0)
-		printf("%c", c);
+		ft_printf("%c", c);
 	else if(ft_strcmp(ssl->message_digest_algo, "sha512") == 0)
-		printf("%016llx%016llx%c", ssl->sha512.h6, ssl->sha512.h7, c);
+		ft_printf("%016llx%016llx%c", ssl->sha512.h6, ssl->sha512.h7, c);
+*/
 }
 
 
@@ -1607,8 +1625,38 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 //	test_md5_table_s(); // Remove
 //	test_md5_table_g(); // Remove
 //	ft_bzero(&ssl->md5, sizeof(ssl->md5));
+
+	char *algo;
 	
-	
+	algo = ssl->message_digest_algo;
+/*	
+// Getting index for dispatch table
+	int algo_type_number;
+
+	algo_type_number = 0;
+	if (ft_strcmp(algo, "md5") == 0 || ft_strcmp(algo, "MD5") == 0)
+		algo_type_number = 0;
+	else if (ft_strcmp(algo, "sha224") == 0 || ft_strcmp(algo, "SHA224") == 0)
+		algo_type_number = 1;
+	else if (ft_strcmp(algo, "sha256") == 0 || ft_strcmp(algo, "SHA256") == 0)
+		algo_type_number = 2;
+	else if (ft_strcmp(algo, "sha384") == 0 || ft_strcmp(algo, "SHA384") == 0)
+		algo_type_number = 3;
+	else if (ft_strcmp(algo, "sha512") == 0 || ft_strcmp(algo, "SHA512") == 0)
+		algo_type_number = 4;
+*/
+
+	if (ft_strcmp(algo, "md5") == 0 || ft_strcmp(algo, "MD5") == 0)
+		hash_message_md5(ssl);
+	else if (ft_strcmp(algo, "sha224") == 0 || ft_strcmp(algo, "SHA224") == 0)
+		hash_message_sha224(ssl);
+	else if (ft_strcmp(algo, "sha256") == 0 || ft_strcmp(algo, "SHA256") == 0)
+		hash_message_sha256(ssl);
+	else if (ft_strcmp(algo, "sha384") == 0 || ft_strcmp(algo, "SHA384") == 0)
+		hash_message_sha384(ssl);
+	else if (ft_strcmp(algo, "sha512") == 0 || ft_strcmp(algo, "SHA512") == 0)
+		hash_message_sha512(ssl);
+/*
 	if(ft_strcmp(ssl->message_digest_algo, "md5") == 0)
 		hash_message_md5(ssl);
 	else if(ft_strcmp(ssl->message_digest_algo, "sha224") == 0)
@@ -1619,8 +1667,7 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 		hash_message_sha384(ssl);
 	else if(ft_strcmp(ssl->message_digest_algo, "sha512") == 0)
 		hash_message_sha512(ssl);
-//	printf("hash_messag(t_ssl *ssl): cp6\n");
-
+*/
 }
 
 
@@ -2037,12 +2084,26 @@ bool is_there_p_or_s(char *argv)
 }
 bool is_md_algorithm_valid(char *str)
 {
+
+	if (ft_strcmp(str, "md5") == 0 || ft_strcmp(str, "MD5") == 0)
+		return(true);
+	else if (ft_strcmp(str, "sha224") == 0 || ft_strcmp(str, "SHA224") == 0)
+		return (true);
+	else if (ft_strcmp(str, "sha256") == 0 || ft_strcmp(str, "SHA256") == 0)
+		return (true);
+	else if (ft_strcmp(str, "sha384") == 0 || ft_strcmp(str, "SHA384") == 0)
+		return (true);
+	else if (ft_strcmp(str, "sha512") == 0 || ft_strcmp(str, "SHA512") == 0)
+		return (true);
+/*
 	if (ft_strcmp(str, "md5") == 0 || ft_strcmp(str, "sha224") == 0)
 		return(true);
 	else if (ft_strcmp(str, "sha256") == 0 || ft_strcmp(str, "sha384") == 0)
 		return(true);
 	else if (ft_strcmp(str, "sha512") == 0)
 		return(true);
+	return(false);
+*/
 	return(false);
 }
 
