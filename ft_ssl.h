@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/10 22:02:34 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 14:21:15 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,6 @@
 *** These Macros will be deleted later. Just for testing
 */
 
-# define NL_HASH "d41d8cd98f00b204e9800998ecf8427e"
-# define AB_NL_HASH "daa8075d6ac5ff8d0c6d4650adb4ef29"
-# define AB_HASH "187ef4436122d1cc2f40dc2b92f0eba0"
-
-
 /*
 ** Macros-----------------------------------------------------------------------
 */
@@ -63,7 +58,7 @@
 **
 ** Will not use g_md5_table_g[64], but might keep it for reference only
 */
-
+/*
 static uint32_t g_md5_table_g[64] =
 {
 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
@@ -71,7 +66,7 @@ static uint32_t g_md5_table_g[64] =
 	5, 8, 11, 14, 1, 4, 7, 10, 13, 0, 3, 6, 9, 12, 15, 2,
 	0, 7, 14, 5, 12, 3, 10, 1, 8, 15, 6, 13, 4, 11, 2, 9
 };
-
+*/
 /*
 ** Table from wiki:
 ** en.wikipedia.org/wiki/SHA-2#Pseudocode
@@ -134,12 +129,10 @@ static uint64_t g_sha512_table_k[80] =
 
 typedef struct	s_ssl_flag
 {	
-//	int			count_of_p;
 	bool		p : 1;
 	bool		s : 1;
 	bool		q : 1;
 	bool		r : 1;
-//	bool		file_name : 1;
 	bool		ft_stdin : 1;
 }				t_ssl_flag;
 
@@ -233,7 +226,7 @@ typedef struct	s_ssl_sha256
 {
 //	uint32_t	table_k[64]; Have global table
 	uint32_t	table_w[64];
-	uint32_t	*padded_message; // malloc
+	uint32_t	*padded_message;
 	uint32_t	padded_message_len;
 	uint32_t	h0;
 	uint32_t	h1;

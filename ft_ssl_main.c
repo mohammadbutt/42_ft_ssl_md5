@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 14:16:19 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 14:36:25 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,63 +316,63 @@ uint32_t ft_swap_bits_1(uint32_t x)
 }
 */
 
+/*
 void	set_ssl_to_zero(t_ssl *ssl)
 {
-/*
-	ssl->md5.padded_message_len = 0;
-	ssl->md5.a0 = 0;
-	ssl->md5.b0 = 0;
-	ssl->md5.c0 = 0;
-	ssl->md5.d0 = 0;
-	ssl->md5.a = 0;
-	ssl->md5.b = 0;
-	ssl->md5.c = 0;
-	ssl->md5.d = 0;
-*/
 
-/*
-	ft_bten(ssl, sizeof(t_ssl));
-	ft_printf("Entered function\n");
-	ft_printf("|%d|\n", ssl->md5.padded_message_len);
-	ft_printf("|%d|\n", ssl->md5.a0);
-	ft_printf("|%u|\n", ssl->md5.b0);
-	ft_printf("|%u|\n", ssl->md5.c0);
-	ft_printf("|%u|\n", ssl->md5.d0);
-	ft_printf("|%u|\n", ssl->md5.a);
-	ft_printf("|%u|\n", ssl->md5.b);
-	ft_printf("|%u|\n", ssl->md5.c);
-	ft_printf("|%u|\n", ssl->md5.d);
-	ft_printf("|%u|\n", ssl->sha256.padded_message_len);
-	ft_printf("|%u|\n", ssl->sha256.h0);
-	ft_printf("|%u|\n", ssl->sha256.h1);
-	ft_printf("|%u|\n", ssl->sha256.h2);
-	ft_printf("|%u|\n", ssl->sha256.h3);
-	ft_printf("|%u|\n", ssl->sha256.h4);
-	ft_printf("|%u|\n", ssl->sha256.h5);
-	ft_printf("|%u|\n", ssl->sha256.h6);
-	ft_printf("|%u|\n", ssl->sha256.h7);
-	ft_printf("|%u|\n", ssl->sha256.a);
-	ft_printf("|%u|\n", ssl->sha256.b);
-	ft_printf("|%u|\n", ssl->sha256.c);
-	ft_printf("|%u|\n", ssl->sha256.d);
-	ft_printf("|%u|\n", ssl->sha256.e);
-	ft_printf("|%u|\n", ssl->sha256.f);
-	ft_printf("|%u|\n", ssl->sha256.g);
-	ft_printf("|%u|\n", ssl->sha256.h);
-	ft_printf("|%u|\n", ssl->sha256.s0);
-	ft_printf("|%u|\n", ssl->sha256.s1);
-	ft_printf("|%u|\n", ssl->sha256.ss0);
-	ft_printf("|%u|\n", ssl->sha256.ss1);
-	ft_printf("|%u|\n", ssl->sha256.ch);
-	ft_printf("|%u|\n", ssl->sha256.maj);
-	ft_printf("|%u|\n", ssl->sha256.temp1);
-	ft_printf("|%u|\n", ssl->sha256.temp2);
-	ft_printf("|%u|\n", ssl->sha256.chunk_of_512bit);
-	ft_printf("|%u|\n", ssl->sha256.h2);
-	ft_printf("Done testing structs\n\n\n");
-*/
+//	ssl->md5.padded_message_len = 0;
+//	ssl->md5.a0 = 0;
+//	ssl->md5.b0 = 0;
+//	ssl->md5.c0 = 0;
+//	ssl->md5.d0 = 0;
+//	ssl->md5.a = 0;
+//	ssl->md5.b = 0;
+//	ssl->md5.c = 0;
+//	ssl->md5.d = 0;
+
+
+	//ft_bten(ssl, sizeof(t_ssl));
+	//ft_printf("Entered function\n");
+	//ft_printf("|%d|\n", ssl->md5.padded_message_len);
+	//ft_printf("|%d|\n", ssl->md5.a0);
+	//ft_printf("|%u|\n", ssl->md5.b0);
+	//ft_printf("|%u|\n", ssl->md5.c0);
+	//ft_printf("|%u|\n", ssl->md5.d0);
+	//ft_printf("|%u|\n", ssl->md5.a);
+	//ft_printf("|%u|\n", ssl->md5.b);
+	//ft_printf("|%u|\n", ssl->md5.c);
+	//ft_printf("|%u|\n", ssl->md5.d);
+	//ft_printf("|%u|\n", ssl->sha256.padded_message_len);
+	//ft_printf("|%u|\n", ssl->sha256.h0);
+	//ft_printf("|%u|\n", ssl->sha256.h1);
+	//ft_printf("|%u|\n", ssl->sha256.h2);
+	//ft_printf("|%u|\n", ssl->sha256.h3);
+	//ft_printf("|%u|\n", ssl->sha256.h4);
+	//ft_printf("|%u|\n", ssl->sha256.h5);
+	//ft_printf("|%u|\n", ssl->sha256.h6);
+	//ft_printf("|%u|\n", ssl->sha256.h7);
+	//ft_printf("|%u|\n", ssl->sha256.a);
+	//ft_printf("|%u|\n", ssl->sha256.b);
+	//ft_printf("|%u|\n", ssl->sha256.c);
+	//ft_printf("|%u|\n", ssl->sha256.d);
+	//ft_printf("|%u|\n", ssl->sha256.e);
+	//ft_printf("|%u|\n", ssl->sha256.f);
+	//ft_printf("|%u|\n", ssl->sha256.g);
+	//ft_printf("|%u|\n", ssl->sha256.h);
+	//ft_printf("|%u|\n", ssl->sha256.s0);
+	//ft_printf("|%u|\n", ssl->sha256.s1);
+	//ft_printf("|%u|\n", ssl->sha256.ss0);
+	//ft_printf("|%u|\n", ssl->sha256.ss1);
+	//ft_printf("|%u|\n", ssl->sha256.ch);
+	//ft_printf("|%u|\n", ssl->sha256.maj);
+	//ft_printf("|%u|\n", ssl->sha256.temp1);
+	//ft_printf("|%u|\n", ssl->sha256.temp2);
+	//ft_printf("|%u|\n", ssl->sha256.chunk_of_512bit);
+	//ft_printf("|%u|\n", ssl->sha256.h2);
+	//ft_printf("Done testing structs\n\n\n");
 	ft_bzero(ssl, sizeof(t_ssl));
 }
+*/
 
 /*
 ** Swapping bits of value: 123456789
@@ -1438,7 +1438,7 @@ void ft_md5_format_print(t_ssl *ssl)
 		ft_md5_print(ssl, ' ');
 		ft_printf("\"%s\"\n", ssl->message_to_digest);
 	}
-	else if(ssl->flag.p == true && ssl->flag.ft_stdin == true)
+	else if(ssl->flag.p == true || ssl->flag.ft_stdin == true)
 	{
 		ft_md5_print(ssl, '\n');
 		(ssl->flag.ft_stdin == true) && (ft_printf("ft_SSL> "));
@@ -1508,8 +1508,6 @@ void	ft_sha512_format_print(t_ssl *ssl, char *algo_name)
 		ft_sha512_print(ssl, '\n');
 	}
 }
-
-
 
 /*
 ** ft_bzero(&ssl->md5, sizeof(t_ssl_md5)); is the same as below:
@@ -2147,8 +2145,8 @@ void ft_ssl_parse_qr(int argc, char **argv)
 	i = 2;
 //	ssl.md5_padded_message_len = 0;
 //	set_md5_to_zero(&ssl);
-	set_ssl_to_zero(&ssl);
-//	ft_initialize_ssl_flag(&ssl);
+//	set_ssl_to_zero(&ssl);
+	ft_bzero(&ssl, sizeof(t_ssl));
 	ssl.message_digest_algo = argv[1];
 	while(i < argc)
 	{
@@ -2227,7 +2225,8 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 	i = 2;
 //	ssl.md5_padded_message_len = 0;
 //	set_md5_to_zero(&ssl);
-	set_ssl_to_zero(&ssl);
+//	set_ssl_to_zero(&ssl);	
+	ft_bzero(&ssl, sizeof(t_ssl));
 	ft_initialize_ssl_flag(&ssl);
 	ssl.message_digest_algo = argv[1];
 	while(i < argc)
@@ -2250,7 +2249,8 @@ void ft_ssl_parsing(int argc, char **argv)
 	
 //	ssl.md5_padded_message_len = 0;
 //	set_md5_to_zero(&ssl);
-	set_ssl_to_zero(&ssl);
+//	set_ssl_to_zero(&ssl);
+	ft_bzero(&ssl, sizeof(t_ssl));
 //	ssl.flag.pqrs = true;
 //	ssl.flag.ft_stdin = false;
 //	ft_printf("p|%d|\n", ssl.flag.p);
@@ -2370,7 +2370,8 @@ void handle_stdin(t_ssl *ssl)
 	
 //	ssl->md5.padded_message_len = 0;
 //	set_md5_to_zero(ssl);
-	set_ssl_to_zero(ssl);
+//	set_ssl_to_zero(ssl);	
+	ft_bzero(ssl, sizeof(t_ssl));
 	read_stdin_loop(message_digest_algo);
 	message_to_digest = mini_gnl_stdin();
 //	ssl->flag.pqrs = false;
