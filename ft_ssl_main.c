@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 14:36:25 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 15:29:28 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,11 +202,19 @@ void ft_sha384_init(t_ssl *ssl)
 ** Can be used to swap values
 */
 
+void	zero_four_variables(uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d)
+{
+	*a = 0;
+	*b = 0;
+	*c = 0;
+	*d = 0;
+}
 
 /*
 ** Adding md5 core functions
 */
 
+/*
 uint32_t md5_function_f(uint32_t b, uint32_t c, uint32_t d)
 {
 	uint32_t f;
@@ -242,21 +250,25 @@ uint32_t md5_function_i(uint32_t b, uint32_t c, uint32_t d)
 	i = c ^ (b | (~d));
 	return(i);
 }
-
-uint32_t md5_function_fghi(uint32_t i, uint32_t b, uint32_t c, uint32_t d)
+*/
+uint32_t md5_function_fghi(uint32_t j, uint32_t b, uint32_t c, uint32_t d)
 {
 	uint32_t f;
+	uint32_t g;
+	uint32_t h;
+	uint32_t i;
+
+	zero_four_variables(&f, &g, &h, &i); 
 	
-	f = 0;
-	if(i >= 0 && i <= 15)
-		f = md5_function_f(b, c, d);
-	else if(i >= 16 && i <= 31)
-		f = md5_function_g(b, c, d);
-	else if(i >= 32 && i <= 47)
-		f = md5_function_h(b, c, d);
-	else if(i >= 48 && i <= 63)
-		f = md5_function_i(b, c, d);
-	return(f);
+	if(j >= 0 && j <= 15)
+		return(f = (b & c) | ((~b) & d));
+	else if(j >= 16 && j <= 31)	
+		return(g = (d & b) | ((~d) & c));
+	else if(j >= 32 && j <= 47)
+		return(h = (b ^ c ^ d));
+	else if(j >= 48 && j <= 63)	
+		return(i = c ^ (b | (~d)));
+	return(0);
 }
 
 /*
@@ -695,8 +707,9 @@ void ft_md5_padding(t_ssl *ssl)
 
 	ssl->md5.padded_message_len = padding;
 
-//	*(uint32_t*)(ssl->md5.padded_message + padding) = ft_64_bit_representation; // works
-	ssl->md5.padded_message[padding] = ft_64_bit_representation;
+	*(uint32_t*)(ssl->md5.padded_message + padding) = ft_64_bit_representation;
+//	padding--;
+//	ssl->md5.padded_message[((padding + 8) / 64) - 1] = ft_64_bit_representation;
 /*
 	ft_printf("printing from ft_md5_padding\n");
 	uint32_t j;
@@ -907,7 +920,7 @@ void error_invalid_file_permission(int fd, char *argv)
 //	exit(EXIT_SUCCESS);
 }
 
-
+/*
 //void test_md5_table_k(void)
 void test_md5_table_k(t_ssl *ssl)
 {
@@ -917,7 +930,7 @@ void test_md5_table_k(t_ssl *ssl)
 	i = 0;
 //	ft_bzero(num, sizeof(num));
 //	compute_md5_table_k(num);
-/*
+
 	while(i < 64)
 	{
 		if(((i) % 4) == 0)
@@ -927,14 +940,15 @@ void test_md5_table_k(t_ssl *ssl)
 			printf("}\n\n");
 		i++;
 	}
-*/
+
 	while(i < 64)
 	{
 		ft_printf("|%u|%u|\n", i, ssl->md5.table_k[i]);
 		i++;
 	}
 }
-
+*/
+/*
 //void test_md5_table_s(void)
 void	test_md5_table_s(t_ssl *ssl)
 {
@@ -954,7 +968,8 @@ void	test_md5_table_s(t_ssl *ssl)
 	}
 
 }
-
+*/
+/*
 void test_md5_table_g(t_ssl *ssl)
 {
 //	uint32_t num[64];
@@ -972,7 +987,7 @@ void test_md5_table_g(t_ssl *ssl)
 	printf("\nDone printing table_x\n\n");
 
 }
-
+*/
 
 /*
 ** ft_update_md5_abcd initializes and updates values to be used in the while
@@ -1041,12 +1056,15 @@ void ft_add_md5_abcd_to_a0b0c0d0(t_ssl *ssl)
 }
 
 
-void set_variables_to_zero(uint32_t *a, uint32_t *b, uint32_t *c)
+//void set_three_variables_to_zero(uint32_t *a, uint32_t *b, uint32_t *c)
+
+void zero_three_variables(uint32_t *a, uint32_t *b, uint32_t *c)
 {
 	*a = 0;
 	*b = 0;
 	*c = 0;
 }
+
 
 void swap_bits_to_fix_endian(t_ssl *ssl)
 {
@@ -1075,7 +1093,8 @@ void ft_md5_transformation(t_ssl *ssl)
 	uint32_t i;
 	uint32_t f;
 
-	set_variables_to_zero(&chunk_of_64_byte, &i, &f);
+//	set_three_variables_to_zero(&chunk_of_64_byte, &i, &f);
+	zero_three_variables(&chunk_of_64_byte, &i, &f);
 	compute_md5_table_g_k_s(ssl);
 	while(chunk_of_64_byte < ssl->md5.padded_message_len)
 	{
@@ -1212,6 +1231,14 @@ void ft_sha256_process_512bit_chunk(t_ssl *ssl, uint32_t chunk)
 		i++;
 	}
 }
+
+/*
+** 120 bytes is allocated on stack for ssl->sha512.table_w because messages for
+** sha512 and sha384 get processed in 1024 chunks.
+** 128 bytes * 8 = 1024;
+** Allocating space for 128 characters for w is different then going through 80
+** rounds to get the new value of w each time.
+*/
 
 void ft_sha512_process_1024bit_chunk(t_ssl *ssl, uint64_t chunk)
 {
@@ -1579,7 +1606,7 @@ void hash_message_sha384(t_ssl *ssl)
 ** ft_bzero(&ssl->sha256, sizeof(t_ssl_sha256)); is the same as below:
 ** ft_bzero(&ssl->sha256, sizeof(ssl->sha256));
 */
-
+/*
 void test_sha256_values(t_ssl *ssl)
 {
 	ft_printf("padded_message_len:|%u|\n", ssl->sha256.padded_message_len);
@@ -1609,7 +1636,7 @@ void test_sha256_values(t_ssl *ssl)
 	ft_printf("             temp2:|%u|\n", ssl->sha256.temp2);
 	ft_printf("   chunk_of_512bit:|%u|\n\n", ssl->sha256.chunk_of_512bit);
 }
-
+*/
 
 void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_digest)
 {
@@ -1897,7 +1924,7 @@ void	*ft_memalloc(size_t size)
 	return (memory);
 }
 */
-
+/*
 void adjust_ssl_flag(t_ssl *ssl)
 {
 	bool p;
@@ -1915,7 +1942,7 @@ void adjust_ssl_flag(t_ssl *ssl)
 	if(p == false && q == false && r == false && s == false)
 		ssl->flag.ft_stdin = true;
 }
-
+*/
 void store_hash_free_message(t_ssl *ssl, char *message_to_digest)
 {
 	int message_len;
