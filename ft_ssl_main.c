@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/10 22:01:13 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 12:51:28 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -757,17 +757,6 @@ void ft_sha512_padding(t_ssl *ssl)
 
 	ssl->sha512.padded_message[i] = ft_128_bit_representation;
 
-/*
-	uint64_t j;
-	j = 0;
-//	while(j < 128)
-	while(j < 30)
-	{
-		ft_printf("|%llu|%llu|\n", j, ssl->sha512.padded_message[j]);
-//		ft_printf("|%llu|%llu|\n", j, (uint64_t)ssl->message_to_digest[j]);
-		j++;
-	}
-*/
 }
 
 
@@ -1402,19 +1391,18 @@ void ft_sha512_print(t_ssl *ssl, char c)
 	ft_printf("%016llx%016llx", ssl->sha512.h2, ssl->sha512.h3);
 	ft_printf("%016llx%016llx", ssl->sha512.h4, ssl->sha512.h5);
 	ft_printf("%016llx", ssl->sha512.h6);
-//	ft_printf("%c", c);
-//	if(ft_strcmp(ssl->message_digest_algo, "sha384") == 0)
-//		printf("%c", c);
-	if(ft_strcmp(ssl->message_digest_algo, "sha512") == 0)
+	if(ft_strcmp(ssl->message_digest_algo, "sha384") == 0)
+		printf("%c", c);
+	else if(ft_strcmp(ssl->message_digest_algo, "sha512") == 0)
 		printf("%016llx%c", ssl->sha512.h7, c);
 }
 
 
 void ft_md5_format_print(t_ssl *ssl)
 {
-	if(ssl->flag.q == true  && ssl->flag.s == true)
-		ft_md5_print(ssl, '\n');
-	else if(ssl->flag.r == true && ssl->flag.s == true)
+//	if(ssl->flag.q == true  && ssl->flag.s == true)
+//		ft_md5_print(ssl, '\n');
+	if(ssl->flag.r == true && ssl->flag.s == true)
 	{
 		ft_md5_print(ssl, ' ');
 		ft_printf("\"%s\"\n", ssl->message_to_digest);
@@ -1438,9 +1426,9 @@ void ft_md5_format_print(t_ssl *ssl)
 }
 void	ft_sha256_format_print(t_ssl *ssl, char *algo_name)
 {
-	if(ssl->flag.q == true  && ssl->flag.s == true)
-		ft_sha256_print(ssl, '\n');
-	else if(ssl->flag.r == true && ssl->flag.s == true)
+//	if(ssl->flag.q == true  && ssl->flag.s == true)
+//		ft_sha256_print(ssl, '\n');
+	if(ssl->flag.r == true && ssl->flag.s == true)
 	{
 		ft_sha256_print(ssl, ' ');
 		ft_printf("\"%s\"\n", ssl->message_to_digest);
@@ -1463,6 +1451,34 @@ void	ft_sha256_format_print(t_ssl *ssl, char *algo_name)
 	}
 }
 
+void	ft_sha512_format_print(t_ssl *ssl, char *algo_name)
+{
+//	if(ssl->flag.q == true  && ssl->flag.s == true)
+//		ft_sha512_print(ssl, '\n');
+	if(ssl->flag.r == true && ssl->flag.s == true)
+	{
+		ft_sha512_print(ssl, ' ');
+		ft_printf("\"%s\"\n", ssl->message_to_digest);
+	}
+	else if(ssl->flag.p == true || ssl->flag.ft_stdin == true)
+	{
+		ft_sha512_print(ssl, '\n');
+		(ssl->flag.ft_stdin == true) && (ft_printf("ft_SSL> "));
+		ssl->flag.p = false;
+	}
+	else if(ssl->flag.r == false && ssl->flag.q == false && ssl->flag.s == true)
+	{
+		ft_printf("%s (\"%s\") = ", algo_name, ssl->message_to_digest);
+		ft_sha512_print(ssl, '\n');
+	}
+	else if(ssl->flag.s == false)
+	{
+		ft_printf("%s (%s) = ", algo_name, ssl->file_name);
+		ft_sha512_print(ssl, '\n');
+	}
+}
+
+
 
 /*
 ** ft_bzero(&ssl->md5, sizeof(t_ssl_md5)); is the same as below:
@@ -1476,7 +1492,7 @@ void hash_message_md5(t_ssl *ssl)
 	ft_md5_padding(ssl);
 	ft_md5_transformation(ssl);
 	swap_bits_to_fix_endian(ssl);
-	if(ssl->flag.ft_stdin == true)
+	if(ssl->flag.ft_stdin == true || ssl->flag.q == true)
 		ft_md5_print(ssl, '\n');
 	else
 		ft_md5_format_print(ssl);
@@ -1488,7 +1504,7 @@ void hash_message_sha256(t_ssl *ssl)
 	ft_sha256_init(ssl);	
 	ft_sha256_padding(ssl);	
 	ft_sha256_transformation(ssl);
-	if(ssl->flag.ft_stdin == true)
+	if(ssl->flag.ft_stdin == true || ssl->flag.q == true)
 		ft_sha256_print(ssl, '\n');
 	else
 		ft_sha256_format_print(ssl, "SHA256");
@@ -1502,7 +1518,7 @@ void hash_message_sha224(t_ssl *ssl)
 	ft_sha224_init(ssl);
 	ft_sha256_padding(ssl);
 	ft_sha256_transformation(ssl);
-	if(ssl->flag.ft_stdin == true)
+	if(ssl->flag.ft_stdin == true || ssl->flag.q == true)
 		ft_sha256_print(ssl, '\n');
 	else
 		ft_sha256_format_print(ssl, "SHA224");
@@ -1510,20 +1526,14 @@ void hash_message_sha224(t_ssl *ssl)
 
 void hash_message_sha512(t_ssl *ssl)
 {
-//	ft_printf("hash_message_sha512: cp1\n");
 	ft_bzero(&ssl->sha512, sizeof(ssl->sha512));
-//	ft_printf("hash_message_sha512: cp2\n");
 	ft_sha512_init(ssl);
-//	ft_printf("hash_message_sha512: cp3\n");
 	ft_sha512_padding(ssl);
-//	ft_printf("hash_message_sha512: cp4\n");
 	ft_sha512_transformation(ssl);
-//	ft_printf("hash_message_sha512: cp5\n");
-	ft_sha512_print(ssl, '\n');
-//	if(ssl->flag.ft_stdin == true)
-//		ft_sha512_print(ssl, '\n');
-//	else
-//		ft_sha512_format_print(ssl, "SHA512");
+	if(ssl->flag.ft_stdin == true || ssl->flag.q == true)
+		ft_sha512_print(ssl, '\n');
+	else
+		ft_sha512_format_print(ssl, "SHA512");
 }
 
 /*
