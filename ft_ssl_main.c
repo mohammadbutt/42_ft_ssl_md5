@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 22:40:03 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 22:48:26 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1122,29 +1122,8 @@ void hash_message(t_ssl *ssl)
 	else if (ft_strcmp(algo, "sha512") == 0 || ft_strcmp(algo, "SHA512") == 0)
 		hash_message_sha512(ssl);
 }
-/*
-** ssl_exit_illegal_option is used when the flag is not one of the valid flag
-** options -p, -q, -r, or -s.
-*/
 
-void ssl_exit_illegal_option(char c)
-{
-	ft_printf("ft_ssl: illegal option -- %c\n", c);
-	ft_printf("usage: ft_ssl [-pqrs] [-s string] [files ...]\n");
-	exit(EXIT_SUCCESS);
-}
-/*
-** ft_option_requires_argument is used when an argument is not entered
-** with -s flag.
-** And the program in this case exits.
-*/
 
-void ft_option_requires_argument(char *digest_method)
-{
-	ft_printf("%s: option requires an argument -- s\n", digest_method);
-	ft_printf("usage: %s [-pqr] [-s string] [files ...]\n", digest_method);
-	exit(EXIT_SUCCESS);
-}
 void store_hash_free_message(t_ssl *ssl, char *message_to_digest)
 {
 	int message_len;
@@ -1160,15 +1139,9 @@ void store_hash_free_message(t_ssl *ssl, char *message_to_digest)
 	free(ssl->message_to_digest);
 }
 
-void ft_print_usage(char *buffer)
-{
-	ft_printf("ft_ssl:Error: '%s' is an invalid command.\n\n", buffer);
-	ft_printf("Message Digest Commands:\n");
-	ft_printf("md5\nsha224\nsha256\nsha384\nsha512\n\n");
-}
-
 void ft_initialize_ssl_flag(t_ssl *ssl)
 {	
 	ft_bzero(&ssl->flag, sizeof(ssl->flag));
 	ft_bzero(&ssl->skip, sizeof(ssl->skip));
 }
+
