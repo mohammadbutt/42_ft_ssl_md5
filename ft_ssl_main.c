@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 18:43:55 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 18:56:36 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2257,9 +2257,9 @@ void ft_ssl_parse_pqrs(int argc, char **argv)
 //	set_ssl_to_zero(&ssl);	
 	ft_bzero(&ssl, sizeof(t_ssl));
 	ft_initialize_ssl_flag(&ssl);
-	ssl.flag.file_name = false;
+//	ssl.flag.file_name = false;
 	ssl.message_digest_algo = argv[1];
-	ft_printf("flag.file_name |%d|\n", ssl.flag.file_name);
+//	ft_printf("flag.file_name |%d|\n", ssl.flag.file_name);
 	while(i < argc)
 	{
 		if(argv[i][0] == '-' && argv[i][1] != '\0' && ssl.flag.s == false)
