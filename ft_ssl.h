@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 14:02:27 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 14:08:22 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,12 +332,24 @@ void			ft_md5_format_print(t_ssl *ssl);
 void			hash_message_md5(t_ssl *ssl);
 
 /*
-** ssl_md5_table_g_k_s.c----------------------------------------------------------
+** ssl_md5_table_g_k_s.c--------------------------------------------------------
 */
 
 void			compute_md5_table_g(uint32_t *num);
 void			compute_md5_table_k(uint32_t *num);
 void			compute_md5_table_g_k_s(t_ssl *ssl);
+
+/*
+** ssl_md5_table_s.c------------------------------------------------------------
+*/
+
+void			compute_md5_table_s_0_to_31(uint32_t *num);
+void			compute_md5_table_s_32_to_63(uint32_t *num);
+void			compute_md5_table_s(uint32_t *num);
+
+
+
+
 
 
 double  ft_fabs(double num);
