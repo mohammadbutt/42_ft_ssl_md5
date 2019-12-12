@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 18:56:36 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 19:10:10 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -912,9 +912,12 @@ void ft_md5_padding(t_ssl *ssl, uint8_t *msg, size_t len)
 ** 2. A file has permission denied access. "Permission denied"
 */
 
-void error_invalid_file_permission(int fd, char *argv)
+void error_invalid_file_permission(t_ssl *ssl, int fd, char *argv)
 {
-	ft_printf("ft_ssl: %s: %s\n", argv, strerror(errno));
+	char *algo;
+
+	algo = ssl->message_digest_algo;
+	ft_printf(BRED"%s: %s: %s\n"NC, algo, argv, strerror(errno));
 //	fd = fd * 1;
 	close(fd);
 //	exit(EXIT_SUCCESS);
@@ -1704,9 +1707,12 @@ void hash_message(t_ssl *ssl)//, char *message_digest_algo, char *message_to_dig
 ** message. "Is a directory"
 */
 
-void error_message_dir(int fd, char *argv)
+void error_message_dir(t_ssl *ssl, int fd, char *argv)
 {
-	ft_printf("ft_ssl: %s: %s\n", argv, strerror(errno));
+	char *algo;
+
+	algo = ssl->message_digest_algo;
+	ft_printf(BYELLOW"%s: %s: %s\n"NC, algo, argv, strerror(errno));
 //	fd = fd * 1;
 	close(fd);
 //	exit(EXIT_SUCCESS);
@@ -1718,7 +1724,7 @@ void error_message_dir(int fd, char *argv)
 ** At the end closes the file descriptor
 */
 
-bool error_messages(int fd, char *argv)
+bool error_messages(t_ssl *ssl, int fd, char *argv)
 {
 	char temp_buff[2];
 	ssize_t return_of_read;
@@ -1726,13 +1732,13 @@ bool error_messages(int fd, char *argv)
 	return_of_read = 0;
 	if(fd == -1)
 	{
-		error_invalid_file_permission(fd, argv);
+		error_invalid_file_permission(ssl, fd, argv);
 		return(true);
 	}
 	return_of_read = read(fd, temp_buff, 1);
 	if(return_of_read == -1)
 	{
-		error_message_dir(fd, argv);
+		error_message_dir(ssl, fd, argv);
 		return(true);
 	}
 	close(fd);
@@ -2220,7 +2226,7 @@ void ft_ssl_parse_pqrs_no_dash(char **argv, t_ssl *ssl, int i)
 	else if(ssl->flag.s == false)
 	{
 		fd = open(argv[i], O_RDONLY);
-		if(error_messages(fd, argv[i]) == false)
+		if(error_messages(ssl, fd, argv[i]) == false)
 		{
 			ssl->file_name = argv[i];
 			message_to_digest = mini_gnl(fd, argv[i]);
