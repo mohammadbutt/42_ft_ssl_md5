@@ -6,20 +6,20 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 19:21:59 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 20:02:07 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_SSL_H
 # define FT_SSL_H
 
-#include "srcs/ft_printf/srcs/ft_printf.h"
-#include "srcs/ft_printf/srcs/mini_libft/mini_libft.h"
-#include <fcntl.h>
-#include <string.h>
-#include <errno.h>
-#include <math.h>
-#include <stdio.h>
+# include "srcs/ft_printf/srcs/ft_printf.h"
+# include "srcs/ft_printf/srcs/mini_libft/mini_libft.h"
+# include <fcntl.h>
+# include <string.h>
+# include <errno.h>
+# include <math.h>
+# include <stdio.h>
 
 /*
 ** Notes about headers that are included:
@@ -28,7 +28,6 @@
 ** #include <errno.h>	to access errno(3)
 ** #include <math.h>	to access sin(3).
 */
-
 
 /*
 ** Macros-----------------------------------------------------------------------
@@ -105,25 +104,12 @@ static uint64_t g_sha512_table_k[80] =
 	0x5fcb6fab3ad6faec, 0x6c44198c4a475817
 };
 
-typedef struct	s_ssl_flag
-{	
-	bool		p : 1;
-	bool		s : 1;
-	bool		q : 1;
-	bool		r : 1;
-	bool		ft_stdin : 1;
-}				t_ssl_flag;
-
-typedef struct	s_ssl_skip
-{
-	bool		if_to_collect_flags : 1;
-	bool		mini_gnl_stdin_for_flag_p : 1;
-}				t_ssl_skip;
-
-
+/*
+** Structs----------------------------------------------------------------------
+*/
 /*
 ** Values a0, b0, c0, d0 and A, B, C, D are mapped based on wiki page of md5
-** 
+**
 ** ssl->md5.a0 = a0 of wiki
 ** ssl->md5.b0 = b0 of wiki
 ** ssl->md5.c0 = c0 of wiki
@@ -139,7 +125,7 @@ typedef struct	s_ssl_skip
 ** b0 = 0xefcdab89
 ** c0 = 0x98badcfe
 ** d0 = 0x10325476
-** 
+**
 ** a, b, c, d gets values from a0, b0, c0, d0
 */
 
@@ -147,14 +133,14 @@ typedef struct	s_ssl_skip
 ** padded_message can be char or uint8_t
 */
 
-typedef struct s_ssl_md5
+typedef struct	s_ssl_md5
 {
 
 	uint32_t	table_g[64];
 	uint32_t	table_k[64];
 	uint32_t	table_s[64];
-	char		*padded_message; // malloced
-	size_t		padded_message_len; // should this be size_t?
+	char		*padded_message;
+	size_t		padded_message_len;
 	uint32_t	a0;
 	uint32_t	b0;
 	uint32_t	c0;
@@ -178,7 +164,6 @@ typedef struct s_ssl_md5
 
 typedef struct	s_ssl_sha256
 {
-//	uint32_t	table_k[64]; Have global table
 	uint32_t	table_w[64];
 	uint32_t	*padded_message;
 	uint32_t	padded_message_len;
@@ -206,18 +191,14 @@ typedef struct	s_ssl_sha256
 	uint32_t	maj;
 	uint32_t	temp1;
 	uint32_t	temp2;
-//	uint32_t	number_of_512bit_chunk;
 	uint32_t	chunk_of_512bit;
 
-}				t_ssl_sha256;
+}				t_sha256;
 
-
-typedef struct s_ssl_sha512
+typedef struct	s_ssl_sha512
 {
-//	uint64_t	table_k[80]; Have global table
 	uint64_t	table_w[128];
-//	uint64_t		table_w[640];
-	uint64_t	*padded_message; // malloc
+	uint64_t	*padded_message;
 	uint64_t	padded_message_len;
 	uint64_t	h0;
 	uint64_t	h1;
@@ -245,58 +226,70 @@ typedef struct s_ssl_sha512
 	uint64_t	temp2;
 	uint64_t	number_of_512bit_chunk;
 	uint64_t	chunk_of_1024bit;
-}				t_ssl_sha512;
+}				t_sha512;
 
-
-typedef struct		s_ssl
+typedef struct	s_ssl_flag
 {
-	t_ssl_flag		flag;
-	t_ssl_skip		skip;
-	t_ssl_md5		md5;
-	t_ssl_sha256	sha256;
-	t_ssl_sha512	sha512;
-	char			*message_digest_algo;
-	char			*message_to_digest;
-	char			*file_name;
-}				t_ssl;
+	bool		p : 1;
+	bool		s : 1;
+	bool		q : 1;
+	bool		r : 1;
+	bool		ft_stdin : 1;
+}				t_ssl_flag;
 
+typedef struct	s_ssl_skip
+{
+	bool		if_to_collect_flags : 1;
+	bool		mini_gnl_stdin_for_flag_p : 1;
+}				t_ssl_skip;
+
+typedef struct	s_ssl
+{
+	t_ssl_flag	flag;
+	t_ssl_skip	skip;
+	t_ssl_md5	md5;
+	t_sha256	sha256;
+	t_sha512	sha512;
+	char		*message_digest_algo;
+	char		*message_to_digest;
+	char		*file_name;
+}				t_ssl;
 
 /*
 ** Function Prototypes----------------------------------------------------------
 */
 
-
 /*
-** Forbidden functions----------------------------------------------------------
+** Forbidden function macros----------------------------------------------------
+** To ensure forbidden function was not used
 */
 
-//------------------------------------------------------------------------------
-# define FORBIDDEN(func) sorry_##func##_is_a_forbidden_function
-
-# undef strcpy
-# define strcpy(x,y) FORBIDDEN(strcpy)
-# undef strcat
-# define strcat(x,y) FORBIDDEN(strcat)
-# undef strncpy
-# define strncpy(x,y,n) FORBIDDEN(strncpy)
-# undef strncat
-# define strncat(x,y,n) FORBIDDEN(strncat)
-# undef bzero
-# define bzero(s, n) FORBIDDEN(strcpy)
-
-# undef sprintf
-# undef vsprintf
-# undef printf
-# ifdef HAVE_VARIADIC_MACROS
-# define sprintf(...) FORBIDDEN(sprintf)
-# define vsprintf(...) FORBIDDEN(vsprintf)
-# define printf(...) FORBIDDEN(printf)
-# else
-# define sprintf(buf,fmt,arg) FORBIDDEN(sprintf)
-# define vsprintf(buf,fmt,arg) FORBIDDEN(sprintf)
-# define printf(fmt, arg) FORBIDDEN(printf)
-# endif
-
-//------------------------------------------------------------------------------
+/*
+**# define FORBIDDEN(func) sorry_##func##_is_a_forbidden_function
+**
+**# undef strcpy
+**# define strcpy(x,y) FORBIDDEN(strcpy)
+**# undef strcat
+**# define strcat(x,y) FORBIDDEN(strcat)
+**# undef strncpy
+**# define strncpy(x,y,n) FORBIDDEN(strncpy)
+**# undef strncat
+**# define strncat(x,y,n) FORBIDDEN(strncat)
+**# undef bzero
+**# define bzero(s, n) FORBIDDEN(strcpy)
+**
+**# undef sprintf
+**# undef vsprintf
+**# undef printf
+**# ifdef HAVE_VARIADIC_MACROS
+**# define sprintf(...) FORBIDDEN(sprintf)
+**# define vsprintf(...) FORBIDDEN(vsprintf)
+**# define printf(...) FORBIDDEN(printf)
+**# else
+**# define sprintf(buf,fmt,arg) FORBIDDEN(sprintf)
+**# define vsprintf(buf,fmt,arg) FORBIDDEN(sprintf)
+**# define printf(fmt, arg) FORBIDDEN(printf)
+**# endif
+*/
 
 #endif

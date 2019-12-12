@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 19:23:08 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 20:02:04 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2460,10 +2460,6 @@ int main(int argc, char *argv[])
 //	ft_printf(BYELLOW"%u|\n"NC, argv[3]);
 //	ft_printf(BYELLOW"|%s|"NC, argv[4]);
 //	ft_printf(BYELLOW"%u|\n"NC, argv[4]);
-
-
-
-
 
 //	int fd;
 
