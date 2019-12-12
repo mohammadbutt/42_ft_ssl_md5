@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 22:28:57 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 22:40:03 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -602,23 +602,6 @@ void test_stored_string(t_ssl *ssl)
 }
 
 /*
-** print_error_messages takes a 2d array and if the file descriptor is -1, then
-** the error message is printed.
-** File desciptor will be -1 under 1 of 2 conditions:
-** 1. A file path is an invalid file path. "No such file or directory"
-** 2. A file has permission denied access. "Permission denied"
-*/
-
-void error_invalid_file_permission(t_ssl *ssl, int fd, char *argv)
-{
-	char *algo;
-
-	algo = ssl->message_digest_algo;
-	ft_printf(BRED"%s: %s: %s\n"NC, algo, argv, strerror(errno));
-	close(fd);
-}
-
-/*
 ** ft_update_md5_abcd initializes and updates values to be used in the while
 ** loop.
 */
@@ -1139,125 +1122,6 @@ void hash_message(t_ssl *ssl)
 	else if (ft_strcmp(algo, "sha512") == 0 || ft_strcmp(algo, "SHA512") == 0)
 		hash_message_sha512(ssl);
 }
-
-
-/*
-** print_error_message_dir prints error message for the directory
-** If a file path is a directory it will still have a valid file descriptor of
-** 1, but when the directory is opened with read, the return value of read will
-** be -1 if it is a directory. strerror and errno are used the print the error
-** message. "Is a directory"
-*/
-
-void error_message_dir(t_ssl *ssl, int fd, char *argv)
-{
-	char *algo;
-
-	algo = ssl->message_digest_algo;
-	ft_printf(BYELLOW"%s: %s: %s\n"NC, algo, argv, strerror(errno));
-	close(fd);
-}
-
-/*
-** error messages calls onto eror_invalid_file_permission and
-** error_message_dir functions.
-** At the end closes the file descriptor
-*/
-
-bool error_messages(t_ssl *ssl, int fd, char *argv)
-{
-	char temp_buff[2];
-	ssize_t return_of_read;
-
-	return_of_read = 0;
-	if(fd == -1)
-	{
-		error_invalid_file_permission(ssl, fd, argv);
-		return(true);
-	}
-	return_of_read = read(fd, temp_buff, 1);
-	if(return_of_read == -1)
-	{
-		error_message_dir(ssl, fd, argv);
-		return(true);
-	}
-	close(fd);
-	return(false);
-}
-
-/*
-** Traverses through a file and counts the number of characters in the file.
-** For example: will go through a file called alpha.txt, that has the following
-** content:
-** a
-** bc
-** def
-** calculate_buffer_length will return 6.
-** Return of calculate_buffer_length is used to allocate memory to read the file
-** in one go.
-*/
-
-/*
-int calculate_buffer_length(int fd, char *argv)
-{
-	char buffer;
-	int buffer_len;
-
-	buffer_len = 0;
-	fd = open(argv, O_RDONLY);
-	while(read(fd, &buffer, 1) > 0)
-		buffer_len++;
-	close(fd);
-	return(buffer_len);
-}
-*/
-/*
-** Function mini_gnl reads a file and stores the content/text of that file to be
-** used for hashing later.
-*/
-
-/*
-char *mini_gnl(int fd, char *argv)
-{
-	int buffer_len;
-	char *big_buffer;
-
-	buffer_len = calculate_buffer_length(fd, argv);
-	big_buffer = malloc(sizeof(char) * (buffer_len + 1));
-	if(big_buffer == NULL)
-		return("mini_gnl memory allocation failed\n");
-	fd = open(argv, O_RDONLY);
-	read(fd, big_buffer, buffer_len);
-	big_buffer[buffer_len] = '\0';
-	close(fd);
-	return(big_buffer);	
-}
-
-
-char *mini_gnl_stdin(void)
-{
-	char buffer[2];
-	char *temp;
-	char *new_string;
-	int i;
-	
-	i = 1;
-	new_string = malloc(sizeof(char) * (2));
-	if(new_string == NULL)
-		return("memory allocation failed in mini_gnl_stdin.\n");
-	new_string[0] = 0;
-	while((read(0, buffer, 1)) > 0)
-	{
-		buffer[i] = '\0';
-		temp = new_string;
-		new_string = ft_strjoin(temp, buffer);
-		free(temp);
-	}
-	return(new_string);
-}
-*/
-
-
 /*
 ** ssl_exit_illegal_option is used when the flag is not one of the valid flag
 ** options -p, -q, -r, or -s.

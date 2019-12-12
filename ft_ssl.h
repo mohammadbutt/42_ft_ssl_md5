@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 22:30:00 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 22:38:49 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,6 +298,13 @@ int				calculate_buffer_length(int fd, char *argv);
 char			*mini_gnl(int fd, char *argv);
 char			*mini_gnl_stdin(void);
 
+/*
+** ssl_error_messages.c---------------------------------------------------------
+*/
+
+void			error_invalid_file_permission(t_ssl *ssl, int fd, char *argv);
+void			error_message_dir(t_ssl *ssl, int fd, char *argv);
+bool			error_messages(t_ssl *ssl, int fd, char *argv);
 
 
 void ft_option_requires_argument(char *digest_method);
