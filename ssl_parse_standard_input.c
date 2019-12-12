@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 20:13:02 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 20:24:13 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 22:02:45 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,19 @@ void	if_control_d_exit_program(int return_of_read)
 {
 	if (return_of_read == 0)
 		exit(EXIT_SUCCESS);
+}
+
+bool	is_md_algorithm_valid(char *str)
+{
+	if (ft_strcmp(str, "md5") == 0 || ft_strcmp(str, "MD5") == 0)
+		return (true);
+	else if (ft_strcmp(str, "sha224") == 0 || ft_strcmp(str, "SHA224") == 0)
+		return (true);
+	else if (ft_strcmp(str, "sha256") == 0 || ft_strcmp(str, "SHA256") == 0)
+		return (true);
+	else if (ft_strcmp(str, "sha384") == 0 || ft_strcmp(str, "SHA384") == 0)
+		return (true);
+	else if (ft_strcmp(str, "sha512") == 0 || ft_strcmp(str, "SHA512") == 0)
+		return (true);
+	return (false);
 }
