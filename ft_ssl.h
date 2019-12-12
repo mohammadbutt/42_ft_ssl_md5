@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 14:08:22 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 14:12:28 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -347,8 +347,12 @@ void			compute_md5_table_s_0_to_31(uint32_t *num);
 void			compute_md5_table_s_32_to_63(uint32_t *num);
 void			compute_md5_table_s(uint32_t *num);
 
+/*
+** ssl_md5_helper.c-------------------------------------------------------------
+*/
 
-
+uint32_t		rotate_left_32bit(uint32_t value, uint32_t rotate_n_bits);
+void			ft_md5_print(t_ssl *ssl, char character);
 
 
 

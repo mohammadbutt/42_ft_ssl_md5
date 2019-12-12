@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 14:08:42 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 14:12:41 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -847,10 +847,13 @@ void swap_bits_to_fix_endian(t_ssl *ssl)
 }
 
 
+//--------------------------------------------------- Cat below
+
 /*
 ** rotate_left rotates x by n bits for md5
 */
 
+/*
 uint32_t rotate_left_32bit(uint32_t value, uint32_t rotate_n_bits)
 {
 	uint32_t new_value;
@@ -865,8 +868,4 @@ void ft_md5_print(t_ssl *ssl, char character)
 	ft_printf("%08x%08x%08x", ssl->md5.a0, ssl->md5.b0, ssl->md5.c0);
 	ft_printf("%08x%c", ssl->md5.d0, character);
 }
-
-
-
-//--------------------------------------------------- Cat below
-
+*/
