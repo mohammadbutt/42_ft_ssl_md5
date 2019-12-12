@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 22:48:42 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 13:36:22 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,10 +314,43 @@ void			ssl_exit_illegal_option(char c);
 void			ft_option_requires_argument(char *digest_method);
 void			ft_print_usage(char *buffer);
 
+/*
+** ssl_store_hash_free_message.c------------------------------------------------
+*/
+
+void			hash_message(t_ssl *ssl);
+void			store_hash_free_message(t_ssl *ssl, char *message_to_digest);
+
+/*
+** ssl_hash_message_md5.c-------------------------------------------------------
+*/
+
+void			ft_md5_init(t_ssl *ssl);
+void			ft_md5_padding(t_ssl *ssl);
+void			ft_md5_transformation(t_ssl *ssl);
+void			ft_md5_format_print(t_ssl *ssl);
+void			hash_message_md5(t_ssl *ssl);
 
 
 
 
+
+
+void    ft_add_md5_abcd_to_a0b0c0d0(t_ssl *ssl);
+uint32_t calculate_ssl_padding_32bit(uint32_t padding);
+void zero_three_variables(uint32_t *a, uint32_t *b, uint32_t *c);
+void compute_md5_table_g_k_s(t_ssl *ssl);
+void ft_update_md5_abcd(t_ssl *ssl);
+uint32_t md5_function_fghi(uint32_t i, uint32_t b, uint32_t c, uint32_t d);
+void swap_md5_adc_with_dcb(t_ssl *ssl);
+uint32_t rotate_left_32bit(uint32_t a, uint32_t b);
+void ft_md5_print(t_ssl *ssl, char c);
+void swap_bits_to_fix_endian(t_ssl *ssl);
+void hash_message_md5(t_ssl *ssl);
+void hash_message_sha224(t_ssl *ssl);
+void hash_message_sha256(t_ssl *ssl);
+void hash_message_sha384(t_ssl *ssl);
+void hash_message_sha512(t_ssl *ssl);
 void ft_option_requires_argument(char *digest_method);
 void ssl_exit_illegal_option(char c);
 void ft_initialize_ssl_flag(t_ssl *ssl);
