@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 22:01:57 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 22:20:29 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1253,32 +1253,6 @@ char *mini_gnl_stdin(void)
 	return(new_string);
 }
 
-bool is_ssl_flag_valid(char c)
-{
-	int i;
-
-	i = 0;
-	while(SSL_VALID_FLAG[i])
-	{
-		if(SSL_VALID_FLAG[i] == c)
-			return(true);
-		i++;
-	}
-	return(false);
-}
-
-void collect_ssl_flag(t_ssl *ssl, char c)
-{
-	if(c == 'p')
-		ssl->flag.p = true;
-	else if(c == 'q')
-		ssl->flag.q = true;
-	else if(c == 'r')
-		ssl->flag.r = true;
-	else if(c == 's')
-		ssl->flag.s = true;
-}
-
 /*
 ** ssl_exit_illegal_option is used when the flag is not one of the valid flag
 ** options -p, -q, -r, or -s.
@@ -1317,74 +1291,6 @@ void store_hash_free_message(t_ssl *ssl, char *message_to_digest)
 	free(ssl->message_to_digest);
 }
 
-
-void ft_ssl_collect_flags_process_p(t_ssl *ssl)
-{
-	char *stdin_message_to_digest;
-	char *empty_message_to_digest;
-	char temp[1];
-
-	ft_strcpy(temp, "");
-	empty_message_to_digest = NULL;
-	if(ssl->skip.mini_gnl_stdin_for_flag_p == false)
-	{
-		stdin_message_to_digest = mini_gnl_stdin();
-		store_hash_free_message(ssl, stdin_message_to_digest);
-		ssl->skip.mini_gnl_stdin_for_flag_p = true;
-	}
-	else if(ssl->skip.mini_gnl_stdin_for_flag_p == true)
-	{
-		empty_message_to_digest = ft_strdup("");
-		store_hash_free_message(ssl, empty_message_to_digest);
-	}
-}
-
-/*
-** ft_ssl_collect_flags_process_s works as following
-** ./ft_ssl md5 -s123
-** String to hash appears right after -s without a space.
-** Or if the -s flag is true but there are no arguments right after it.
-** ./ft_ssl md5 -s
-*/
-
-void ft_ssl_collect_flags_process_s(char *message, t_ssl *ssl, int j, int argc)
-{
-	char *message_to_digest;
-
-	if(ssl->flag.s == true && message[0] != '\0')
-	{
-		message_to_digest = ft_memalloc(ft_strlen(message) + 1);
-		ft_strcpy(message_to_digest, message);
-		store_hash_free_message(ssl, message_to_digest);
-		ssl->flag.s = false;
-	}
-	else if(ssl->flag.s == true && j + 1 == argc)
-		ft_option_requires_argument(ssl->message_digest_algo);
-}
-
-
-void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
-{
-	int i;
-
-	i = 1;
-	while(argv[i])
-	{
-		if(is_ssl_flag_valid(argv[i]) == true)
-		{
-			collect_ssl_flag(ssl, argv[i]);
-			if (ssl->flag.p == true)
-				ft_ssl_collect_flags_process_p(ssl);
-			if(ssl->flag.s == true)
-				break;
-		}
-		else if(is_ssl_flag_valid(argv[i]) == false)
-			ssl_exit_illegal_option(argv[i]);
-		i++;
-	}
-	ft_ssl_collect_flags_process_s(argv + i + 1, ssl, j, argc);
-}
-
 /*
 ** Function is_there_p_or_s is used in function ft_ssl_parse_qr.
 ** Because ft_ssl_parse_qr is supposed to only pint and hash a string if
@@ -1397,6 +1303,8 @@ void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc)
 ** Return Value: returns true if there is 'p' or 's'.
 ** Returns false if there is no 'p' or 's'
 */
+
+/*
 bool is_there_p_or_s(char *argv)
 {
 	int i;
@@ -1408,22 +1316,6 @@ bool is_there_p_or_s(char *argv)
 			return(true);
 		i++;
 	}
-	return(false);
-}
-/*
-bool is_md_algorithm_valid(char *str)
-{
-
-	if (ft_strcmp(str, "md5") == 0 || ft_strcmp(str, "MD5") == 0)
-		return(true);
-	else if (ft_strcmp(str, "sha224") == 0 || ft_strcmp(str, "SHA224") == 0)
-		return (true);
-	else if (ft_strcmp(str, "sha256") == 0 || ft_strcmp(str, "SHA256") == 0)
-		return (true);
-	else if (ft_strcmp(str, "sha384") == 0 || ft_strcmp(str, "SHA384") == 0)
-		return (true);
-	else if (ft_strcmp(str, "sha512") == 0 || ft_strcmp(str, "SHA512") == 0)
-		return (true);
 	return(false);
 }
 */

@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 20:13:02 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 22:02:45 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 22:20:47 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,32 @@ bool	is_md_algorithm_valid(char *str)
 		return (true);
 	else if (ft_strcmp(str, "sha512") == 0 || ft_strcmp(str, "SHA512") == 0)
 		return (true);
+	return (false);
+}
+
+/*
+** Function is_there_p_or_s is used in function ft_ssl_parse_qr.
+** Because ft_ssl_parse_qr is supposed to only pint and hash a string if
+** q or r are true, and both p and s are false.
+** Since functions ft_ssl_parse_qr and ft_ssl_parse_pqrs both rely on
+** ft_ssl_collect_flags to collect flags, it is helpful to have is_there_p_or_s,
+** so if 'p' or 's' are true then the pogram leaves ft_ssl_parse_qr to go to
+** ft_ssl_parse_pqrs.
+**
+** Return Value: returns true if there is 'p' or 's'.
+** Returns false if there is no 'p' or 's'
+*/
+
+bool	is_there_p_or_s(char *argv)
+{
+	int	i;
+
+	i = 1;
+	while (argv[i])
+	{
+		if (argv[i] == 'p' || argv[i] == 's')
+			return (true);
+		i++;
+	}
 	return (false);
 }
