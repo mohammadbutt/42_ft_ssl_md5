@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 14:22:13 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 14:51:44 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -364,9 +364,23 @@ void			swap_md5_adc_with_dcb(t_ssl *ssl);
 void			ft_add_md5_abcd_to_a0b0c0d0(t_ssl *ssl);
 void			swap_bits_to_fix_endian(t_ssl *ssl);
 
+/*
+** ssl_hash_message_sha256.c----------------------------------------------------
+*/
+
+void			ft_sha256_init(t_ssl *ssl);
+void			ft_sha256_padding(t_ssl *ssl);
+void			ft_sha256_transformation(t_ssl *ssl);
+void			hash_message_sha256(t_ssl *ssl);
 
 
 
+
+void    ft_sha256_process_512bit_chunk(t_ssl *ssl, uint32_t chunk);
+void                 ft_sha256_compression(t_ssl *ssl);
+void    ft_sha224_init(t_ssl *ssl);
+void    ft_sha256_print(t_ssl *ssl, char c);
+void    ft_sha256_format_print(t_ssl *ssl, char *str);
 void    zero_four_variables(uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d);
 uint32_t ft_swap_32bit(uint32_t value);
 double  ft_fabs(double num);
