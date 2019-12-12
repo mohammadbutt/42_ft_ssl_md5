@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 20:22:38 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 21:48:06 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,23 @@ char			*read_stdin_loop(char *message_digest_algorithm);
 void			handle_stdin(t_ssl *ssl);
 void			if_control_d_exit_program(int return_of_read);
 
+/*
+** ssl_parse_pqrs.c-------------------------------------------------------------
+*/
 
+void			ft_ssl_parse_qr(int argc, char **argv);
+void			ft_ssl_parse_pqrs_no_dash_adjust_flags(t_ssl *ssl);
+void			ft_ssl_parse_pqrs_no_dash(char **argv, t_ssl *ssl, int i);
+void			ft_ssl_parse_pqrs(int argc, char **argv);
+
+
+
+
+bool is_there_p_or_s(char *argv);
+void ft_initialize_ssl_flag(t_ssl *ssl);
+char *mini_gnl(int fd, char *argv);
+bool error_messages(t_ssl *ssl, int fd, char *argv);
+void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc);
 void handle_stdin(t_ssl *ssl);
 void ft_ssl_parsing(int argc, char **argv);
 bool is_md_algorithm_valid(char *str);

@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 20:58:05 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 21:40:41 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1443,6 +1443,7 @@ void ft_initialize_ssl_flag(t_ssl *ssl)
 	ft_bzero(&ssl->skip, sizeof(ssl->skip));
 }
 
+/*
 void ft_ssl_parse_qr(int argc, char **argv)
 {
 	t_ssl ssl;
@@ -1465,7 +1466,9 @@ void ft_ssl_parse_qr(int argc, char **argv)
 	message_to_digest = mini_gnl_stdin();
 	store_hash_free_message(&ssl, message_to_digest);
 }
+*/
 
+/*
 
 void ft_ssl_parse_pqrs_no_dash_adjust_flags(t_ssl *ssl)
 {
@@ -1474,7 +1477,9 @@ void ft_ssl_parse_pqrs_no_dash_adjust_flags(t_ssl *ssl)
 	ssl->flag.s = false;
 	ssl->flag.p = false;
 }
+*/
 
+/*
 void ft_ssl_parse_pqrs_no_dash(char **argv, t_ssl *ssl, int i)
 {
 	char *message_to_digest;
@@ -1500,12 +1505,15 @@ void ft_ssl_parse_pqrs_no_dash(char **argv, t_ssl *ssl, int i)
 	}
 	ft_ssl_parse_pqrs_no_dash_adjust_flags(ssl);
 }
+*/
+
 
 /*
-** ssl.skip_if is false as long as 's' or 'p' flag appear.
-** If in an argument 's' or 'p' flag dont appear than ssl.skip_if is enabled and
-** set to true, so flags are no more collected.
+** ssl.skip.if_to_collect_flags is false as long as 's' or 'p' flag appear.
+** If 's' or 'p' flag dont appear in argument then ssl.skip.if_to_collect_flag
+** is enabled and set to true, so flags are not collected anymore.
 */
+/*
 void ft_ssl_parse_pqrs(int argc, char **argv)
 {
 	t_ssl ssl;
@@ -1554,3 +1562,5 @@ void ft_ssl_parsing(int argc, char **argv)
 		ft_ssl_parse_pqrs(argc, argv);
 	}
 }
+*/
+
