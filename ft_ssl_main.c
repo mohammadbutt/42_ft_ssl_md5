@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 22:20:29 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 22:28:57 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1193,8 +1193,11 @@ bool error_messages(t_ssl *ssl, int fd, char *argv)
 ** bc
 ** def
 ** calculate_buffer_length will return 6.
+** Return of calculate_buffer_length is used to allocate memory to read the file
+** in one go.
 */
 
+/*
 int calculate_buffer_length(int fd, char *argv)
 {
 	char buffer;
@@ -1207,13 +1210,13 @@ int calculate_buffer_length(int fd, char *argv)
 	close(fd);
 	return(buffer_len);
 }
-
+*/
 /*
 ** Function mini_gnl reads a file and stores the content/text of that file to be
 ** used for hashing later.
 */
 
-
+/*
 char *mini_gnl(int fd, char *argv)
 {
 	int buffer_len;
@@ -1252,6 +1255,8 @@ char *mini_gnl_stdin(void)
 	}
 	return(new_string);
 }
+*/
+
 
 /*
 ** ssl_exit_illegal_option is used when the flag is not one of the valid flag
@@ -1291,40 +1296,6 @@ void store_hash_free_message(t_ssl *ssl, char *message_to_digest)
 	free(ssl->message_to_digest);
 }
 
-/*
-** Function is_there_p_or_s is used in function ft_ssl_parse_qr.
-** Because ft_ssl_parse_qr is supposed to only pint and hash a string if
-** q or r are true, and both p and s are false.
-** Since functions ft_ssl_parse_qr and ft_ssl_parse_pqrs both rely on
-** ft_ssl_collect_flags to collect flags, it is helpful to have is_there_p_or_s,
-** so if 'p' or 's' are true then the pogram leaves ft_ssl_parse_qr to go to
-** ft_ssl_parse_pqrs.
-**
-** Return Value: returns true if there is 'p' or 's'.
-** Returns false if there is no 'p' or 's'
-*/
-
-/*
-bool is_there_p_or_s(char *argv)
-{
-	int i;
-
-	i = 1;
-	while(argv[i])
-	{
-		if(argv[i] == 'p' || argv[i] == 's')
-			return(true);
-		i++;
-	}
-	return(false);
-}
-*/
-
-/*
-** flag.p and flag.s are set equal to -1 because if -s or -p never appear in
-** any of the arguments, but -q or -r are present then the program should be
-** able to enter the standard input/stdin mode to read from stream.
-*/
 void ft_print_usage(char *buffer)
 {
 	ft_printf("ft_ssl:Error: '%s' is an invalid command.\n\n", buffer);

@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 22:20:16 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 22:30:00 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,17 +290,23 @@ void			ft_ssl_collect_flags_process_s(char *message, t_ssl *ssl,int j,
 				int argc);
 void			ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc);
 
+/*
+** ssl_get_next_line.c----------------------------------------------------------
+*/
+
+int				calculate_buffer_length(int fd, char *argv);
+char			*mini_gnl(int fd, char *argv);
+char			*mini_gnl_stdin(void);
+
 
 
 void ft_option_requires_argument(char *digest_method);
 void ssl_exit_illegal_option(char c);
 void ft_initialize_ssl_flag(t_ssl *ssl);
-char *mini_gnl(int fd, char *argv);
 bool error_messages(t_ssl *ssl, int fd, char *argv);
 void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc);
 void handle_stdin(t_ssl *ssl);
 void ft_print_usage(char *buffer);
-char *mini_gnl_stdin(void);
 void store_hash_free_message(t_ssl *ssl, char *message_to_digest);
 
 /*
