@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 18:44:36 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 19:21:59 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 #include <string.h>
 #include <errno.h>
 #include <math.h>
-
 #include <stdio.h>
+
 /*
 ** Notes about headers that are included:
 ** #include <fcntl.h> 	to access open(2).
@@ -29,9 +29,6 @@
 ** #include <math.h>	to access sin(3).
 */
 
-/*
-*** These Macros will be deleted later. Just for testing
-*/
 
 /*
 ** Macros-----------------------------------------------------------------------
@@ -45,28 +42,9 @@
 # define FT_64_BIT 8
 
 /*
-** Structs----------------------------------------------------------------------
+** Tables-----------------------------------------------------------------------
 */
 
-/*
-** g_md5_table_m hex values.
-** 0 = 0x0, 1 = 0x1, 2 = 0x2, 3 = 0x3,
-** 4 = 0x4, 5 = 0x5, 6 = 0x6, 7 = 0x7,
-** 8 = 0x8, 9 = 0x9, 10 = 0xa, 11 = 0xb,
-** 12 = 0xc, 13 = 0xd, 14 = 0xe, 15 = 0xf
-** Also have a compute_md5_table_g
-**
-** Will not use g_md5_table_g[64], but might keep it for reference only
-*/
-/*
-static uint32_t g_md5_table_g[64] =
-{
-	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-	1, 6, 11, 0, 5, 10, 15, 4, 9, 14, 3, 8, 13, 2, 7, 12,
-	5, 8, 11, 14, 1, 4, 7, 10, 13, 0, 3, 6, 9, 12, 15, 2,
-	0, 7, 14, 5, 12, 3, 10, 1, 8, 15, 6, 13, 4, 11, 2, 9
-};
-*/
 /*
 ** Table from wiki:
 ** en.wikipedia.org/wiki/SHA-2#Pseudocode
@@ -134,7 +112,6 @@ typedef struct	s_ssl_flag
 	bool		q : 1;
 	bool		r : 1;
 	bool		ft_stdin : 1;
-//	bool		file_name : 1;
 }				t_ssl_flag;
 
 typedef struct	s_ssl_skip
@@ -143,31 +120,7 @@ typedef struct	s_ssl_skip
 	bool		mini_gnl_stdin_for_flag_p : 1;
 }				t_ssl_skip;
 
-/*
-typedef struct	s_ssl_context
-{
-	uint32_t	state[4];
-	uint32_t	count[2];
-	uint32_t	a;
-	uint32_t	b;
-	uint32_t	c;
-	uint32_t	d;
-}				t_ssl_context;
-*/
 
-/*
-typedef struct	s_ssl_state
-{
-	uint32_t	a0;
-	uint32_t	b0;
-	uint32_t	c0;
-	uint32_t	d0;
-	uint32_t	a;
-	uint32_t	b;
-	uint32_t	c;
-	uint32_t	d;
-}				t_ssl_state;
-*/
 /*
 ** Values a0, b0, c0, d0 and A, B, C, D are mapped based on wiki page of md5
 ** 
@@ -304,22 +257,46 @@ typedef struct		s_ssl
 	t_ssl_sha512	sha512;
 	char			*message_digest_algo;
 	char			*message_to_digest;
-//	int				message_to_digest_len;
 	char			*file_name;
-
-//	t_ssl_state		state;
-//	t_ssl_context	context;
-//	bool		skip_if_to_collect_flags;
-//	bool		skip_mini_gnl_stdin_for_flag_p;
-//	int			count_of_flag_p;
-//	char		*md5_padded_message; // malloced
-//	uint32_t	md5_padded_message_len;
-//	uint32_t	md5_table
 }				t_ssl;
 
 
 /*
 ** Function Prototypes----------------------------------------------------------
 */
+
+
+/*
+** Forbidden functions----------------------------------------------------------
+*/
+
+//------------------------------------------------------------------------------
+# define FORBIDDEN(func) sorry_##func##_is_a_forbidden_function
+
+# undef strcpy
+# define strcpy(x,y) FORBIDDEN(strcpy)
+# undef strcat
+# define strcat(x,y) FORBIDDEN(strcat)
+# undef strncpy
+# define strncpy(x,y,n) FORBIDDEN(strncpy)
+# undef strncat
+# define strncat(x,y,n) FORBIDDEN(strncat)
+# undef bzero
+# define bzero(s, n) FORBIDDEN(strcpy)
+
+# undef sprintf
+# undef vsprintf
+# undef printf
+# ifdef HAVE_VARIADIC_MACROS
+# define sprintf(...) FORBIDDEN(sprintf)
+# define vsprintf(...) FORBIDDEN(vsprintf)
+# define printf(...) FORBIDDEN(printf)
+# else
+# define sprintf(buf,fmt,arg) FORBIDDEN(sprintf)
+# define vsprintf(buf,fmt,arg) FORBIDDEN(sprintf)
+# define printf(fmt, arg) FORBIDDEN(printf)
+# endif
+
+//------------------------------------------------------------------------------
 
 #endif

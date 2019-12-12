@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/09 15:50:24 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/08 21:57:34 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 19:41:10 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,16 +165,16 @@ char				*ft_strrev(char *str);
 ** ft_memcpy.c------------------------------------------------------------------
 */
 
-void *ft_memcpy(void *original_dest, const void *original_source, size_t n);
+void				*ft_memcpy(void *dest0, const void *source0, size_t n);
 
 /*
 ** ft_binary.c------------------------------------------------------------------
 */
-char	*ft_binary(uint_fast64_t value, int base, char str[]);
+char				*ft_binary(uint_fast64_t value, int base, char str[]);
 
 /*
 ** ft_memalloc.c----------------------------------------------------------------
 */
-void	*ft_memalloc(size_t size);
+void				*ft_memalloc(size_t size);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 21:10:01 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/22 21:16:22 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 19:40:16 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** Function ft_swap, swaps the values of a and b.
 */
 
-void ft_swap(char *a, char *b)
+void	ft_swap(char *a, char *b)
 {
 	char temp;
 

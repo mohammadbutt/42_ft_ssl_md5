@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 21:09:16 by mbutt             #+#    #+#             */
-/*   Updated: 2019/11/22 21:18:02 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 19:29:44 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 ** function ft_strrev takes a string and reverses it in place
 */
 
-char *ft_strrev(char *str)
+char	*ft_strrev(char *str)
 {
-	int i;
-	int len;
+	int	i;
+	int	len;
 
 	i = 0;
 	len = ft_strlen(str) - 1;

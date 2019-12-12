@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/23 20:57:42 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/02 17:56:46 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 19:29:11 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ char	*ft_strcpy_const(char *dest, const char *source)
 	dest[j] = '\0';
 	return (dest);
 }
-
 
 char	*ft_strncpy(char *dest, char *source, int len)
 {
