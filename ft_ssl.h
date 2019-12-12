@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 20:02:07 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 20:22:38 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,22 @@ typedef struct	s_ssl
 /*
 ** Function Prototypes----------------------------------------------------------
 */
+
+/*
+** ssl_parse_standard_input.c---------------------------------------------------
+*/
+
+char			*read_stdin_loop(char *message_digest_algorithm);
+void			handle_stdin(t_ssl *ssl);
+void			if_control_d_exit_program(int return_of_read);
+
+
+void handle_stdin(t_ssl *ssl);
+void ft_ssl_parsing(int argc, char **argv);
+bool is_md_algorithm_valid(char *str);
+void ft_print_usage(char *buffer);
+char *mini_gnl_stdin(void);
+void store_hash_free_message(t_ssl *ssl, char *message_to_digest);
 
 /*
 ** Forbidden function macros----------------------------------------------------

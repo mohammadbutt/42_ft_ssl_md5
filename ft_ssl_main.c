@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 20:02:04 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/11 20:23:53 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2286,16 +2286,7 @@ void ft_ssl_parsing(int argc, char **argv)
 	t_ssl ssl;
 	char *message_to_digest;
 	
-//	ssl.md5_padded_message_len = 0;
-//	set_md5_to_zero(&ssl);
-//	set_ssl_to_zero(&ssl);
 	ft_bzero(&ssl, sizeof(t_ssl));
-//	ssl.flag.pqrs = true;
-//	ssl.flag.ft_stdin = false;
-//	ft_printf("p|%d|\n", ssl.flag.p);
-//	ft_printf("q|%d|\n", ssl.flag.q);
-//	ft_printf("r|%d|\n", ssl.flag.r);
-//	ft_printf("s|%d|\n", ssl.flag.s);
 	if(is_md_algorithm_valid(argv[1]) == false)
 	{
 		ft_print_usage(argv[1]);
@@ -2307,42 +2298,12 @@ void ft_ssl_parsing(int argc, char **argv)
 		ssl.message_digest_algo = argv[1];
 		ssl.flag.ft_stdin = true;
 		store_hash_free_message(&ssl, message_to_digest);
-//		ssl.message_to_digest = message_to_digest;
-//		hash_message(&ssl);//, argv[1], message_to_digest);
-//		free(message_to_digest);
 	}
 	else
 	{
 		ft_ssl_parse_qr(argc, argv);
 		ft_ssl_parse_pqrs(argc, argv);
 	}
-/*
-	t_ssl ssl;
-	char *full_str;
-	int i;
-	int fd;
-
-	i = 1;
-	ft_initialize_ssl_flag(&ssl);
-	ft_printf("|%d|\n", argc);
-//	ft_ssl_parsing_for_qr(argc, argv);
-	while(i < argc)
-	{
-		fd = open(argv[i], O_RDONLY);
-		if(argv[i][0] == '-' && argv[i][1] != '\0')
-		{
-			ft_ssl_collect_flags(argv[i], &ssl);
-		}
-		else if(error_messages(fd, argv[i]) == false)
-		{
-			full_str = mini_gnl(fd, argv[i]);
-			printf("ft_ssl (%s) = ",argv[i]);
-			free(full_str);
-		}	
-		(fd) && (close(fd));
-		i++;
-	}
-*/
 }
 
 
@@ -2354,12 +2315,13 @@ void ft_ssl_parsing(int argc, char **argv)
 ** program, just like how the original openssl does.
 */
 
+/*
 void if_control_d_exit_program(int return_of_read)
 {
 	if(return_of_read == 0)
 		exit(EXIT_SUCCESS);
 }
-
+*/
 /*
 ** read_stdin_loop reads the input from user if the only argument is ./ft_ssl.
 **
@@ -2373,7 +2335,7 @@ void if_control_d_exit_program(int return_of_read)
 ** 2. If digest message string is one of "md5", "sha224", "sha256", "sha384", or
 ** "sha512". And program continues to do the rest of the work.
 */
-
+/*
 char *read_stdin_loop(char *message_digest_algorithm)
 {
 	int return_of_read;
@@ -2388,106 +2350,24 @@ char *read_stdin_loop(char *message_digest_algorithm)
 		{
 			message_digest_algorithm[return_of_read - 1] = '\0';
 			if(is_md_algorithm_valid(message_digest_algorithm) == true)
-			{
 				return(message_digest_algorithm);
-//				break;
-			}
 			else
 				ft_print_usage(message_digest_algorithm);
 		}
 		if_control_d_exit_program(return_of_read);
-//		if(return_of_read == 0)
-//			exit(EXIT_SUCCESS);
 	}
 }
 
-//void handle_stdin(void)
 void handle_stdin(t_ssl *ssl)
 {
 	char message_digest_algo[8];
 	char *message_to_digest;
 	
-//	ssl->md5.padded_message_len = 0;
-//	set_md5_to_zero(ssl);
-//	set_ssl_to_zero(ssl);	
 	ft_bzero(ssl, sizeof(t_ssl));
 	read_stdin_loop(message_digest_algo);
 	message_to_digest = mini_gnl_stdin();
-//	ssl->flag.pqrs = false;
 	ssl->flag.ft_stdin = true;
 	ssl->message_digest_algo = message_digest_algo;
 	store_hash_free_message(ssl, message_to_digest);
-//	ssl->message_to_digest = message_to_digest;
-//	hash_message(ssl);//message_digest_algo, message_to_digest);
-//	free(message_to_digest);
-
-//	char *md_command;
-//	ft_printf("%s", message_digest_buffer);
-//	ft_printf("ft_SSL> ");
-//	md_command = is_md_command_valid();
-//	check_if // -1 -> strcmp != 0 and usage, 0i, 1
-//	string = mini_gnl_stdin();
-
-//	system(string);
-//	if(ft_strcmp(string, "md5") == 0)
-//		printf("%s", string); ///////////////////
-//	free(string);       ///////////////
-//	char buffer;
-
-//	while(read(0, &buffer, 1) > 0)
-//		ft_printf("%c", buffer);
-
-//	str = mini_gnl(0, argv[1]);
-	
-//	printf("%s", str);
-//	while(1)
-//	{
-//		str = argv[1];
-//	}
-//	printf("%s", str);
 }
-
-int main(int argc, char *argv[])
-{
-	t_ssl ssl;
-
-	ft_bzero(&ssl, sizeof(t_ssl));
-//	ft_printf(BYELLOW"|%s|"NC, argv[1]);
-//	ft_printf(BYELLOW"%u|\n"NC, argv[1]);
-//	ft_printf(BYELLOW"|%s|"NC, argv[2]);
-//	ft_printf(BYELLOW"%u|\n"NC, argv[2]);
-//	ft_printf(BYELLOW"|%s|"NC, argv[3]);
-//	ft_printf(BYELLOW"%u|\n"NC, argv[3]);
-//	ft_printf(BYELLOW"|%s|"NC, argv[4]);
-//	ft_printf(BYELLOW"%u|\n"NC, argv[4]);
-
-//	int fd;
-
-//	fd = open(argv[1], O_RDONLY);
-
-	if(argc == 1)
-		handle_stdin(&ssl);
-	else if(argc > 1)
-		ft_ssl_parsing(argc, argv);
-	
-//	while(1);
-//	system("leaks ft_ssl");
-//	while(1);
-
-/*
-	if(argc >= 1)
-	{
-		if(fd == -1)
-			ft_printf("%s\n", strerror(errno));
-		else if(fd == 3)
-			ft_printf("%s\n", strerror(errno));
-		printf("%s\n", strerror(fd));
-		ft_printf("file desciptor:|%d|\n", fd);
-	}
 */
-//	num = argc;
-//	ft_printf("Number of arguments:|%d|\n", num);
-//	ft_printf("%s", argv[0]);
-
-//	ft_printf("|This is just a test for %*d_ft_ssl|\n", 0, 42);
-}
