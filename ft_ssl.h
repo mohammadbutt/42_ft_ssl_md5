@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 17:58:43 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 18:26:38 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -385,12 +385,19 @@ void			ft_sha256_process_512bit_chunk(t_ssl *ssl, uint32_t chunk);
 void			ft_sha256_compression(t_ssl *ssl);
 
 /*
-** ssl_sha256_print_and_helper.c------------------------------------------------
+** ssl_sha256_helper.c----------------------------------------------------------
 */
 
 uint32_t		rotate_right_32bit(uint32_t value, uint32_t rotate_n_bits);
 uint32_t		shift_right_32bit(uint32_t value, uint32_t shift_n_bits);
 uint32_t		ft_swap_32bit(uint32_t value);
+void			ft_bzero_num_array_32bit(uint32_t *num, uint32_t elements);
+uint32_t		calculate_ssl_padding_32bit(uint32_t padding);
+
+/*
+** ssl_sha256_print.c----------------------------------------------------------
+*/
+
 void			ft_sha256_print(t_ssl *ssl, char c);
 void			ft_sha256_format_print(t_ssl *ssl, char *algo_name);
 
@@ -401,10 +408,24 @@ void			ft_sha256_format_print(t_ssl *ssl, char *algo_name);
 void			ft_sha224_init(t_ssl *ssl);
 void			hash_message_sha224(t_ssl *ssl);
 
+/*
+** ssl_hash_message_sha512.c----------------------------------------------------
+*/
+
+void			ft_sha512_init(t_ssl *ssl);
+void			ft_sha512_padding(t_ssl *ssl);
+void			ft_sha512_transformation(t_ssl *ssl);
+void			hash_message_sha512(t_ssl *ssl);
 
 
 
 
+void                 ft_sha512_compression(t_ssl *ssl);
+void                 ft_sha512_print(t_ssl *ssl, char c);
+void	                ft_sha512_format_print(t_ssl *ssl, char *str);
+uint64_t ft_swap_64bit(uint64_t value);
+void    ft_sha512_process_1024bit_chunk(t_ssl *ssl, uint64_t chunk);
+uint64_t		calculate_ssl_padding_64bit(uint64_t padding);
 void       ft_bzero_num_array_32bit(uint32_t *num, uint32_t n);
 uint32_t rotate_right_32bit(uint32_t value, uint32_t rotate_by);
 uint32_t shift_right_32bit(uint32_t value, uint32_t rotate_by);
