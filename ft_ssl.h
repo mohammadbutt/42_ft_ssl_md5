@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 19:01:06 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 19:13:28 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,7 @@ void			ft_ssl_parsing(int argc, char **argv);
 bool			is_ssl_flag_valid(char c);
 void			collect_ssl_flag(t_ssl *ssl, char c);
 void			ft_ssl_collect_flags_process_p(t_ssl *ssl);
-void			ft_ssl_collect_flags_process_s(char *message, t_ssl *ssl,int j,
+void			ft_ssl_collect_flags_process_s(char *message, t_ssl *ssl, int j,
 				int argc);
 void			ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc);
 
@@ -451,53 +451,16 @@ void			ft_sha512_format_print(t_ssl *ssl, char *algo_name);
 void			ft_sha384_init(t_ssl *ssl);
 void			hash_message_sha384(t_ssl *ssl);
 
+/*
+** ft_math_and_zero_functions.c-------------------------------------------------
+*/
 
-uint64_t shift_right_64bit(uint64_t value, uint64_t rotate_by);
-uint64_t rotate_right_64bit(uint64_t value, uint64_t rotate_by);
-void       ft_bzero_num_array_64bit(uint64_t *num, uint64_t n);
-void                 ft_sha512_compression(t_ssl *ssl);
-void                 ft_sha512_print(t_ssl *ssl, char c);
-void	                ft_sha512_format_print(t_ssl *ssl, char *str);
-uint64_t ft_swap_64bit(uint64_t value);
-void    ft_sha512_process_1024bit_chunk(t_ssl *ssl, uint64_t chunk);
-uint64_t		calculate_ssl_padding_64bit(uint64_t padding);
-void       ft_bzero_num_array_32bit(uint32_t *num, uint32_t n);
-uint32_t rotate_right_32bit(uint32_t value, uint32_t rotate_by);
-uint32_t shift_right_32bit(uint32_t value, uint32_t rotate_by);
-
-void    ft_sha256_process_512bit_chunk(t_ssl *ssl, uint32_t chunk);
-void                 ft_sha256_compression(t_ssl *ssl);
-void    ft_sha224_init(t_ssl *ssl);
-void    ft_sha256_print(t_ssl *ssl, char c);
-void    ft_sha256_format_print(t_ssl *ssl, char *str);
-void    zero_four_variables(uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d);
-uint32_t ft_swap_32bit(uint32_t value);
-double  ft_fabs(double num);
-uint64_t ft_pow(int base, int exponent);
-void    compute_md5_table_s(uint32_t *num);
-void    ft_add_md5_abcd_to_a0b0c0d0(t_ssl *ssl);
-uint32_t calculate_ssl_padding_32bit(uint32_t padding);
-void zero_three_variables(uint32_t *a, uint32_t *b, uint32_t *c);
-void compute_md5_table_g_k_s(t_ssl *ssl);
-void ft_update_md5_abcd(t_ssl *ssl);
-uint32_t md5_function_fghi(uint32_t i, uint32_t b, uint32_t c, uint32_t d);
-void swap_md5_adc_with_dcb(t_ssl *ssl);
-uint32_t rotate_left_32bit(uint32_t a, uint32_t b);
-void ft_md5_print(t_ssl *ssl, char c);
-void swap_bits_to_fix_endian(t_ssl *ssl);
-void hash_message_md5(t_ssl *ssl);
-void hash_message_sha224(t_ssl *ssl);
-void hash_message_sha256(t_ssl *ssl);
-void hash_message_sha384(t_ssl *ssl);
-void hash_message_sha512(t_ssl *ssl);
-void ft_option_requires_argument(char *digest_method);
-void ssl_exit_illegal_option(char c);
-void ft_initialize_ssl_flag(t_ssl *ssl);
-bool error_messages(t_ssl *ssl, int fd, char *argv);
-void ft_ssl_collect_flags(char *argv, t_ssl *ssl, int j, int argc);
-void handle_stdin(t_ssl *ssl);
-void ft_print_usage(char *buffer);
-void store_hash_free_message(t_ssl *ssl, char *message_to_digest);
+void			ft_initialize_ssl_flag(t_ssl *ssl);
+void			zero_four_variables(uint32_t *a, uint32_t *b, uint32_t *c,
+				uint32_t *d);
+void			zero_three_variables(uint32_t *a, uint32_t *b, uint32_t *c);
+uint64_t		ft_pow(int base, int exponent);
+double			ft_fabs(double num);
 
 /*
 ** Forbidden function macros----------------------------------------------------
