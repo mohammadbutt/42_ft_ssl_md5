@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 18:26:38 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 18:41:07 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -417,9 +417,23 @@ void			ft_sha512_padding(t_ssl *ssl);
 void			ft_sha512_transformation(t_ssl *ssl);
 void			hash_message_sha512(t_ssl *ssl);
 
+/*
+** ssl_sha512_core.c
+*/
+
+void			ft_update_sha512_abcdefgh(t_ssl *ssl);
+void			ft_add_sha512_abcdefgh_to_h_values(t_ssl *ssl);
+void			ft_sha512_swap_abcdefgh(t_ssl *ssl);
+void			ft_sha512_process_1024bit_chunk(t_ssl *ssl, uint64_t chunk);
+void			ft_sha512_compression(t_ssl *ssl);
 
 
 
+
+
+uint64_t shift_right_64bit(uint64_t value, uint64_t rotate_by);
+uint64_t rotate_right_64bit(uint64_t value, uint64_t rotate_by);
+void       ft_bzero_num_array_64bit(uint64_t *num, uint64_t n);
 void                 ft_sha512_compression(t_ssl *ssl);
 void                 ft_sha512_print(t_ssl *ssl, char c);
 void	                ft_sha512_format_print(t_ssl *ssl, char *str);
