@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 19:19:19 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 19:44:20 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -463,9 +463,19 @@ uint64_t		ft_pow(int base, int exponent);
 double			ft_fabs(double num);
 
 /*
-** dispatch_table
+** dispatch_table---------------------------------------------------------------
 */
 
+typedef void	t_ssl_dispatch(t_ssl *ssl);
+
+static t_ssl_dispatch *g_ssl_dispatch_table[] =
+{
+	hash_message_md5,
+	hash_message_sha224,
+	hash_message_sha256,
+	hash_message_sha384,
+	hash_message_sha512
+};
 
 /*
 ** Forbidden function macros----------------------------------------------------
