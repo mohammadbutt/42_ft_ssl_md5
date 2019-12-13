@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 16:18:06 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 17:53:57 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 17:59:00 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -390,9 +390,8 @@ void ft_initialize_ssl_flag(t_ssl *ssl)
 	ft_bzero(&ssl->skip, sizeof(ssl->skip));
 }
 
-
 //------------------------------------------------- Cat below
-
+/*
 void hash_message_sha224(t_ssl *ssl)
 {
 	ft_bzero(&ssl->sha256, sizeof(ssl->sha256));
@@ -405,7 +404,6 @@ void hash_message_sha224(t_ssl *ssl)
 		ft_sha256_format_print(ssl, "SHA224");
 }
 
-
 void ft_sha224_init(t_ssl *ssl)
 {
 	ssl->sha256.h0 = 0xc1059ed8;
@@ -417,7 +415,7 @@ void ft_sha224_init(t_ssl *ssl)
 	ssl->sha256.h6 = 0x64f98fa7;
 	ssl->sha256.h7 = 0xbefa4fa4;
 }
-
+*/
 
 //--------------------------------------------------- Cat below
 // ------------------------------------------------------------ Cat below
