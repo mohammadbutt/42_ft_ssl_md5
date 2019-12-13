@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 14:15:34 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 14:23:34 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/13 14:27:20 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ uint32_t	md5_function_fghi(uint32_t j, uint32_t b, uint32_t c, uint32_t d)
 	uint32_t	i;
 
 	zero_four_variables(&f, &g, &h, &i);
-	if (j >= 0 && j <= 15)
+	if ((j == 0) || (j > 0 && j <= 15))
 		return (f = (b & c) | ((~b) & d));
 	else if (j >= 16 && j <= 31)
 		return (g = (d & b) | ((~d) & c));

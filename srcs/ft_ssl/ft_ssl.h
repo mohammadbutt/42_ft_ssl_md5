@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 19:49:46 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/13 15:25:01 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -466,15 +466,34 @@ double			ft_fabs(double num);
 ** dispatch_table---------------------------------------------------------------
 */
 
-typedef void	t_ssl_dispatch(t_ssl *ssl);
-
-static t_ssl_dispatch *g_ssl_dispatch_table[] =
+typedef struct	s_ssl_dispatch
 {
-	hash_message_md5,
-	hash_message_sha224,
-	hash_message_sha256,
-	hash_message_sha384,
-	hash_message_sha512
+	char		*algo;
+	void		(*func)(t_ssl *ssl);
+}				t_ssl_dispatch;
+
+/*
+** It is perfectly ok to prototype the dispatch table as following:
+** t_ssl_dispatch	g_ssl_dispatch_table[11] =
+** which is without mentioning "static", but if it is prototyped without
+** the word "static", then the dispatch function will have to be placed in the
+** same file where the dispatch table is being called, in this case
+** ssl_store_hash_free_message.c
+*/
+
+static t_ssl_dispatch	g_ssl_dispatch_table[11] =
+{
+	{"md5", &hash_message_md5},
+	{"MD5", &hash_message_md5},
+	{"sha224", &hash_message_sha224},
+	{"SHA224", &hash_message_sha224},
+	{"sha256", &hash_message_sha256},
+	{"SHA256", &hash_message_sha256},
+	{"sha384", &hash_message_sha384},
+	{"SHA384", &hash_message_sha384},
+	{"sha512", &hash_message_sha512},
+	{"SHA512", &hash_message_sha512},
+	{"NULL", NULL},
 };
 
 /*
