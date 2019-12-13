@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 18:49:55 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 18:55:15 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -437,8 +437,12 @@ uint64_t		ft_swap_64bit(uint64_t value);
 void			ft_bzero_num_array_64bit(uint64_t *num, uint64_t size);
 uint64_t		calculate_ssl_padding_64bit(uint64_t padding);
 
+/*
+** ssl_sha512_print.c-----------------------------------------------------------
+*/
 
-
+void			ft_sha512_print(t_ssl *ssl, char c);
+void			ft_sha512_format_print(t_ssl *ssl, char *algo_name);
 
 
 
