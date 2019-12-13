@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 14:51:44 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 16:05:09 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -373,8 +373,22 @@ void			ft_sha256_padding(t_ssl *ssl);
 void			ft_sha256_transformation(t_ssl *ssl);
 void			hash_message_sha256(t_ssl *ssl);
 
+/*
+** ssl_sha256_core.c------------------------------------------------------------
+*/
+
+void			ft_update_sha256_abcdefgh(t_ssl *ssl);
+void			ft_add_sha256_abcdefgh_to_h_values(t_ssl *ssl);
+void			ft_sha256_swap_abcdefgh(t_ssl *ssl);
+void			ft_sha256_process_512bit_chunk(t_ssl *ssl, uint32_t chunk);
+void			ft_sha256_compression(t_ssl *ssl);
 
 
+
+
+void       ft_bzero_num_array_32bit(uint32_t *num, uint32_t n);
+uint32_t rotate_right_32bit(uint32_t value, uint32_t rotate_by);
+uint32_t shift_right_32bit(uint32_t value, uint32_t rotate_by);
 
 void    ft_sha256_process_512bit_chunk(t_ssl *ssl, uint32_t chunk);
 void                 ft_sha256_compression(t_ssl *ssl);
