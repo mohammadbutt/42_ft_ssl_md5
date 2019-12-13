@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 19:13:28 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 19:19:19 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -428,7 +428,7 @@ void			ft_sha512_process_1024bit_chunk(t_ssl *ssl, uint64_t chunk);
 void			ft_sha512_compression(t_ssl *ssl);
 
 /*
-** ssl_sha256_helper.c----------------------------------------------------------
+** ssl_sha512_helper.c----------------------------------------------------------
 */
 
 uint64_t		rotate_right_64bit(uint64_t value, uint64_t rotate_n_bits);
@@ -461,6 +461,11 @@ void			zero_four_variables(uint32_t *a, uint32_t *b, uint32_t *c,
 void			zero_three_variables(uint32_t *a, uint32_t *b, uint32_t *c);
 uint64_t		ft_pow(int base, int exponent);
 double			ft_fabs(double num);
+
+/*
+** dispatch_table
+*/
+
 
 /*
 ** Forbidden function macros----------------------------------------------------
