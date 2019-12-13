@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 16:05:09 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 17:52:43 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,7 +348,7 @@ void			compute_md5_table_s_32_to_63(uint32_t *num);
 void			compute_md5_table_s(uint32_t *num);
 
 /*
-** ssl_md5_helper.c-------------------------------------------------------------
+** ssl_md5_print_and_helper.c---------------------------------------------------
 */
 
 uint32_t		rotate_left_32bit(uint32_t value, uint32_t rotate_n_bits);
@@ -358,7 +358,8 @@ void			ft_md5_print(t_ssl *ssl, char character);
 ** ssl_md5_core.c---------------------------------------------------------------
 */
 
-uint32_t		md5_function_fghi(uint32_t j, uint32_t b, uint32_t c, uint32_t d);
+uint32_t		md5_function_fghi(uint32_t j, uint32_t b, uint32_t c,
+				uint32_t d);
 void			ft_update_md5_abcd(t_ssl *ssl);
 void			swap_md5_adc_with_dcb(t_ssl *ssl);
 void			ft_add_md5_abcd_to_a0b0c0d0(t_ssl *ssl);
@@ -382,6 +383,17 @@ void			ft_add_sha256_abcdefgh_to_h_values(t_ssl *ssl);
 void			ft_sha256_swap_abcdefgh(t_ssl *ssl);
 void			ft_sha256_process_512bit_chunk(t_ssl *ssl, uint32_t chunk);
 void			ft_sha256_compression(t_ssl *ssl);
+
+/*
+** ssl_sha256_print_and_helper.c------------------------------------------------
+*/
+
+uint32_t		rotate_right_32bit(uint32_t value, uint32_t rotate_n_bits);
+uint32_t		shift_right_32bit(uint32_t value, uint32_t shift_n_bits);
+uint32_t		ft_swap_32bit(uint32_t value);
+void			ft_sha256_print(t_ssl *ssl, char c);
+void			ft_sha256_format_print(t_ssl *ssl, char *algo_name);
+
 
 
 
