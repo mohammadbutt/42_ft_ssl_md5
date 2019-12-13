@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:37:36 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/12 18:41:07 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/12 18:49:55 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -391,7 +391,7 @@ void			ft_sha256_compression(t_ssl *ssl);
 uint32_t		rotate_right_32bit(uint32_t value, uint32_t rotate_n_bits);
 uint32_t		shift_right_32bit(uint32_t value, uint32_t shift_n_bits);
 uint32_t		ft_swap_32bit(uint32_t value);
-void			ft_bzero_num_array_32bit(uint32_t *num, uint32_t elements);
+void			ft_bzero_num_array_32bit(uint32_t *num, uint32_t size);
 uint32_t		calculate_ssl_padding_32bit(uint32_t padding);
 
 /*
@@ -426,6 +426,17 @@ void			ft_add_sha512_abcdefgh_to_h_values(t_ssl *ssl);
 void			ft_sha512_swap_abcdefgh(t_ssl *ssl);
 void			ft_sha512_process_1024bit_chunk(t_ssl *ssl, uint64_t chunk);
 void			ft_sha512_compression(t_ssl *ssl);
+
+/*
+** ssl_sha256_helper.c----------------------------------------------------------
+*/
+
+uint64_t		rotate_right_64bit(uint64_t value, uint64_t rotate_n_bits);
+uint64_t		shift_right_64bit(uint64_t value, uint64_t shift_n_bits);
+uint64_t		ft_swap_64bit(uint64_t value);
+void			ft_bzero_num_array_64bit(uint64_t *num, uint64_t size);
+uint64_t		calculate_ssl_padding_64bit(uint64_t padding);
+
 
 
 
