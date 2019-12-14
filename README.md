@@ -22,6 +22,14 @@ Additional allowed C functions: strerror(3), exit(3).
       * [Parsing - Standard Input](#parsing---standard-input-Source-Code)
       * [Parsing -qr](#parsing--qr-source-code)
       * [Parsing -pqrs](#parsing--pqrs-source-code)
+   * [Hash](#hashing)
+      * [Hash MD5](#hash-md5-source-code)
+      * [Hash SHA224](#hash-sha224-source-Code)
+      * [Hash SHA256](#hash-sha256-source-Code)
+      * [Hash SHA384](#hash-sha384-source-Code)
+      * [Hash SHA512](#hash-sha512-source-Code)
+
+      
 * [Suggestions and tips](#suggestions-and-tips)
 * [Resource and References](#resources-and-references)
 
