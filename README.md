@@ -11,7 +11,38 @@ Allowed C functions: malloc(3), free(3)
 Additional allowed C functions: strerror(3), exit(3).
 
 ---
-# Table of Contents - CLick a section to jump to it
+# Table of Contents - Click a section to jump to it
+* [Cloning Repository](#cloning-repository)
+* [Installing ft_ssl macOS only](#installing-ft_ssl-macos-only)
+* [ft_ssl Usage](#ft_ssl-usage)
+* [Program Installation gif Demo](#program-installation-gif-demo)
+* [Program Usage gif Demo](#program-usage-gif-demo)
+* [Project Summary](#project-summary)
+
+# Cloning Repository
+```
+https://github.com/mohammadbutt/42_ft_ssl_md5.git
+```
+
+# Installing ft_ssl macOS only
+```
+make
+```
+
+# ft_ssl Usage
+```
+./ft_ssl md5 [-pqr] [-s string] [files ...]
+./ft_ssl sha224 [-pqr] [-s string] [files ...]
+./ft_ssl sha256 [-pqr] [-s string] [files ...]
+./ft_ssl sha384 [-pqr] [-s string] [files ...]
+./ft_ssl sha512 [-pqr] [-s string] [files ...]
+```
+
+# Program Insallation gif Demo
+
+# Program Usage gif Demo
+
+# Project Summary
 
 ### Rules for `-s`
 
