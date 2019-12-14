@@ -48,7 +48,12 @@ make
 
 ### Parsing
 #### Parsing - Standard Input [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_parse_standard_input.c)
+When the user just enters `./ft_ssl`, then the program enters the standard input mode through the function called "read_stdin_loop" that takes in a string with a buffer of 8 to store the name of the hashing algorithm. "read_stdin_loop" reads in a continuous while loop and the loop keeps on running as long as one of the hashing alogrithms, "md5", "sha224", "sha256", "sha384", and "sha512", are not found. Function is_md_algorithm_valid compares the string entered by the user, if the string matches the hashing algorithm then the is_md_algorithm_valid returns true and read_stdin_loop returns the name of the hashing algorithm entered by the user. Function, "if_control_d_exit_program" allows the user to stop and exit the program by pressing `Control + D`, just like the original openssl.
 
+Once the hashing algorithm has been stored, then the stream is ran again to allow the user to end the string they would like to hash. In order to store the string to hash, the program enters the functions called, "mini_gnl_stdin". Function "mini_gnl_stdin" reads 1 byte at a time, and stores the string by using "ft_strjoin", a pointer is set to the temporary string which points to the actual string where the message is being stored using ft_strjoin. A temporary pointer is created because the temporary pointer is used to free what was previously stored in the actual string. If this is not done properly, there will be memory leaks. And because the actual string gets the address of the new pointer, since "ft_strjoin" returns the memory address of newly allocated/malloced char * string.
+
+#### Parsing -q or -r [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_parse_pqrs.c)
+If there are more than 1 arugments When the user enters `./ft_ssl -q` or `./ft_ssl -r`, then the program en
 
 
 ### Rules for `-s`
