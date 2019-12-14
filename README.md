@@ -58,6 +58,23 @@ If there are more than 2 arugments and the hashing algorithm is one of the valid
 #### Parsing -pqrs [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_parse_pqrs.c)
 If there are more than 2 arguments and the hashing algorithm is one of the valid algorithms and `-s` or `-r` were detected in the function "ft_ssl_pase_qr", then the program enters the function, "ft_ssl_parse_pqrs". This is where the program collects flags. If `-q` appears then ssl->flag.q is set to true. If `-r` appears then ssl->flag.r is set to true. If `-q` or `-r` appear then the program conitnues to collect the remaining flags in that argument. But if `-p` appears, then ssl->flag.p is set to true, but then it is also processed to hash the message. Similar is true for `-s`, as soon as `-s` appears the program stops collecting flags, and if there are characters that appear after `-s` in the same argument will be considered a string. When `-q` is true then the hashing algorithm and the hashing string or file name are nor printed, just the hash is printed. If the `-r` is set to true then the printing order is reversed to print the hash first and then the file name or string. When the `-r` flag is true name of the of hashing algorithm is not printed.
 
+### Hash
+
+#### Hash MD5 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_md5.c)
+
+
+#### Hash SHA224 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_sha224.c)
+
+
+#### Hash SHA256 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_sha256.c)
+
+
+#### Hash SHA384 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_sha384.c)
+
+
+#### Hash SHA512 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_sha512.c)
+
+
 
 ### Rules for `-s`
 
