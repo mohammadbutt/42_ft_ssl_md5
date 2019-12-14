@@ -38,7 +38,7 @@ make
 ./ft_ssl sha512 [-pqr] [-s string] [files ...]
 ```
 
-# Program Insallation gif Demo
+# Program Installation gif Demo
 
 # Program Usage gif Demo
 
