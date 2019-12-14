@@ -18,8 +18,8 @@ Additional allowed C functions: strerror(3), exit(3).
 * [Program Installation gif Demo](#program-installation-gif-demo)
 * [Program Usage gif Demo](#program-usage-gif-demo)
 * [Project Summary](#project-summary)
-* [Suggestions and tips]
-* [Resource and References](#resources-and_references)
+* [Suggestions and tips](#suggestions-and-tips)
+* [Resource and References](#resources-and-references)
 
 # Cloning Repository
 ```
