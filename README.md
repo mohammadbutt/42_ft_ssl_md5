@@ -52,8 +52,11 @@ When the user just enters `./ft_ssl`, then the program enters the standard input
 
 Once the hashing algorithm has been stored, then the stream is ran again to allow the user to end the string they would like to hash. In order to store the string to hash, the program enters the functions called, "mini_gnl_stdin". Function "mini_gnl_stdin" reads 1 byte at a time, and stores the string by using "ft_strjoin", a pointer is set to the temporary string which points to the actual string where the message is being stored using ft_strjoin. A temporary pointer is created because the temporary pointer is used to free what was previously stored in the actual string. If this is not done properly, there will be memory leaks. And because the actual string gets the address of the new pointer, since "ft_strjoin" returns the memory address of newly allocated/malloced char * string.
 
-#### Parsing -q or -r [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_parse_pqrs.c)
-If there are more than 1 arugments When the user enters `./ft_ssl -q` or `./ft_ssl -r`, then the program en
+#### Parsing -qr [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_parse_pqrs.c)
+If there are more than 2 arugments and the hashing algorithm is one of the valid algorithms then the program enters the function called, "ft_ssl_parse_qr". One of the things this function does is to traverse through to check if `-p` or `-s` appear anywhere. If `-p` or `-s` dont appear in any of the arguments, but `-q` or `-r` appear then the program will call onto mini_gnl_stdin, which will read the text entered by the user in a stream, just like the program reads text in standard input. If `-p` or `-s` appear anywhere, then the program simply leaves that function, without returning a value.
+
+#### Parsing -pqrs [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_parse_pqrs.c)
+
 
 
 ### Rules for `-s`
