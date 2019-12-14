@@ -20,6 +20,8 @@ Additional allowed C functions: strerror(3), exit(3).
 * [Project Summary](#project-summary)
    * [Parsing](#parsing)
       * [Parsing - Standard Input](#parsing---standard-input-Source-Code)
+      * [Parsing -qr](#parsing--qr-source-code)
+      * [Parsing -pqrs](#parsing--pqrs-source-code)
 * [Suggestions and tips](#suggestions-and-tips)
 * [Resource and References](#resources-and-references)
 
