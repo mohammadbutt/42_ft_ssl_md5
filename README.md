@@ -18,6 +18,8 @@ Additional allowed C functions: strerror(3), exit(3).
 * [Program Installation gif Demo](#program-installation-gif-demo)
 * [Program Usage gif Demo](#program-usage-gif-demo)
 * [Project Summary](#project-summary)
+* [Suggestions and tips]
+* [Resource and References](#resources-and_references)
 
 # Cloning Repository
 ```
@@ -43,6 +45,9 @@ make
 # Program Usage gif Demo
 
 # Project Summary
+
+### Parsing
+
 
 ### Rules for `-s`
 
@@ -96,7 +101,7 @@ make
    4. Process Message in 16-word blocks
    5. Final Output
 
-# Resources and References:
+# Resources and References
 1. [Reading from stdin - stackoverflow](https://stackoverflow.com/questions/15883568/reading-from-stdin)
 2. [Design Principles and Design Patterns by Robert C Martin](https://fi.ort.edu.uy/innovaportal/file/2032/1/design_principles.pdf)
 4. [md5 47 parsing - Open Source Apple](https://opensource.apple.com/source/text_cmds/text_cmds-47/md5/md5.c.auto.html)
