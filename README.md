@@ -47,6 +47,8 @@ make
 # Project Summary
 
 ### Parsing
+#### Parsing - Standard Input [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_parse_standard_input.c)
+
 
 
 ### Rules for `-s`
