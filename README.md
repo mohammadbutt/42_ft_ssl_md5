@@ -18,6 +18,8 @@ Additional allowed C functions: strerror(3), exit(3).
 * [Program Installation gif Demo](#program-installation-gif-demo)
 * [Program Usage gif Demo](#program-usage-gif-demo)
 * [Project Summary](#project-summary)
+   * [Parsing](#parsing)
+      * [Parsing - Standard Input](#parsing---standard-input-Source-Code)
 * [Suggestions and tips](#suggestions-and-tips)
 * [Resource and References](#resources-and-references)
 
