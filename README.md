@@ -56,7 +56,7 @@ Once the hashing algorithm has been stored, then the stream is ran again to allo
 If there are more than 2 arugments and the hashing algorithm is one of the valid algorithms then the program enters the function called, "ft_ssl_parse_qr". One of the things this function does is to traverse through to check if `-p` or `-s` appear anywhere. If `-p` or `-s` dont appear in any of the arguments, but `-q` or `-r` appear then the program will call onto mini_gnl_stdin, which will read the text entered by the user in a stream, just like the program reads text in standard input. If `-p` or `-s` appear anywhere, then the program simply leaves that function, without returning a value.
 
 #### Parsing -pqrs [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_parse_pqrs.c)
-
+If there are more than 2 arguments and the hashing algorithm is one of the valid algorithms and `-s` or `-r` was detected in the function "ft_ssl_pase_qr", then the program enters the function
 
 
 ### Rules for `-s`
