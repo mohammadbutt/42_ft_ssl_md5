@@ -20,7 +20,7 @@ NAME = ft_ssl
 CC = gcc
 CFLAGS = -I. -c -g
 WFLAGS = -Wall -Wextra -Werror
-DEBUG = #-fsanitize=address -g #-ggdb
+DEBUG = -fsanitize=address -g #-ggdb
 #DEBUG = -fsanitize=undefined # Cannot be used for md5, sha256, and so on...
 
 SRC = srcs/ft_ssl/*.c
