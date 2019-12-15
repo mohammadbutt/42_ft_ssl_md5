@@ -18,7 +18,7 @@ Additional allowed C functions: strerror(3), exit(3).
 * [Program Installation gif Demo](#program-installation-gif-demo)
 * [Program Usage gif Demo](#program-usage-gif-demo)
 * [Project Summary](#project-summary)
-   * [What is hashing and why to use it](#what-is-hashing-and-whyto-useit)
+   * [What is hashing and why use it](#what-is-hashing-and-why-use-it)
    * [Parsing](#parsing)
       * [Parsing - Standard Input](#parsing---standard-input-Source-Code)
       * [Parsing -qr](#parsing--qr-source-code)
@@ -59,7 +59,7 @@ make
 
 # Project Summary
 
-### What is hashing and why to use it
+### What is hashing and why use it
 
 Test
 
