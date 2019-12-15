@@ -18,6 +18,7 @@ Additional allowed C functions: strerror(3), exit(3).
 * [Program Installation gif Demo](#program-installation-gif-demo)
 * [Program Usage gif Demo](#program-usage-gif-demo)
 * [Project Summary](#project-summary)
+   * [What is hashing and why to use it](#what-is-hashing-and-whyto-useit)
    * [Parsing](#parsing)
       * [Parsing - Standard Input](#parsing---standard-input-Source-Code)
       * [Parsing -qr](#parsing--qr-source-code)
@@ -58,6 +59,10 @@ make
 
 # Project Summary
 
+### What is hashing and why to use it
+
+Test
+
 ### Parsing
 #### Parsing - Standard Input [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_parse_standard_input.c)
 When the user just enters `./ft_ssl`, then the program enters the standard input mode through the function called "read_stdin_loop" that takes in a string with a buffer of 8 to store the name of the hashing algorithm. "read_stdin_loop" reads in a continuous while loop and the loop keeps on running as long as one of the hashing alogrithms, "md5", "sha224", "sha256", "sha384", and "sha512", are not found. Function is_md_algorithm_valid compares the string entered by the user, if the string matches the hashing algorithm then the is_md_algorithm_valid returns true and read_stdin_loop returns the name of the hashing algorithm entered by the user. Function, "if_control_d_exit_program" allows the user to stop and exit the program by pressing `Control + D`, just like the original openssl.
@@ -68,11 +73,14 @@ Once the hashing algorithm has been stored, then the stream is ran again to allo
 If there are more than 2 arugments and the hashing algorithm is one of the valid algorithms then the program enters the function called, "ft_ssl_parse_qr". One of the things this function does is to traverse through to check if `-p` or `-s` appear anywhere. If `-p` or `-s` dont appear in any of the arguments, but `-q` or `-r` appear then the program will call onto mini_gnl_stdin, which will read the text entered by the user in a stream, just like the program reads text in standard input. If `-p` or `-s` appear anywhere, then the program simply leaves that function, without returning a value.
 
 #### Parsing -pqrs [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_parse_pqrs.c)
-If there are more than 2 arguments and the hashing algorithm is one of the valid algorithms and `-s` or `-r` were detected in the function "ft_ssl_pase_qr", then the program enters the function, "ft_ssl_parse_pqrs". This is where the program collects flags. If `-q` appears then ssl->flag.q is set to true. If `-r` appears then ssl->flag.r is set to true. If `-q` or `-r` appear then the program conitnues to collect the remaining flags in that argument. But if `-p` appears, then ssl->flag.p is set to true, but then it is also processed to hash the message. Similar is true for `-s`, as soon as `-s` appears the program stops collecting flags, and if there are characters that appear after `-s` in the same argument will be considered a string. When `-q` is true then the hashing algorithm and the hashing string or file name are nor printed, just the hash is printed. If the `-r` is set to true then the printing order is reversed to print the hash first and then the file name or string. When the `-r` flag is true name of the of hashing algorithm is not printed.
+If there are more than 2 arguments and the hashing algorithm is one of the valid algorithms and `-s` or `-r` were detected in the function "ft_ssl_pase_qr", then the program enters the function, "ft_ssl_parse_pqrs". This is where the program collects flags. If `-q` appears then ssl->flag.q is set to true. If `-r` appears then ssl->flag.r is set to true. If `-q` or `-r` appear then the program conitnues to collect the remaining flags in that argument. But if `-p` appears, then ssl->flag.p is set to true, but then it is also processed to hash the message. Similar is true for `-s`, as soon as `-s` appears the program stops collecting flags, and if there are characters that appear after `-s` in the same argument will be considered a string. When `-q` is true then the hashing algorithm and the hashing string or file name are not printed, just the hash is printed. If the `-r` is set to true then the printing order is reversed to print the hash first and then the file name or string. When the `-r` flag is true name of the of hashing algorithm is not printed.
 
 ### Hash
 
+After parsing is done, hashing algorithm and and the user message is stored. These are then passed through one of the hashing algorithms, MD5, SHA224, SHA256, SHA384, and SHA512. Below is a brief explanation of how these algorithms work with my implemented source code. 
+
 #### Hash MD5 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_md5.c)
+
 
 
 #### Hash SHA224 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_sha224.c)
