@@ -6,7 +6,7 @@
 /*   By: mbutt <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 21:39:04 by mbutt             #+#    #+#             */
-/*   Updated: 2019/12/11 21:59:53 by mbutt            ###   ########.fr       */
+/*   Updated: 2019/12/15 16:37:14 by mbutt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	ft_ssl_parse_pqrs_no_dash(char **argv, t_ssl *ssl, int i)
 
 	if (ssl->flag.s == true)
 	{
-		message_to_digest = malloc(sizeof(ft_strlen(argv[i]) + 1));
+		message_to_digest = malloc(sizeof(char) * (ft_strlen(argv[i]) + 1));
 		ft_strcpy(message_to_digest, argv[i]);
 		store_hash_free_message(ssl, message_to_digest);
 	}
