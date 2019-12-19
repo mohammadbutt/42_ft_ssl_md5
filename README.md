@@ -15,6 +15,7 @@ Additional allowed C functions: strerror(3), exit(3).
 * [Cloning Repository](#cloning-repository)
 * [Installing ft_ssl macOS only](#installing-ft_ssl-macos-only)
 * [ft_ssl Usage](#ft_ssl-usage)
+  * [MD5](#md5)
 * [Program Installation gif Demo](#program-installation-gif-demo)
 * [Program Usage gif Demo](#program-usage-gif-demo)
 * [Project Summary](#project-summary)
@@ -58,6 +59,7 @@ make
 
 Yes! This is all you need to do to install the program! Scroll down for usage.
 # Program Usage gif Demo
+## MD5
 ![](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/docs_and_media/Media/usage_md5_4k_24fps.gif)
 # Project Summary
 
