@@ -89,34 +89,50 @@ Now the original string "github" is copied onto the new string that was just all
 
 Last step in MD5 for padding is to append the length of the original message in the form of 64 bit representation to the message that was just padded. I multiplied the length of the message with 8, so lenght of, "github" 6 mulitplied by 8 is equal to 48 bits are set equal to the last index of the padded message.
 
-Next the padded messaged is processed in 16-word blocks which is also known as "chunking". When chunking is done, chunking is performed on uint32_t data type. Suppose padded_message is equal to "abcdefghijklmnopqrstuvwxyz", then padded_message at index 0 is 'a', index 1 is 'b', index 2 is 'c', and index 3 is 'd', but when the padded message is saved to a uint32_t data type, then index 0 will be 'a', but index 1 will be 'e', index 2 will be 'i', and index 3 will be 'm'. This may seem strange behavior, but it is not. Since char data type uses 1 byte, which is why it will show value of every cosecutive character, but uint32_t uses 4 bytes of memory which is why it stores and shows value of every 4th character. Memcpy or strcpy were not performed for this step, I just simply set a uint32_t pointer to the padded message and then type casted padded message with uint32_t. This new string of uint32_t data type is used with bitwise manipulation to constantly update a, b, c, d values. When values a, b, c, and d are done getting updated, their bits are swapped which is also known as Endianness because the original source code is written in little-endian. Swapping bits of each value for a, b, c, and d converts them from little-endian to big endian, which can then printed in hexadecimal.
+Next the padded messaged is processed in 16-word blocks which is also known as "chunking". When chunking is done, chunking is performed on uint32_t data type. Suppose padded_message is equal to "abcdefghijklmnopqrstuvwxyz", then padded_message at index 0 is 'a', index 1 is 'b', index 2 is 'c', and index 3 is 'd', but when the padded message is saved to a uint32_t data type, then index 0 will be 'a', but index 1 will be 'e', index 2 will be 'i', and index 3 will be 'm'. This may seem strange behavior, but it is not. Since char data type uses 1 byte, which is why it will show value of every cosecutive character, but uint32_t uses 4 bytes of memory which is why it stores and shows value of every 4th character. Memcpy or strcpy were not performed for this step, I just simply set a uint32_t pointer to the padded message and then type casted padded message with uint32_t. This new string of uint32_t data type is used with bitwise manipulation to constantly update a, b, c, d values. When values a, b, c, and d are done getting updated, their bits are swapped which is also known as Endianness because the original source code is written in little-endian. Swapping bits of each value for a, b, c, and d converts them from little-endian to big endian, which can then printed in hexadecimal to produce a 32 characters long hash
 
 #### Hash SHA224 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_sha224.c)
 SHA224 is relatively similar to SHA256. Below are the differences of SH224:
 1. In SHA224 there are different initilizations values for h. These are also known as "init"
-2. In SHA224 only 7 h values are printed, that are h0, h1, h2, h3, h4, h5, and h6. Value h7 is omittied when hash is printed.
+2. In SHA224 only 7 h values are printed, that are h0, h1, h2, h3, h4, h5, and h6. Value h7 is omittied when hash is printed. Each h value will print 8 characters, this produces a 56 characters long hash for SHA224.
 
 I did SHA256 first, which allowed me to use all of the core and helper SHA256 functions for SHA224.
 
 #### Hash SHA256 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_sha256.c)
-Padding in SHA256 is similar to MD5. I did some things differently to perform padding for SHA256. After I calculate the number for padding which is done the same way as it is done in MD5, chunk of 512 bits is calculated. In order to calculate the chunk of 512 bits. Padded number will always be a multiple of 56. 8 is added to this padded number to bring this upto a multiple of 64. (padded_message + 8) is divided by 64 to get the chunk of 512 bits. Suppose a string is 70 characters long, when padding is calculated, padded number will be 120. (120 + 8) / 64 = 2.
+Padding in SHA256 is similar to MD5. I did some things differently to perform padding for SHA256. After I calculate the number for padding which is done the same way as it is done in MD5, chunk of 512 bits is calculated. In order to calculate the chunk of 512 bits. Padded number will always be a multiple of 56. 8 is added to this padded number to bring this upto a multiple of 64. Equation that I was able to formulate to caluclate the chunks of 512 bits is (padded_message + 8) is divided by 64 to get the chunk of 512 bits. Suppose a string is 70 characters long, when padding is calculated, padded number will be 120. (120 + 8) / 64 = 2.
 
 There will be two chunks of 512bits. Copying user message or string and appending 1 is done the same way as it is done in MD5, but in SHA256 destination data type will be a unit32_t data type, which is also known as unsigned integer 32, because all of the calculations in SHA256 are performed on unit32_t data types.
 
 In SHA256 before appending the length at the last index of the string, uint32_t values of the destination variable are swapped.
 
-Last part in padding is to append the length of the original message at the last index of the string, just like it was done in MD5.
+Finally to append the length of the original string, index is calculated by multiplying 16 with chunk of 512 bit and subtracting 1 from it. Length of the original string is appended at this index.
 
 The destination variable are used to constantly update the values of h0, h1, h2, h3, h4, h5, h6, and h7. Bitwise with rotating and shifting bits are used to constantly modify the h values.
 
-Once the h values are done getting updated all of the h values are printed in hex.
+Once the h values are done getting updated all of the h values are printed in hex. Each h value will print 8 characters, this produces a 64 characters long hash for SHA256.
 
 #### Hash SHA384 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_sha384.c)
+SHA384 is also relatively similar to SHA512. Below are the difference for SHA384:
+1. SHA384 also uses different initialization values for h. These are also known as "init".
+2. SHA384 only prints 6 h values. These h values are, h0, h1, h2, h3, h4, and h5. Values for h6 and h7 are omitted when the has is printed. Each h value will print 16 characters, this produces a 96 characters long hash for SHA384.
+
+I did SHA512 first, which allowed me to use all of the core and helper SHA512 functions for SHA384.
 
 
 #### Hash SHA512 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_sha512.c)
-Padding in SHA512 is a lot similar to SHA256 then it is to MD5. Some things are modified in SHA512 when padding is performed. First thing that is different in SHA512 is that I used uint64_t data type for all of the variables to store the information instead of uint32_t. Second 
+Padding in SHA512 is a lot similar to SHA256 then it is to MD5. Some things are modified in SHA512 when padding is performed. First thing that is different in SHA512 is that I used uint64_t data type for all of the variables to store the information instead of uint32_t. Second thing that is different in SHA512 is how the padded number is calculated. In SHA512, multiples of 896 and 1024 bits are used, but since I have done all my calculations in bytes, I used multiples of 112 and 128 bytes. So if a string was a 100 characters long then 12 more bytes are to it, bringing it upto 112 bytes a mutliple of 112, and then 16 bytes are added to it bring it upto 128 making it a multiple of 128.
 
+When string copy is performed to stored the user message into a destination variable, the only thing that is different from SHA256 is that the destination variable for SHA512 is uint64_t data type, so it will store every 8th character of the string.
+
+SHA512 also uses what is known as "chunking" to process messages in 1024 bits. Equation that I formulated to calculate chunk of 1024 bits is (padded_message + 16) / 128. If the user message is less than 112 characters long than this equation will give 1 chunk of 1024 bits. And suppose if the user message is 130 characters long then this equation will produce 2 chunks of 1024 bits.
+
+Once user message has be copied to destination variable and chunks of 1024 bits have been calculated, the values of the destination variable are swapped. Since the destination variable is uint64_t data type, I created a function ft_swap_64bit, which swaps the values of a unit64_t data type variable.
+
+Finally to append the length of the original string, index is calculated by multiplying 16 with chunk of 1024 bit and subtracting 1 from it. Length of the original string is appended at this index.
+
+The destination variable is used to constantly updated the values of h0, h1, h2, h3, h4, h5, h6, and h7. Just like SHA256, bitwise with rotating and shifting bits are used to constatnyl modify the h values.
+
+Once the h values are done getting updated all of the h values are printed in hex. Each h value will print 16 characters, this produces a 128 characters long hash for SHA512.
 
 ### Rules for `-s`
 
