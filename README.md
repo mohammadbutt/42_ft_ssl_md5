@@ -96,7 +96,7 @@ SHA224 is relatively similar to SHA256. Below are the differences of SH224:
 1. In SHA224 there are different initilizations values for h. These are also known as "init"
 2. In SHA224 only 7 h values are printed, that are h0, h1, h2, h3, h4, h5, and h6. Value h7 is omittied when hash is printed.
 
-I did SHA256 first, which allowed me to use all of the core SHA256 functions for SHA224.
+I did SHA256 first, which allowed me to use all of the core and helper SHA256 functions for SHA224.
 
 #### Hash SHA256 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_sha256.c)
 Padding in SHA256 is similar to MD5. I did some things differently to perform padding for SHA256. After I calculate the number for padding which is done the same way as it is done in MD5, chunk of 512 bits is calculated. In order to calculate the chunk of 512 bits. Padded number will always be a multiple of 56. 8 is added to this padded number to bring this upto a multiple of 64. (padded_message + 8) is divided by 64 to get the chunk of 512 bits. Suppose a string is 70 characters long, when padding is calculated, padded number will be 120. (120 + 8) / 64 = 2.
@@ -115,7 +115,7 @@ Once the h values are done getting updated all of the h values are printed in he
 
 
 #### Hash SHA512 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_sha512.c)
-
+Padding in SHA512 is a lot similar to SHA256 then it is to MD5. Some things are modified in SHA512 when padding is performed. First thing that is different in SHA512 is that I used uint64_t data type for all of the variables to store the information instead of uint32_t. Second 
 
 
 ### Rules for `-s`
