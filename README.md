@@ -114,7 +114,7 @@ Once the h values are done getting updated all of the h values are printed in he
 #### Hash SHA384 [Source Code](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/srcs/ft_ssl/ssl_hash_message_sha384.c)
 SHA384 is also relatively similar to SHA512. Below are the difference for SHA384:
 1. SHA384 also uses different initialization values for h. These are also known as "init".
-2. SHA384 only prints 6 h values. These h values are, h0, h1, h2, h3, h4, and h5. Values for h6 and h7 are omitted when the has is printed. Each h value will print 16 characters, this produces a 96 characters long hash for SHA384.
+2. SHA384 only prints 6 h values. These h values are, h0, h1, h2, h3, h4, and h5. Values for h6 and h7 are omitted when the hash is printed. Each h value will print 16 characters, this produces a 96 characters long hash for SHA384.
 
 I did SHA512 first, which allowed me to use all of the core and helper SHA512 functions for SHA384.
 
