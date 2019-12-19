@@ -55,6 +55,7 @@ make
 
 # Program Installation gif Demo
 
+Yes! This is all you need to do to install the program! Scroll down for usage.
 # Program Usage gif Demo
 
 # Project Summary
