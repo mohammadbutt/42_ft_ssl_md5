@@ -54,10 +54,11 @@ make
 ```
 
 # Program Installation gif Demo
+![](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/docs_and_media/Media/installation_720p_24fps.gif)
 
 Yes! This is all you need to do to install the program! Scroll down for usage.
 # Program Usage gif Demo
-
+![](https://github.com/mohammadbutt/42_ft_ssl_md5/blob/master/docs_and_media/Media/usage_md5_4k_24fps.gif)
 # Project Summary
 
 ### What is hashing and why use it
