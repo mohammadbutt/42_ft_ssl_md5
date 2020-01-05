@@ -34,7 +34,7 @@ Additional allowed C functions: strerror(3), exit(3).
       * [Hash SHA512](#hash-sha512-source-Code)
 
       
-* [Suggestions and tips](#suggestions-and-tips)
+* [Acknowledgment](#acknowledgment)
 * [Resource and References](#resources-and-references)
 
 # Cloning Repository
@@ -146,6 +146,9 @@ Finally to append the length of the original string, index is calculated by mult
 The destination variable is used to constantly updated the values of h0, h1, h2, h3, h4, h5, h6, and h7. Just like SHA256, bitwise with rotating and shifting bits are used to constatnyl modify the h values.
 
 Once the h values are done getting updated all of the h values are printed in hex. Each h value will print 16 characters, this produces a 128 characters long hash for SHA512.
+
+# Acknowledgment
+Thanks to [JC](https://github.com/JCTGY) for encouraging me to go the extra mile and also covering SHA224, SHA384, and SHA512. Reading and understanding his code was also instrumental for me to recode this project.
 
 # Resources and References
 1. [Reading from stdin - stackoverflow](https://stackoverflow.com/questions/15883568/reading-from-stdin)
