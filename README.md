@@ -148,7 +148,7 @@ The destination variable is used to constantly updated the values of h0, h1, h2,
 Once the h values are done getting updated all of the h values are printed in hex. Each h value will print 16 characters, this produces a 128 characters long hash for SHA512.
 
 # Acknowledgment
-Thanks to [JC](https://github.com/JCTGY) for encouraging me to go the extra mile and also covering SHA224, SHA384, and SHA512. Reading and understanding his code was also instrumental for me to recode this project.
+Thank you to [JC](https://github.com/JCTGY) for encouraging me to go the extra mile and also covering SHA224, SHA384, and SHA512. Reading and understanding his code was also instrumental for me to recode this project.
 
 # Resources and References
 1. [Reading from stdin - stackoverflow](https://stackoverflow.com/questions/15883568/reading-from-stdin)
